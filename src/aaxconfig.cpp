@@ -18,6 +18,8 @@
  */
 
 #include <stdio.h>	/* std::rename */
+#include <sys/stat.h>	/* std::chmod  */
+
 #include <iostream>
 #include <fstream>
 
@@ -499,6 +501,9 @@ AeonWaveConfig::writeConfigFile()
         }
         file << "</configuration>\n";
         file.close();
+
+        int mode = strtol("0600", 0, 8);
+        chmod(from_path.c_str(), mode);
     }
 }
 
