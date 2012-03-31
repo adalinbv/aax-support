@@ -3,6 +3,8 @@ SET( cmake_verbose_makefile TRUE)
 
 PROJECT(aaxconfig)
 
+OPTION(WERROR "Treat compile warnings as errors"   OFF)
+
 # read 'version' file into a variable (stripping any newlines or spaces)
 file(READ version versionFile)
 string(STRIP ${versionFile} AAXCONFIG_VERSION)
@@ -70,7 +72,26 @@ SET( HEADERS src/aaxconfig.h src/aaxconfig_ui.h )
 
 SET( GUI src/aaxconfig.ui )
 
-ADD_DEFINITIONS( -Wall)
+ADD_DEFINITIONS(-Wall -DHAVE_CONFIG_H=1)
+IF(WERROR)
+  ADD_DEFINITIONS(-Werror)
+ENDIF(WERROR)
+
+SET(C_FLAGS "${C_FLAGS} -march=i386 -Wall -Werror=format-security" CACHE STRING
+    "Flags used by al build types."
+    FORCE)
+SET(CMAKE_C_FLAGS_RELWITHDEBINFO "${C_FLAGS} -g -O2 -D_DEBUG" CACHE STRING
+    "Flags used by the compiler during Release with Debug Info builds."
+    FORCE)
+SET(CMAKE_C_FLAGS_MINSIZEREL "${C_FLAGS} -Os -DNDEBUG" CACHE STRING
+    "Flags used by the compiler during release minsize builds."
+    FORCE)
+SET(CMAKE_C_FLAGS_RELEASE "${C_FLAGS} -Os -fomit-frame-pointer -DNDEBUG"
+    CACHE STRING "Flags used by the compiler during release builds"
+    FORCE)
+SET(CMAKE_C_FLAGS_DEBUG "${C_FLAGS} -g3 -D_DEBUG" CACHE STRING
+    "Flags used by the compiler during debug builds."
+    FORCE
 
 FIND_PACKAGE(Qt4 COMPONENTS  QtCore QtGui REQUIRED)
 FIND_PACKAGE(AAX COMPONENTS aax REQUIRED)
