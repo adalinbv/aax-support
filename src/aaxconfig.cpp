@@ -27,6 +27,7 @@
 #include <xml.h>
 
 #include "aaxconfig.h"
+#include "api.h"
 
 AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     QDialog(parent)
@@ -234,28 +235,30 @@ AeonWaveConfig::getSystemResources()
     }
 }
 
-/* from aax/src/aax_driver.c */
-#define USER_CONFIG_FILE	".aaxconfig.xml"
-#define SYSTEM_CONFIG_FILE	"/etc/aax/config.xml"
 void
 AeonWaveConfig::readConfigFiles()
 {
     /* read the system wide configuration file */
-    void *xid = xmlOpen(SYSTEM_CONFIG_FILE);
-    if (xid != NULL)
+    
+    char *path;
+    void *xid;
+ 
+    path = systemConfigFile();
+    if (path)
     {
-        readConfigSettings(xid);
-        xmlClose(xid);
+        xid = xmlOpen(path);
+        if (xid)
+        {
+            readConfigSettings(xid);
+            xmlClose(xid);
+        }
     }
 
      /* read the user configurstion file */
-    char *ptr = getenv("HOME");
-    if (ptr)
+    path = userConfigFile();
+    if (path)
     {
-        std::string path = ptr;
-        path += '/';
-        path += USER_CONFIG_FILE;
-        xid = xmlOpen(path.c_str());
+        xid = xmlOpen(path);
         if (xid)
         {
             readConfigSettings(xid);
@@ -427,12 +430,10 @@ void
 AeonWaveConfig::writeConfigFile()
 {
 
-    const char *homedir = getenv("HOME");
-    if (homedir)
+    char *path = userConfigFile();
+    if (path)
     {
-        std::string from_path = homedir;
-        from_path += '/';
-        from_path += USER_CONFIG_FILE;
+        std::string from_path = path;
 
         const char *username = getenv("SUDO_USER");
         if (!username) username = getenv("USER");

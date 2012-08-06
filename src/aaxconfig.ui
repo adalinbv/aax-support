@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>579</width>
-    <height>366</height>
+    <height>390</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>579</width>
-    <height>366</height>
+    <height>390</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>579</width>
-    <height>366</height>
+    <height>390</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -28,9 +28,9 @@
   <widget class="QLineEdit" name="ProductKey">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>10</x>
      <y>30</y>
-     <width>251</width>
+     <width>311</width>
      <height>21</height>
     </rect>
    </property>
@@ -41,7 +41,7 @@
   <widget class="QLabel" name="label_product_key">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>10</x>
      <y>10</y>
      <width>91</width>
      <height>17</height>
@@ -51,117 +51,11 @@
     <string>Product-Key:</string>
    </property>
   </widget>
-  <widget class="KComboBox" name="GeneralSampleFreq">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>100</y>
-     <width>121</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <item>
-    <property name="text">
-     <string>8000 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>11025 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>16000 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>22050 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>32000 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>44056 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>44100 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>48000 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>88200 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>96000 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>176400 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>192000 Hz</string>
-    </property>
-   </item>
-  </widget>
-  <widget class="QLabel" name="label_general_sample_freq">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>80</y>
-     <width>131</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Sample Frequency:</string>
-   </property>
-  </widget>
-  <widget class="QSpinBox" name="RefreshRate">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>100</y>
-     <width>61</width>
-     <height>27</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_refresh_rate">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>80</y>
-     <width>91</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Refresh rate:</string>
-   </property>
-  </widget>
   <widget class="QComboBox" name="SpeakerSetup">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>150</y>
+     <x>10</x>
+     <y>260</y>
      <width>121</width>
      <height>27</height>
     </rect>
@@ -190,22 +84,22 @@
   <widget class="QLabel" name="label_setup">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>130</y>
-     <width>62</width>
+     <x>10</x>
+     <y>240</y>
+     <width>101</width>
      <height>17</height>
     </rect>
    </property>
    <property name="text">
-    <string>Setup:</string>
+    <string>Speaker Setup:</string>
    </property>
   </widget>
   <widget class="QComboBox" name="Backend">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>30</y>
-     <width>271</width>
+     <x>10</x>
+     <y>80</y>
+     <width>311</width>
      <height>27</height>
     </rect>
    </property>
@@ -213,8 +107,8 @@
   <widget class="QLabel" name="label_backend">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>10</y>
+     <x>10</x>
+     <y>60</y>
      <width>71</width>
      <height>17</height>
     </rect>
@@ -226,8 +120,8 @@
   <widget class="QLabel" name="label_output_sample_freq">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>130</y>
+     <x>10</x>
+     <y>180</y>
      <width>131</width>
      <height>20</height>
     </rect>
@@ -239,8 +133,8 @@
   <widget class="KComboBox" name="OutputSampleFreq">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>150</y>
+     <x>10</x>
+     <y>200</y>
      <width>121</width>
      <height>27</height>
     </rect>
@@ -309,9 +203,9 @@
   <widget class="QComboBox" name="OutputSpeakers">
    <property name="geometry">
     <rect>
-     <x>460</x>
-     <y>150</y>
-     <width>101</width>
+     <x>10</x>
+     <y>320</y>
+     <width>121</width>
      <height>27</height>
     </rect>
    </property>
@@ -339,22 +233,22 @@
   <widget class="QLabel" name="label_speakers">
    <property name="geometry">
     <rect>
-     <x>460</x>
-     <y>130</y>
-     <width>101</width>
-     <height>17</height>
+     <x>10</x>
+     <y>300</y>
+     <width>121</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>Speaker Setup:</string>
+    <string>No. Speakers:</string>
    </property>
   </widget>
   <widget class="QComboBox" name="OutputDevice">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>100</y>
-     <width>271</width>
+     <x>10</x>
+     <y>140</y>
+     <width>311</width>
      <height>27</height>
     </rect>
    </property>
@@ -362,21 +256,21 @@
   <widget class="QLabel" name="label_output_device">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>80</y>
+     <x>10</x>
+     <y>120</y>
      <width>151</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>Default Output Device:</string>
+    <string>Output Device:</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_input_sample_freq">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>250</y>
+     <x>340</x>
+     <y>180</y>
      <width>131</width>
      <height>20</height>
     </rect>
@@ -388,8 +282,8 @@
   <widget class="KComboBox" name="InputSampleFreq">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>270</y>
+     <x>340</x>
+     <y>200</y>
      <width>121</width>
      <height>27</height>
     </rect>
@@ -458,44 +352,31 @@
   <widget class="QLabel" name="label_input_device">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>200</y>
+     <x>340</x>
+     <y>120</y>
      <width>141</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>Default Input Device:</string>
+    <string>Input Device:</string>
    </property>
   </widget>
   <widget class="QComboBox" name="InputDevice">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>220</y>
-     <width>271</width>
+     <x>340</x>
+     <y>140</y>
+     <width>231</width>
      <height>27</height>
     </rect>
-   </property>
-  </widget>
-  <widget class="Line" name="line">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>60</y>
-     <width>251</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
    </property>
   </widget>
   <widget class="QPushButton" name="OK">
    <property name="geometry">
     <rect>
      <x>470</x>
-     <y>320</y>
+     <y>350</y>
      <width>93</width>
      <height>27</height>
     </rect>
@@ -504,30 +385,120 @@
     <string>OK</string>
    </property>
   </widget>
-  <widget class="Line" name="line_2">
+  <widget class="QGraphicsView" name="graphicsView">
    <property name="geometry">
     <rect>
-     <x>270</x>
-     <y>10</y>
-     <width>20</width>
-     <height>301</height>
+     <x>150</x>
+     <y>180</y>
+     <width>167</width>
+     <height>200</height>
     </rect>
    </property>
-   <property name="orientation">
-    <enum>Qt::Vertical</enum>
-   </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="label_general_sample_freq">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>110</y>
-     <width>21</width>
+     <x>340</x>
+     <y>10</y>
+     <width>131</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Sample Frequency:</string>
+   </property>
+  </widget>
+  <widget class="KComboBox" name="GeneralSampleFreq">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>30</y>
+     <width>121</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>8000 Hz</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>11025 Hz</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>16000 Hz</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>22050 Hz</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>32000 Hz</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>44056 Hz</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>44100 Hz</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>48000 Hz</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>88200 Hz</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>96000 Hz</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>176400 Hz</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>192000 Hz</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QSpinBox" name="RefreshRate">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>30</y>
+     <width>91</width>
+     <height>27</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_refresh_rate">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>10</y>
+     <width>91</width>
      <height>17</height>
     </rect>
    </property>
    <property name="text">
-    <string>Hz</string>
+    <string>Refresh Rate:</string>
    </property>
   </widget>
  </widget>
@@ -542,14 +513,15 @@
   <tabstop>ProductKey</tabstop>
   <tabstop>GeneralSampleFreq</tabstop>
   <tabstop>RefreshRate</tabstop>
-  <tabstop>SpeakerSetup</tabstop>
   <tabstop>Backend</tabstop>
   <tabstop>OutputDevice</tabstop>
   <tabstop>OutputSampleFreq</tabstop>
+  <tabstop>SpeakerSetup</tabstop>
   <tabstop>OutputSpeakers</tabstop>
   <tabstop>InputDevice</tabstop>
   <tabstop>InputSampleFreq</tabstop>
   <tabstop>OK</tabstop>
+  <tabstop>graphicsView</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -586,22 +558,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>RefreshRate</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>Configuration</receiver>
-   <slot>changeRefreshRate(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>240</x>
-     <y>115</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>241</x>
-     <y>128</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>SpeakerSetup</sender>
    <signal>currentIndexChanged(int)</signal>
    <receiver>Configuration</receiver>
@@ -614,22 +570,6 @@
     <hint type="destinationlabel">
      <x>167</x>
      <y>166</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>GeneralSampleFreq</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>Configuration</receiver>
-   <slot>changeGeneralSampleFreq(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>78</x>
-     <y>114</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>156</x>
-     <y>137</y>
     </hint>
    </hints>
   </connection>
