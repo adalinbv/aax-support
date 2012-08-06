@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Configuration</class>
+ <class>UiConfig</class>
  <widget class="QDialog" name="Configuration">
   <property name="geometry">
    <rect>
@@ -130,7 +130,7 @@
     <string>Sample Frequency:</string>
    </property>
   </widget>
-  <widget class="KComboBox" name="OutputSampleFreq">
+  <widget class="QComboBox" name="OutputSampleFreq">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -279,7 +279,7 @@
     <string>Sample Frequency:</string>
    </property>
   </widget>
-  <widget class="KComboBox" name="InputSampleFreq">
+  <widget class="QComboBox" name="InputSampleFreq">
    <property name="geometry">
     <rect>
      <x>340</x>
@@ -408,7 +408,7 @@
     <string>Sample Frequency:</string>
    </property>
   </widget>
-  <widget class="KComboBox" name="GeneralSampleFreq">
+  <widget class="QComboBox" name="GeneralSampleFreq">
    <property name="geometry">
     <rect>
      <x>340</x>
@@ -502,13 +502,6 @@
    </property>
   </widget>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
- </customwidgets>
  <tabstops>
   <tabstop>ProductKey</tabstop>
   <tabstop>GeneralSampleFreq</tabstop>

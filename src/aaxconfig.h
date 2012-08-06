@@ -56,21 +56,26 @@ private:
     typedef struct
     {
         std::string name;
+        unsigned int sample_freq;
+        unsigned int no_speakers;
+        enum aaxRenderMode setup;
+    } device_t;
+
+    typedef struct
+    {
+        std::string name;
 
         unsigned int current_output_device;
-        std::vector<std::string> output;
-        unsigned int output_sample_freq;
-        unsigned int no_speakers;
+        std::vector<device_t> output;
 
         unsigned int current_input_device;
-        std::vector<std::string> input;
-        int input_sample_freq;
+        std::vector<device_t> input;
     } backend_t;
  
     std::string product_key;
     unsigned int refresh_rate;
     unsigned int general_sample_freq;
-    enum aaxRenderMode setup;
+    enum aaxRenderMode general_setup;
 
     unsigned int current_backend;
     std::vector<backend_t> backends;

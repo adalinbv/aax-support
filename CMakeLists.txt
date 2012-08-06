@@ -66,13 +66,13 @@ INCLUDE (CPack)
 # We have some custom .cmake scripts not in the official distribution.
 SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
 
-SET( SOURCES src/main.cpp src/aaxconfig.cpp )
+SET( SOURCES src/main.cpp src/aaxconfig.cpp src/api.c )
 
-SET( HEADERS src/aaxconfig.h src/aaxconfig_ui.h )
+SET( HEADERS src/aaxconfig.h src/aaxconfig_ui.h src/api.h )
 
 SET( GUI src/aaxconfig.ui )
 
-ADD_DEFINITIONS(-march=i386 -Wall -Werror=format-security -DHAVE_CONFIG_H=1)
+ADD_DEFINITIONS(-Wall -Werror=format-security -DHAVE_CONFIG_H=1)
 IF(WERROR)
   ADD_DEFINITIONS(-Werror)
 ENDIF(WERROR)
