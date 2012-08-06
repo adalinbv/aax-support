@@ -39,6 +39,9 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     ui->setupUi(this);
     displayUiConfig();
 
+    QPixmap pixmap(":/surround7_1.png");
+    ui->graphicsView->setPixmap(pixmap);
+
     setMinimumSize( size() );
     setMaximumSize( size() );
 }
@@ -77,6 +80,7 @@ AeonWaveConfig::changeSpeakerSetup(int val)
 {
     unsigned pos = backends[current_backend].current_output_device;
     backends[current_backend].output[pos].setup = aaxRenderMode(val+1);
+    changeNoSpeakers(backends[current_backend].output[pos].no_speakers/2-1);
 }
 
 void
@@ -98,6 +102,26 @@ AeonWaveConfig::changeNoSpeakers(int val)
 {
     unsigned pos = backends[current_backend].current_output_device;
     backends[current_backend].output[pos].no_speakers = (val+1)*2;
+
+    pos = current_backend;
+    int i = backends[pos].current_output_device;
+
+    char *path = ":/stereo.png";
+    if (backends[pos].output[i].setup != AAX_MODE_WRITE_HRTF)
+    {
+        if (backends[pos].output[i].no_speakers == 2) {
+            path = ":/stereo.png";
+        } else if (backends[pos].output[i].no_speakers == 4) {
+            path = ":/quad.png";
+        } else if (backends[pos].output[i].no_speakers == 6) {
+            path = ":/surround6.png";
+        } else {
+            path = ":/surround7_1.png";
+        }
+    }
+
+    QPixmap pixmap(path);
+    ui->graphicsView->setPixmap(pixmap);
 }
 
 void
@@ -419,8 +443,6 @@ AeonWaveConfig::displayUiDevicesConfig()
 {
     unsigned pos = current_backend;
     int idx;
-
-printf("displayUiDevicesConfig\n");
 
     /* Output devices */
     idx = backends[pos].current_output_device;

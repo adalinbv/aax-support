@@ -1,0 +1,8 @@
+ <!DOCTYPE RCC><RCC version="1.0">
+ <qresource>
+     <file alias="stereo.png">../support/stereo.png</file>
+     <file alias="quad.png">../support/quad.png</file>
+     <file alias="surround6.png">../support/surround6.png</file>
+     <file alias="surround7_1.png">../support/surround7_1.png</file>
+ </qresource>
+ </RCC>

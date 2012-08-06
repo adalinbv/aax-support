@@ -45,7 +45,7 @@ public:
     QLabel *label_input_device;
     QComboBox *InputDevice;
     QPushButton *OK;
-    QGraphicsView *graphicsView;
+    QLabel *graphicsView;
     QLabel *label_general_sample_freq;
     QComboBox *GeneralSampleFreq;
     QSpinBox *RefreshRate;
@@ -109,9 +109,9 @@ public:
         OK = new QPushButton(Configuration);
         OK->setObjectName(QString::fromUtf8("OK"));
         OK->setGeometry(QRect(470, 350, 93, 27));
-        graphicsView = new QGraphicsView(Configuration);
+        graphicsView = new QLabel(Configuration);
         graphicsView->setObjectName(QString::fromUtf8("graphicsView"));
-        graphicsView->setGeometry(QRect(150, 180, 167, 200));
+        graphicsView->setGeometry(QRect(150, 190, 165, 165));
         label_general_sample_freq = new QLabel(Configuration);
         label_general_sample_freq->setObjectName(QString::fromUtf8("label_general_sample_freq"));
         label_general_sample_freq->setGeometry(QRect(340, 10, 131, 20));
