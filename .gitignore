@@ -12,6 +12,7 @@ missing
 build*
 Debug/
 *.bak
+*.swp
 *.o
 lib*.a
 cmake_install.cmake

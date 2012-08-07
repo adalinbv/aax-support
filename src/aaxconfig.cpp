@@ -41,7 +41,7 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     ui->setupUi(this);
     displayUiConfig();
 
-    QPixmap pixmap(":/surround7_1.png");
+    QPixmap pixmap(speaker_setup[STEREO].pixmap);
     ui->graphicsView->setPixmap(pixmap);
 
     setMinimumSize( size() );
@@ -56,8 +56,11 @@ AeonWaveConfig::~AeonWaveConfig()
 /* ------------------------------------------------------------------------- */
 
 #define MAX_FREQ	12
-static unsigned int _freq[MAX_FREQ] = {  8000,  11025, 16000, 22050,  32000,
-                        44056,  44100,  48000, 88200, 96000, 176400, 192000};
+static unsigned int _freq[MAX_FREQ] = {
+  8000,  11025, 16000, 22050,  32000,
+  44056,  44100,  48000, 88200, 96000,
+ 176400, 192000
+};
 
 void
 AeonWaveConfig::changeProductKey(QString str)
@@ -108,18 +111,50 @@ AeonWaveConfig::changeNoSpeakers(int val)
     pos = current_backend;
     int i = backends[pos].current_output_device;
 
-    char *path = ":/stereo.png";
-    if (backends[pos].output[i].setup != AAX_MODE_WRITE_HRTF)
+    char *path = speaker_setup[STEREO].pixmap;
+    switch(backends[pos].output[i].setup)
     {
-        if (backends[pos].output[i].no_speakers == 2) {
-            path = ":/stereo.png";
-        } else if (backends[pos].output[i].no_speakers == 4) {
-            path = ":/quad.png";
-        } else if (backends[pos].output[i].no_speakers == 6) {
-            path = ":/surround6.png";
-        } else {
-            path = ":/surround7_1.png";
+    case AAX_MODE_WRITE_STEREO:
+    case AAX_MODE_WRITE_SURROUND:
+    {
+        switch(backends[pos].output[i].no_speakers)
+        {
+        case 2:
+            path = speaker_setup[STEREO].pixmap;
+            break;
+        case 4:
+            path = speaker_setup[QUAD].pixmap;
+            break;
+        case 6:
+            path = speaker_setup[SURROUND51].pixmap;
+            break;
+        case 8:
+            path = speaker_setup[SURROUND71].pixmap;
+            break;
         }
+        break;
+    }
+    case AAX_MODE_WRITE_SPATIAL:
+    {
+        switch(backends[pos].output[i].no_speakers)
+        {
+        case 2:
+            path = speaker_setup[STEREO].pixmap;
+            break;
+        case 4:
+            path = speaker_setup[QUAD].pixmap;
+            break;
+        case 6:
+            path = speaker_setup[SPATIAL24].pixmap;
+            break;
+        case 8:
+            path = speaker_setup[SPATIAL8].pixmap;
+            break;
+        }
+        break;
+    }
+    default:
+        break;
     }
 
     QPixmap pixmap(path);

@@ -24,7 +24,18 @@
 extern "C" {
 #endif
 
-#define MAX_SPEAKER_SETUP       8
+enum
+{
+    STEREO = 0,
+    QUAD,
+    SURROUND51,
+    SURROUND71,
+    SPATIAL24,
+    SPATIAL6,
+    SPATIAL8,
+    USER_DEFINED,
+    MAX_SPEAKER_SETUP
+};
 
 typedef struct
 {
