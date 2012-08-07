@@ -11,6 +11,7 @@ ltmain.sh
 missing
 build*
 Debug/
+*.bak
 *.o
 lib*.a
 cmake_install.cmake
