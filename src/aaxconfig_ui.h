@@ -111,7 +111,7 @@ public:
         OK->setGeometry(QRect(470, 350, 93, 27));
         graphicsView = new QLabel(Configuration);
         graphicsView->setObjectName(QString::fromUtf8("graphicsView"));
-        graphicsView->setGeometry(QRect(150, 190, 165, 165));
+        graphicsView->setGeometry(QRect(140, 175, 195, 195));
         label_general_sample_freq = new QLabel(Configuration);
         label_general_sample_freq->setObjectName(QString::fromUtf8("label_general_sample_freq"));
         label_general_sample_freq->setGeometry(QRect(340, 10, 131, 20));

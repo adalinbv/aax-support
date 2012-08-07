@@ -24,6 +24,23 @@
 extern "C" {
 #endif
 
+#define MAX_SPEAKER_SETUP       8
+
+typedef struct
+{
+    int no_speakers;
+    char *name;
+    char *pixmap;
+    int setup;
+    struct
+    {
+        int channel;
+        float pos[3];
+    } speaker[8];
+} speaker_t;
+
+extern speaker_t speaker_setup[MAX_SPEAKER_SETUP];
+
 const char* userHomeDir();
 char* userConfigFile();
 char* systemConfigFile();

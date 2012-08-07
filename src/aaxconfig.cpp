@@ -29,6 +29,8 @@
 #include "aaxconfig.h"
 #include "api.h"
 
+
+
 AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     QDialog(parent)
 {
@@ -507,7 +509,7 @@ AeonWaveConfig::writeConfigFile()
         file.open(from_path.c_str());
         file << "<?xml version=\"1.0\"?>\n\n";
         file << "<configuration>\n";
-        file << " <version>1.1</version>\n";
+//      file << " <version>1.1</version>\n";
         file << " <product-key>" << product_key << "</product-key>\n";
         file << " <output>\n";
         file << "  <frequency-hz>"<< general_sample_freq << "</frequency-hz>\n";

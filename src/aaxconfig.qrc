@@ -1,8 +1,11 @@
- <!DOCTYPE RCC><RCC version="1.0">
- <qresource>
-     <file alias="stereo.png">../support/stereo.png</file>
-     <file alias="quad.png">../support/quad.png</file>
-     <file alias="surround6.png">../support/surround6.png</file>
-     <file alias="surround7_1.png">../support/surround7_1.png</file>
+<!DOCTYPE RCC><RCC version="1.0">
+  <qresource>
+    <file alias="quad.png">../support/quad.png</file>
+    <file alias="stereo.png">../support/stereo.png</file>
+    <file alias="surround2_4.png">../support/surround2_4.png</file>
+    <file alias="surround5_1.png">../support/surround5_1.png</file>
+    <file alias="surround6.png">../support/surround6.png</file>
+    <file alias="surround7_1.png">../support/surround7_1.png</file>
+    <file alias="surround8.png">../support/surround8.png</file>
  </qresource>
- </RCC>
+</RCC>
