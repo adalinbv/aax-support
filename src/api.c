@@ -145,7 +145,7 @@ systemConfigFile()
 speaker_t speaker_setup[MAX_SPEAKER_SETUP] =
 {
   {
-    2, "stereo", ":/stereo.png", AAX_MODE_WRITE_STEREO,
+    2, "stereo", ":/stereo.png", AAX_MODE_WRITE_SURROUND,
     {
       { 0, {-1.0f, 0.0f, 0.0f} },    { 1, { 1.0f, 0.0f, 0.0f} },
       { 2, {-1.0f, 0.0f, 0.0f} },    { 3, { 1.0f, 0.0f, 0.0f} },
@@ -154,7 +154,7 @@ speaker_t speaker_setup[MAX_SPEAKER_SETUP] =
     }
   },
   {
-    4, "quad", ":/quad.png", AAX_MODE_WRITE_SPATIAL,
+    4, "quad", ":/quad.png", AAX_MODE_WRITE_SURROUND,
     {
       { 0, {-1.0f, 0.0f, 1.0f} },    { 1, { 1.0f, 0.0f, 1.0f} },
       { 2, {-1.0f, 0.0f,-1.0f} },    { 3, { 1.0f, 0.0f,-1.0f} },
@@ -181,6 +181,24 @@ speaker_t speaker_setup[MAX_SPEAKER_SETUP] =
     }
   },
   {
+    2, "stereo", ":/stereo.png", AAX_MODE_WRITE_SPATIAL,
+    {
+      { 0, {-1.0f, 0.0f, 0.0f} },    { 1, { 1.0f, 0.0f, 0.0f} },
+      { 2, {-1.0f, 0.0f, 0.0f} },    { 3, { 1.0f, 0.0f, 0.0f} },
+      { 4, {-1.0f, 0.0f, 0.0f} },    { 5, { 1.0f, 0.0f, 0.0f} },
+      { 6, {-1.0f, 0.0f, 0.0f} },    { 7, { 1.0f, 0.0f, 0.0f} }
+    }
+  },
+  {
+    4, "quad", ":/quad.png", AAX_MODE_WRITE_SPATIAL,
+    {
+      { 0, {-1.0f, 0.0f, 1.0f} },    { 1, { 1.0f, 0.0f, 1.0f} },
+      { 2, {-1.0f, 0.0f,-1.0f} },    { 3, { 1.0f, 0.0f,-1.0f} },
+      { 4, { 0.0f, 0.0f, 0.0f} },    { 5, { 0.0f, 0.0f, 0.0f} },
+      { 6, { 0.0f, 0.0f, 0.0f} },    { 7, { 0.0f, 0.0f, 0.0f} }
+    }
+  },
+  {
     6, "spatial 2.4", ":/surround2_4.png", AAX_MODE_WRITE_SPATIAL,
     {
       { 0, {-1.0f, 0.0f, 1.0f} },    { 1, { 1.0f, 0.0f, 1.0f} },
@@ -189,6 +207,7 @@ speaker_t speaker_setup[MAX_SPEAKER_SETUP] =
       { 6, { 0.0f, 0.0f, 0.0f} },    { 7, { 0.0f, 0.0f, 0.0f} }
     }
   },
+#if 0
   {
     6, "spatial 6", ":/surround6.png", AAX_MODE_WRITE_SPATIAL,
     {
@@ -198,6 +217,7 @@ speaker_t speaker_setup[MAX_SPEAKER_SETUP] =
       { 6, { 0.0f, 0.0f, 0.0f} },    { 7, { 0.0f, 0.0f, 0.0f} }
    }
   },
+#endif
   {
     8, "spatial 8", ":/surround8.png", AAX_MODE_WRITE_SPATIAL,
     {

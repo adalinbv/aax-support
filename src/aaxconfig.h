@@ -53,15 +53,25 @@ private slots:
 private:
     UiConfig *ui;
 
-    typedef struct
+    typedef struct _device
     {
         std::string name;
         unsigned int sample_freq;
         unsigned int no_speakers;
         enum aaxRenderMode setup;
+
+        _device() :
+            sample_freq(44100),
+            no_speakers(2),
+            setup(AAX_MODE_WRITE_STEREO) {};
+        _device(std::string n) :
+            name(n),
+            sample_freq(44100),
+            no_speakers(2),
+            setup(AAX_MODE_WRITE_STEREO) {};
     } device_t;
 
-    typedef struct
+    typedef struct _backend
     {
         std::string name;
 
@@ -70,6 +80,7 @@ private:
 
         unsigned int current_input_device;
         std::vector<device_t> input;
+           
     } backend_t;
  
     std::string product_key;

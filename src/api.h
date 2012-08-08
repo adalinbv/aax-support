@@ -30,8 +30,10 @@ enum
     QUAD,
     SURROUND51,
     SURROUND71,
+    SPATIAL2,
+    SPATIAL4,
     SPATIAL24,
-    SPATIAL6,
+//  SPATIAL6,
     SPATIAL8,
     USER_DEFINED,
     MAX_SPEAKER_SETUP
@@ -39,10 +41,10 @@ enum
 
 typedef struct
 {
-    int no_speakers;
+    unsigned no_speakers;
     char *name;
     char *pixmap;
-    int setup;
+    unsigned setup;
     struct
     {
         int channel;

@@ -32,7 +32,12 @@
 
 
 AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
-    QDialog(parent)
+    QDialog(parent),
+    refresh_rate(46),
+    general_sample_freq(48000),
+    general_setup(AAX_MODE_WRITE_STEREO),
+    current_backend(0)
+
 {
     getSystemResources();   
     readConfigFiles();
@@ -112,51 +117,16 @@ AeonWaveConfig::changeNoSpeakers(int val)
     int i = backends[pos].current_output_device;
 
     char *path = speaker_setup[STEREO].pixmap;
-    switch(backends[pos].output[i].setup)
+    for (int s=0; s<MAX_SPEAKER_SETUP; s++)
     {
-    case AAX_MODE_WRITE_STEREO:
-    case AAX_MODE_WRITE_SURROUND:
-    {
-        switch(backends[pos].output[i].no_speakers)
-        {
-        case 2:
-            path = speaker_setup[STEREO].pixmap;
-            break;
-        case 4:
-            path = speaker_setup[QUAD].pixmap;
-            break;
-        case 6:
-            path = speaker_setup[SURROUND51].pixmap;
-            break;
-        case 8:
-            path = speaker_setup[SURROUND71].pixmap;
-            break;
-        }
-        break;
+       if (backends[pos].output[i].setup == speaker_setup[s].setup &&
+           backends[pos].output[i].no_speakers == speaker_setup[s].no_speakers)
+       {
+           path = speaker_setup[s].pixmap;
+           break;
+       }
     }
-    case AAX_MODE_WRITE_SPATIAL:
-    {
-        switch(backends[pos].output[i].no_speakers)
-        {
-        case 2:
-            path = speaker_setup[STEREO].pixmap;
-            break;
-        case 4:
-            path = speaker_setup[QUAD].pixmap;
-            break;
-        case 6:
-            path = speaker_setup[SPATIAL24].pixmap;
-            break;
-        case 8:
-            path = speaker_setup[SPATIAL8].pixmap;
-            break;
-        }
-        break;
-    }
-    default:
-        break;
-    }
-
+  
     QPixmap pixmap(path);
     ui->graphicsView->setPixmap(pixmap);
 }
@@ -221,22 +191,16 @@ AeonWaveConfig::FreqToIndex(unsigned int freq)
 void
 AeonWaveConfig::getSystemResources()
 {
-    refresh_rate = 46;
-    general_sample_freq = 48000;
-    general_setup = AAX_MODE_WRITE_STEREO;
-    current_backend = 0;
-
-    unsigned max = aaxDriverGetCount(general_setup);
-    for (unsigned x=0; x<max; x++)
+    unsigned max_driver = aaxDriverGetCount(general_setup);
+    for (unsigned driver=0; driver<max_driver; driver++)
     {
-        enum aaxRenderMode mode;
-
-        aaxConfig cfg = aaxDriverGetByPos(x, general_setup);
+        aaxConfig cfg = aaxDriverGetByPos(driver, general_setup);
         if (cfg)
         {
-            unsigned max_device;
+            enum aaxRenderMode mode;
+            unsigned max_dev;
             backend_t backend;
-            const char *d;
+            std::string d;
 
             d = aaxDriverGetSetup(cfg, AAX_NAME_STRING);
             backend.current_output_device = 0;
@@ -244,80 +208,75 @@ AeonWaveConfig::getSystemResources()
             backend.name = d;
 
             mode = general_setup;
-            max_device = aaxDriverGetDeviceCount(cfg, mode);
-            if (max_device)
+            max_dev = aaxDriverGetDeviceCount(cfg, mode);
+            if (max_dev)
             {
-                device_t device;
-                for (unsigned y=0; y<max_device; y++)
+                for (unsigned dev=0; dev<max_dev; dev++)
                 {
-                    unsigned max_interface;
-                    const char *r;
+                    unsigned max_ifs;
+                    std::string r;
 
-                    r = aaxDriverGetDeviceNameByPos(cfg, y, mode);
-                    device.name = r;
-
-                    max_interface = aaxDriverGetInterfaceCount(cfg, r, mode);
-                    if (max_interface)
+                    r = aaxDriverGetDeviceNameByPos(cfg, dev, mode);
+                    max_ifs = aaxDriverGetInterfaceCount(cfg, r.c_str(), mode);
+                    if (max_ifs)
                     {
-                        for (unsigned z=0; z<max_interface; z++)
+                        for (unsigned ifs=0; ifs<max_ifs; ifs++)
                         {
-                            const char *ifs;
-
-                            ifs = aaxDriverGetInterfaceNameByPos(cfg,r,z,mode);
-                            device.name = r;
-                            device.name += ": ";
-                            device.name += ifs;
-
-                            device.setup = AAX_MODE_WRITE_STEREO;
-                            device.sample_freq = 44100;
-                            device.no_speakers = 2;
-
+                            std::string i;
+                            i = aaxDriverGetInterfaceNameByPos(cfg, r.c_str(),
+                                                                   ifs, mode);
+                            device_t device(r + std::string(": ") + i);
                             backend.output.push_back(device);
                         }
                     }
-                    else {
+                    else
+                    {
+                        device_t device(r);
                         backend.output.push_back(device);
                     }
                 }
             }
+            else
+            {
+                device_t device("default");
+                backend.output.push_back(device);
+            }
 
             mode = AAX_MODE_READ;
-            max_device = aaxDriverGetDeviceCount(cfg, mode);
-            if (max_device)
+            max_dev = aaxDriverGetDeviceCount(cfg, mode);
+            if (max_dev)
             {
-                device_t device;
-                for (unsigned y=0; y<max_device; y++)
+                for (unsigned dev=0; dev<max_dev; dev++)
                 {
-                    unsigned max_interface; 
-                    const char *r;
+                    unsigned max_ifs; 
+                    std::string r;
 
-                    r = aaxDriverGetDeviceNameByPos(cfg, y, mode);
-                    device.name = r;
- 
-                    max_interface = aaxDriverGetInterfaceCount(cfg, r, mode);
-                    if (max_interface)
+                    r = aaxDriverGetDeviceNameByPos(cfg, dev, mode);
+                    max_ifs = aaxDriverGetInterfaceCount(cfg, r.c_str(), mode);
+                    if (max_ifs)
                     {
-                        for (unsigned z=0; z<max_interface; z++)
+                        for (unsigned ifs=0; ifs<max_ifs; ifs++)
                         {
-                            const char *ifs;
-
-                            ifs = aaxDriverGetInterfaceNameByPos(cfg,r,z,mode);
-                            device.name = r;
-                            device.name += ": ";
-                            device.name += ifs;
-
-                            device.sample_freq = 22050;
-
+                            std::string i;
+                            i = aaxDriverGetInterfaceNameByPos(cfg, r.c_str(),
+                                                                   ifs, mode);
+                            device_t device(r + std::string(": ") + i);
                             backend.input.push_back(device);
                         }
                     }
-                    else {
+                    else
+                    {
+                        device_t device(r);
                         backend.input.push_back(device);
                     }
                 }
             }
+            else
+            {
+                device_t device("default");
+                backend.input.push_back(device);
+            }
             aaxDriverDestroy(cfg);
-
             backends.push_back(backend);
         }
     }
@@ -326,11 +285,10 @@ AeonWaveConfig::getSystemResources()
 void
 AeonWaveConfig::readConfigFiles()
 {
-    /* read the system wide configuration file */
-    
     char *path;
     void *xid;
  
+    /* read the system wide configuration file */
     path = systemConfigFile();
     if (path)
     {
@@ -535,8 +493,7 @@ AeonWaveConfig::writeConfigFile()
         if (!username) username = getenv("USER");
         if (username)
         {
-            std::string to_path = from_path;
-            to_path += ".old";
+            std::string to_path = from_path + std::string(".old");
             std::rename(from_path.c_str(), to_path.c_str());
         }
 
@@ -557,60 +514,93 @@ AeonWaveConfig::writeConfigFile()
         file << "</setup>\n";
         file << " </output>\n\n";
 
-        for (unsigned i=0; i<backends.size(); i++)
+        for (unsigned be=0; be<backends.size(); be++)
         {
-            file << " <backend>\n";
-            file << "  <name>" << backends[i].name << "</name>\n";
-            file << "  <output>\n";
-
-            unsigned pos = backends[i].current_output_device;
-            if (pos < backends[i].output.size())
+            for (unsigned dev=0; dev<backends[be].output.size(); dev++)
             {
+                file << " <backend>\n";
+                file << "  <name>" << backends[be].name << "</name>\n";
+                file << "  <output>\n";
+
                 file << "   <renderer>";
-                file << backends[i].output[pos].name;
+                file << backends[be].output[dev].name;
                 file << "</renderer>\n";
 
-                file << "   <frequency-hz>" << backends[i].output[pos].sample_freq;
+                file << "   <frequency-hz>";
+                file << backends[be].output[dev].sample_freq;
                 file << "</frequency-hz>\n";
 
                 file << "   <setup>"; 
-                if (backends[i].output[pos].setup == AAX_MODE_WRITE_STEREO) 
-                    file << "stereo";
-                else if (backends[i].output[pos].setup == AAX_MODE_WRITE_SPATIAL) 
+                switch(backends[be].output[dev].setup)
+                {
+                case AAX_MODE_WRITE_SPATIAL:
                     file << "spatial";
-                else if (backends[i].output[pos].setup == AAX_MODE_WRITE_SURROUND) 
+                    break;
+                case AAX_MODE_WRITE_SURROUND:
                     file << "surround";
-                else if (backends[i].output[pos].setup == AAX_MODE_WRITE_HRTF) 
+                    break;
+                case AAX_MODE_WRITE_HRTF:
                     file << "hrtf";
+                    break;
+                case AAX_MODE_WRITE_STEREO:
+                default:
+                    file << "stereo";
+                    break;
+                }
                 file << "</setup>\n";
 
-                file << "   <channels>"<< backends[i].output[pos].no_speakers;
+                file << "   <channels>";
+                file << backends[be].output[dev].no_speakers;
                 file <<"</channels>\n";
-            }
-            else {
-                file << "   <renderer>default</renderer>\n";
-            }
-            file << "  </output>\n";
 
-            file << "  <input>\n";
+                for (unsigned s=0; s<MAX_SPEAKER_SETUP; s++)
+                {
+                   if (backends[be].output[dev].setup
+                           == speaker_setup[s].setup 
+                       &&  backends[be].output[dev].no_speakers
+                               == speaker_setup[s].no_speakers
+                      )
+                   {
+                       for (unsigned q=0; q<speaker_setup[s].no_speakers; q++)
+                       {
+                           file << "    <speaker n=\"" << q << "\">\n";
+                           file << "     <channel>";
+                           file << speaker_setup[s].speaker[q].channel;
+                           file << "</channel>\n";
+                           file << "     <pos-x>";
+                           file << speaker_setup[s].speaker[q].pos[0];
+                           file << "</pos-x>\n";
+                           file << "     <pos-y>";
+                           file << speaker_setup[s].speaker[q].pos[1];
+                           file << "</pos-y>\n";
+                           file << "     <pos-z>";
+                           file << speaker_setup[s].speaker[q].pos[2];
+                           file << "</pos-z>\n";
+                           file << "    </speaker>\n";
+                       }
+                       break;
+                   }
+                }
+                file << "  </output>\n";
+                file << " </backend>\n\n";
+            }
 
-            pos = backends[i].current_input_device;
-            if (pos < backends[i].input.size())
+            for(unsigned dev=0; dev<backends[be].input.size(); dev++)
             {
+                file << " <backend>\n";
+                file << "  <input>\n";
+
                 file << "   <renderer>";
-                file << backends[i].input[pos].name;
+                file << backends[be].input[dev].name;
                 file << "</renderer>\n";
 
-                file << "   <frequency-hz>" << backends[i].input[pos].sample_freq;
+                file << "   <frequency-hz>";
+                file << backends[be].input[dev].sample_freq;
                 file << "</frequency-hz>\n";
 
+                file << "  </input>\n";
+                file << " </backend>\n\n";
             }
-            else {
-                file << "   <renderer>default</renderer>\n";
-            }
-
-            file << "  </input>\n";
-            file << " </backend>\n\n";
         }
         file << "</configuration>\n";
         file.close();
