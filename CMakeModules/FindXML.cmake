@@ -10,10 +10,10 @@
 #
 # Created by Erik Hofman.
 
-FIND_PATH(RMALLOC_INCLUDE_DIR rmalloc.h
+FIND_PATH(XML_INCLUDE_DIR xml.h
   HINTS
   $ENV{XMLDIR}
-  $ENV{ProgramFiles}/ZeroXml
+  $ENV{ProgramFiles}/zeroxml
   PATH_SUFFIXES include
   PATHS
   ~/Library/Frameworks
@@ -23,3 +23,22 @@ FIND_PATH(RMALLOC_INCLUDE_DIR rmalloc.h
   /opt
 )
 
+FIND_LIBRARY(XML_LIBRARY 
+  NAMES XML zeroxml ZeroXML32
+  HINTS
+  $ENV{XMLDIR}
+  $ENV{ProgramFiles}/zeroxml
+  PATH_SUFFIXES lib lib/${CMAKE_LIBRARY_ARCHITECTURE} lib64 libs64 libs libs/Win32 libs/Win64
+  PATHS
+  ~/Library/Frameworks
+  /Library/Frameworks
+  /usr/local
+  /usr
+  /opt
+)
+
+
+SET(XML_FOUND "NO")
+IF(XML_LIBRARY AND XML_INCLUDE_DIR)
+  SET(XML_FOUND "YES")
+ENDIF(XML_LIBRARY AND XML_INCLUDE_DIR)

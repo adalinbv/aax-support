@@ -23,7 +23,6 @@
 #include <iostream>
 #include <fstream>
 
-#include <string.h>	/* for strcasestr */
 #include <xml.h>
 
 #include "aaxconfig.h"
@@ -372,8 +371,10 @@ AeonWaveConfig::readConfigSettings(void* xid)
                 str = xmlNodeGetString(output, "renderer");
                 if (str)
                 {
-                    for (unsigned i=0; i<backends[q].output.size(); i++) {
-                        if (strcasestr(backends[q].output[i].name.c_str(), str))
+                    for (unsigned i=0; i<backends[q].output.size(); i++)
+                    {
+                        size_t found = backends[q].output[i].name.find(str);
+                        if (found != std::string::npos)
                         {
                             backends[q].current_output_device = i;
 
@@ -412,7 +413,8 @@ AeonWaveConfig::readConfigSettings(void* xid)
                 {
                     for (unsigned i=0; i<backends[q].input.size(); i++)
                     {
-                        if (strcasestr(backends[q].input[i].name.c_str(), renderer))
+                        size_t found = backends[q].input[i].name.find(renderer);
+                        if (found != std::string::npos)
                         {
                             backends[q].current_input_device = i;
 
@@ -606,8 +608,10 @@ AeonWaveConfig::writeConfigFile()
         file << "</configuration>\n";
         file.close();
 
+#ifndef _WIN32
         int mode = strtol("0600", 0, 8);
         chmod(from_path.c_str(), mode);
+#endif
     }
 }
 

@@ -20,6 +20,8 @@
 #include <string.h>
 #include <stdlib.h>		/* for getenv */
 
+#include "api.h"
+
 #define CONFIG_FILE             "config.xml"
 
 #if defined(WIN32)

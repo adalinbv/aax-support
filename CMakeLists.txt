@@ -1,114 +1,186 @@
-cmake_minimum_required(VERSION 2.4.7)
+cmake_minimum_required(VERSION 2.8.3)
 SET( cmake_verbose_makefile TRUE)
 
 PROJECT(aaxconfig)
+SET(PACKAGE_NAME "AeonWave-Config")
+SET(PACKAGE "aaxconfig")
 
 OPTION(WERROR "Treat compile warnings as errors"   OFF)
 
 # read 'version' file into a variable (stripping any newlines or spaces)
-file(READ version versionFile)
-string(STRIP ${versionFile} AAXCONFIG_VERSION)
-
-# detect system type
-IF(NOT DEFINED CPACK_SYSTEM_NAME)
-  SET(CPACK_SYSTEM_NAME ${CMAKE_SYSTEM_NAME})
-ENDIF(NOT DEFINED CPACK_SYSTEM_NAME)
-IF (UNIX AND NOT WIN32)
-  IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    SET(CPACK_PACKAGE_ARCHITECTURE "x86_64")
-  ELSE(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    SET(CPACK_PACKAGE_ARCHITECTURE "i386")
-  ENDIF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-ENDIF(UNIX AND NOT WIN32)
-
-# read 'description` file into a variable
-file(STRINGS description descriptionFile)
-STRING(REGEX REPLACE ";" " " descriptionFile "${descriptionFile}")
+FILE(READ version versionFile)
+STRING(STRIP ${versionFile} AAXCONFIG_VERSION)
+SET(VERSION AAXCONFIG_VERSION)
 
 # split version string into components, note CMAKE_MATCH_0 is the entire regexp match
-STRING(REGEX MATCH "([0-9]+)\\.([0-9]+)\\.([0-9]+)" CPACK_PACKAGE_VERSION ${AAXCONFIG_VERSION} )
+STRING(REGEX MATCH "([0-9]+)\\.([0-9]+)\\.([0-9]+)" CPACK_PACKAGE_VERSION ${AAXCONFIG_VERSION})
+
 SET(CPACK_PACKAGE_VERSION_MAJOR ${CMAKE_MATCH_1})
 SET(CPACK_PACKAGE_VERSION_MINOR ${CMAKE_MATCH_2})
 SET(CPACK_PACKAGE_VERSION_PATCH ${CMAKE_MATCH_3})
-SET(CPACK_PACKAGE_NAME "aaxconfig")
-SET(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}.el6.${CPACK_PACKAGE_ARCHITECTURE}")
-SET(CPACK_PACKAGE_CONTACT "tech@adalin.org")
-SET(CPACK_PACKAGE_VENDOR "tech@adalin.org")
-SET(CPACK_PACKAGE_DESCRIPTION "Graphical AeonWave Configuration utility")
-SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY ${descriptionFile})
-SET(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/COPYING")
-SET(CPACK_RESOURCE_FILE_README "${PROJECT_SOURCE_DIR}/README")
 
-# DEBIAN
-IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-  SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
-ELSE(CMAKE_SIZEOF_VOID_P EQUAL 8)
-  SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "i386")
-ENDIF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-SET(CPACK_DEBIAN_PACKAGE_SECTION "sound")
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.1), libaax2 (>= 2.0), libqt4-core (>= 4.6.2), libqt4-gui (>= 4.6.2)")
+SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "AeonWave 4D audio library configuration applet")
 
-# RPM
-SET(CPACK_RPM_PACKAGE_ARCHITECTURE ${PACK_PACKAGE_ARCHITECTURE})
-SET(CPACK_RPM_PACKAGE_GROUP "System Environment/Base")
+# We have some custom .cmake scripts not in the official distribution.
+SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
 
+INCLUDE(CPack_Modules)
+INCLUDE(CPack_Defaults)
 
-SET(CPACK_SOURCE_GENERATOR ZIP)
+IF(WIN32)
+  SET(CPACK_PACKAGE_INSTALL_DIRECTORY "${CMAKE_INSTALL_PREFIX}")
+  ADD_DEFINITIONS("-D_WIN32")
+
+ELSE(WIN32)
+
+  # DEBIAN
+  SET(CPACK_DEBIAN_PACKAGE_SECTION "Sound")
+  SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.1), libaax2-bin (>= 2.2), libqt4-core (>= 4.6.2), libqt4-gui (>= 4.6.2)")
+
+  # RPM
+  SET(CPACK_RPM_PACKAGE_LICENSE "GPL v3")
+  SET(CPACK_RPM_PACKAGE_GROUP "System Environment/Base")
+  SET(CPACK_RPM_PACKAGE_REQUIRES "libaax2-bin >= 2.2")
+ENDIF(WIN32)
+
+# ZIP
 SET(CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${AAXCONFIG_VERSION}" CACHE INTERNAL "tarball basename")
-SET(CPACK_SOURCE_IGNORE_FILES
-  "^${PROJECT_BINARY_DIR};${PROJECT_SOURCE_DIR}/.git;\\\\.gitignore;Makefile.am;~$;${CPACK_SOURCE_IGNORE_FILES}")
-
-SET(CPACK_GENERATOR "DEB;RPM")
-SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Adalin B.V.")
 
 INCLUDE (CPack)
 
-# We have some custom .cmake scripts not in the official distribution.
-SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
+# Required libraries
+FIND_PACKAGE(Qt4 REQUIRED)
+FIND_PACKAGE(AAX COMPONENTS aax REQUIRED)
+FIND_PACKAGE(XML COMPONENTS xml REQUIRED)
 
-SET( SOURCES src/main.cpp src/aaxconfig.cpp src/api.c )
-
-SET( HEADERS src/aaxconfig.h src/aaxconfig_ui.h src/api.h )
-
-SET( GUI src/aaxconfig.ui )
-
-SET( RCS src/aaxconfig.qrc )
-
-ADD_DEFINITIONS(-Wall -Werror=format-security -DHAVE_CONFIG_H=1)
+ADD_DEFINITIONS(-DHAVE_CONFIG_H=1)
 IF(WERROR)
   ADD_DEFINITIONS(-Werror)
 ENDIF(WERROR)
 
-SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-g -O2 -D_DEBUG" CACHE STRING
-    "Flags used by the compiler during Release with Debug Info builds."
-    FORCE)
-SET(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -DNDEBUG" CACHE STRING
-    "Flags used by the compiler during release minsize builds."
-    FORCE)
-SET(CMAKE_CXX_FLAGS_RELEASE "-Os -fomit-frame-pointer -DNDEBUG" CACHE STRING
-    "Flags used by the compiler during release builds"
-    FORCE)
-SET(CMAKE_CXX_FLAGS_DEBUG "-g3 -D_DEBUG" CACHE STRING
-    "Flags used by the compiler during debug builds."
-    FORCE)
+IF(MSVC)
+    SET(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO} -D_DEBUG /LD")
+    SET(CMAKE_C_FLAGS_MINSIZEREL "${CMAKE_C_FLAGS_MINSIZEREL} -DNDEBUG /LD")
+    SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -DNDEBUG /LD")
+    SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG /LD")
 
-FIND_PACKAGE(Qt4 COMPONENTS  QtCore QtGui REQUIRED)
-FIND_PACKAGE(AAX COMPONENTS aax REQUIRED)
-FIND_PACKAGE(XML COMPONENTS xml REQUIRED)
+    SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO} -D_DEBUG /LD")
+    SET(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_C_FLAGS_MINSIZEREL} -DNDEBUG /LD")
+    SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -DNDEBUG /LD")
+    SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG /LD")
+
+    ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
+    ADD_DEFINITIONS(-D_CRT_NONSTDC_NO_DEPRECATE)
+
+    OPTION(FORCE_STATIC_VCRT "Force /MT for static VC runtimes" ON)
+    IF(FORCE_STATIC_VCRT)
+        FOREACH(flag_var
+                CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE
+                CMAKE_C_FLAGS_MINSIZEREL CMAKE_C_FLAGS_RELWITHDEBINFO
+                CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
+                CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
+            IF(${flag_var} MATCHES "/MD")
+                STRING(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
+            ENDIF()
+        ENDFOREACH(flag_var)
+    ENDIF()
+ELSE(MSVC)
+    IF(NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
+       SET(C_FLAGS "${C_FLAGS} -march=i586")
+       SET(CXX_FLAGS "${CXX_FLAGS} -march=i586")
+    ENDIF(NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
+
+    SET(C_FLAGS "${C_FLAGS} -Os -Wall -Werror=format-security" CACHE STRING
+        "Flags used by al build types."
+        FORCE)
+
+    SET(CXX_FLAGS "${CXX_FLAGS} -Os -Wall -Werror=format-security" CACHE STRING
+        "Flags used by al build types."
+        FORCE)
+
+    SET(CMAKE_C_FLAGS_RELWITHDEBINFO "${C_FLAGS} -g -O2 -D_DEBUG" CACHE STRING
+        "Flags used by the compiler during Release with Debug Info builds."
+        FORCE)
+    SET(CMAKE_C_FLAGS_MINSIZEREL "${C_FLAGS} -Os -DNDEBUG" CACHE STRING
+        "Flags used by the compiler during release minsize builds."
+        FORCE)
+    SET(CMAKE_C_FLAGS_RELEASE "${C_FLAGS} -Os -fomit-frame-pointer -DNDEBUG"
+        CACHE STRING "Flags used by the compiler during release builds"
+        FORCE)
+    SET(CMAKE_C_FLAGS_DEBUG "${C_FLAGS} -g3 -D_DEBUG" CACHE STRING
+        "Flags used by the compiler during debug builds."
+        FORCE)
+
+    SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${C_FLAGS} -g -O2 -D_DEBUG" CACHE STRING
+        "Flags used by the compiler during Release with Debug Info builds."
+        FORCE)
+    SET(CMAKE_CXX_FLAGS_MINSIZEREL "${C_FLAGS} -Os -DNDEBUG" CACHE STRING
+        "Flags used by the compiler during release minsize builds."
+        FORCE)
+    SET(CMAKE_CXX_FLAGS_RELEASE "${C_FLAGS} -Os -fomit-frame-pointer -DNDEBUG"
+        CACHE STRING "Flags used by the compiler during release builds"
+        FORCE)
+    SET(CMAKE_CXX_FLAGS_DEBUG "${C_FLAGS} -g3 -D_DEBUG" CACHE STRING
+        "Flags used by the compiler during debug builds."
+        FORCE)
+ENDIF(MSVC)
 
 INCLUDE( ${QT_USE_FILE} )
 
-QT4_WRAP_UI( GUI_HEADERS ${GUI} )
+SET( SOURCES src/main.cpp src/aaxconfig.cpp src/api.c )
+SET( HEADERS src/aaxconfig.h src/aaxconfig_ui.h src/api.h )
+SET( GUI src/aaxconfig.ui )
+SET( RCS src/aaxconfig.qrc )
+
 QT4_WRAP_CPP( MOC_HEADERS ${HEADERS} )
 QT4_ADD_RESOURCES(RC_SRCS ${RCS})
+QT4_WRAP_UI( GUI_HDRS ${GUI} )
 
 INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} ${AAX_INCLUDE_DIR} ${XML_INCLUDE_DIR} )
 
-ADD_EXECUTABLE(aaxconfig ${RC_SRCS} ${SOURCES} ${MOC_HEADERS} ${GUI_HEADERS} )
+ADD_EXECUTABLE(aaxconfig ${SOURCES} ${MOC_HEADERS} ${RC_SRCS} ${GUI_HEADERS} )
 
 TARGET_LINK_LIBRARIES( aaxconfig ${QT_LIBRARIES} ${XML_LIBRARY} ${AAX_LIBRARY})
 
-INSTALL( PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/aaxconfig DESTINATION bin)
+INSTALL(TARGETS aaxconfig
+        RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT Applications
+)
+
+IF(WIN32)
+  # Used to create Start Menu shortcuts <EXEC> <LABEL>
+  SET(CPACK_PACKAGE_EXECUTABLES "aaxconfig" "AeonWave-Config")
+
+  # Include Qt libraries
+  SET(plugin_dest_dir bin)
+  SET(APPS "\${CMAKE_INSTALL_PREFIX}/bin/aaxconfig.exe")
+  SET(DIRS ${QT_LIBRARY_DIRS})
+
+  INSTALL(CODE "
+    file(GLOB_RECURSE QTPLUGINS
+      \"\${CMAKE_INSTALL_PREFIX}/${plugin_dest_dir}/plugins/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
+    include(BundleUtilities)
+    fixup_bundle(\"${APPS}\" \"\${QTPLUGINS}\" \"${DIRS}\")
+    " COMPONENT Runtime)
+
+ENDIF(WIN32)
+
+IF(APPLE)
+SET(PLATFORM_SPECIFIC "aaxconfig.icns")
+  SET_SOURCE_FILES_PROPERTIES(
+      "aaxconfig.icns"
+      PROPERTIES
+      MACOSX_PACKAGE_LOCATION Resources
+  )
+  SET(GUI_TYPE MACOSX_BUNDLE)
+  SET(MACOSX_BUNDLE_ICON_FILE MacIcon.icns)
+ENDIF()
+
+IF(UNIX AND NOT APPLE)
+  INSTALL(FILES admin/aaxconfig.png
+           DESTINATION share/icons)
+  INSTALL(FILES admin/aaxconfig.desktop
+          DESTINATION share/applications)
+ENDIF(UNIX AND NOT APPLE)
 
 #-----------------------------------------------------------------------------
 ### uninstall target

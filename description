@@ -1,3 +1,5 @@
-AeonWave Configuration utility
-
-A utility to manage the personal AeonWave configuration file using a graphical user interface. It is possible to select the default output device, the output frequency and the number of output channels for every supported backend.
+AeonWave Configuration applet
+ A graphical configuration applet which can be used to manage the personal
+ AeonWave configuration file. It is possible to select the default output
+ device, the default output frequency and the frequency and speaker setup
+ for every output device indevidually.

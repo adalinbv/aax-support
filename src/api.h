@@ -18,10 +18,19 @@
  */
 
 #ifndef __API_H
-#define __API_H
+#define __API_H 1
 
 #if defined(__cplusplus)
 extern "C" {
+#endif
+
+#if _MSC_VER
+# include <Windows.h>
+# include <stdio.h>
+# define strtoll _strtoi64
+# define snprintf _snprintf
+# define strcasecmp _stricmp
+# define strncasecmp _strnicmp
 #endif
 
 enum
