@@ -51,7 +51,7 @@ private slots:
     void writeConfig();
 
 private:
-    UiConfig *ui;
+    Ui_Configuration *ui;
 
     typedef struct _device
     {

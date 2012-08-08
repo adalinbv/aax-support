@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>UiConfig</class>
+ <class>Configuration</class>
  <widget class="QDialog" name="Configuration">
   <property name="geometry">
    <rect>
@@ -54,7 +54,7 @@
   <widget class="QComboBox" name="SpeakerSetup">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>200</x>
      <y>260</y>
      <width>121</width>
      <height>27</height>
@@ -84,7 +84,7 @@
   <widget class="QLabel" name="label_setup">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>200</x>
      <y>240</y>
      <width>101</width>
      <height>17</height>
@@ -120,20 +120,20 @@
   <widget class="QLabel" name="label_output_sample_freq">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>200</x>
      <y>180</y>
-     <width>131</width>
+     <width>81</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>Sample Frequency:</string>
+    <string>Frequency:</string>
    </property>
   </widget>
   <widget class="QComboBox" name="OutputSampleFreq">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>200</x>
      <y>200</y>
      <width>121</width>
      <height>27</height>
@@ -203,7 +203,7 @@
   <widget class="QComboBox" name="OutputSpeakers">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>200</x>
      <y>320</y>
      <width>121</width>
      <height>27</height>
@@ -233,7 +233,7 @@
   <widget class="QLabel" name="label_speakers">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>200</x>
      <y>300</y>
      <width>121</width>
      <height>20</height>
@@ -269,20 +269,20 @@
   <widget class="QLabel" name="label_input_sample_freq">
    <property name="geometry">
     <rect>
-     <x>340</x>
+     <x>450</x>
      <y>180</y>
-     <width>131</width>
+     <width>81</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>Sample Frequency:</string>
+    <string>Frequency:</string>
    </property>
   </widget>
   <widget class="QComboBox" name="InputSampleFreq">
    <property name="geometry">
     <rect>
-     <x>340</x>
+     <x>450</x>
      <y>200</y>
      <width>121</width>
      <height>27</height>
@@ -388,11 +388,20 @@
   <widget class="QLabel" name="graphicsView">
    <property name="geometry">
     <rect>
-     <x>150</x>
+     <x>0</x>
      <y>190</y>
-     <width>165</width>
-     <height>165</height>
+     <width>180</width>
+     <height>180</height>
     </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::NoFrame</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Sunken</enum>
+   </property>
+   <property name="lineWidth">
+    <number>1</number>
    </property>
   </widget>
   <widget class="QLabel" name="label_general_sample_freq">

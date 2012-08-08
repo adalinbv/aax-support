@@ -42,7 +42,7 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     getSystemResources();   
     readConfigFiles();
 
-    ui = new UiConfig;
+    ui = new Ui_Configuration;
     ui->setupUi(this);
     displayUiConfig();
 
@@ -588,6 +588,7 @@ AeonWaveConfig::writeConfigFile()
             for(unsigned dev=0; dev<backends[be].input.size(); dev++)
             {
                 file << " <backend>\n";
+                file << "  <name>" << backends[be].name << "</name>\n";
                 file << "  <input>\n";
 
                 file << "   <renderer>";
