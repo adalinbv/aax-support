@@ -202,6 +202,9 @@ AeonWaveConfig::getSystemResources()
             std::string d;
 
             d = aaxDriverGetSetup(cfg, AAX_NAME_STRING);
+            if (d == "None" || d == "AeonWave Loopback")
+                        continue;
+
             backend.current_output_device = 0;
             backend.current_input_device = 0;
             backend.name = d;
@@ -216,6 +219,7 @@ AeonWaveConfig::getSystemResources()
                     std::string r;
 
                     r = aaxDriverGetDeviceNameByPos(cfg, dev, mode);
+
                     max_ifs = aaxDriverGetInterfaceCount(cfg, r.c_str(), mode);
                     if (max_ifs)
                     {
