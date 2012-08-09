@@ -27,11 +27,27 @@ SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
 INCLUDE(CPack_Modules)
 INCLUDE(CPack_Defaults)
 
+FIND_PACKAGE(Qt4 REQUIRED QtCore QtGui)
+INCLUDE( ${QT_USE_FILE} )
+
 IF(WIN32)
+  # Used to create Start Menu shortcuts <EXEC> <LABEL>
+  SET(CPACK_PACKAGE_EXECUTABLES "${PACKAGE}" "${PACKAGE_NAME}")
+  SET(CPACK_PACKAGE_ICON "${CMake_SOURCE_DIR}/admin\\\\aaxconfig.png")
+  SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\aaxconfig.exe")
+
+  SET(CPACK_NSIS_MODIFY_PATH "ON")
+  SET(CMAKE_INSTALL_PREFIX ${PACKAGE_NAME} CACHE PATH "Final directory"FORCE)
   SET(CPACK_PACKAGE_INSTALL_DIRECTORY "${CMAKE_INSTALL_PREFIX}")
   ADD_DEFINITIONS("-D_WIN32")
+#  SET(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}\\\\admin\aaxconfig.png")
+  ADD_DEFINITIONS(/NODEFAULTLIB:msvcrt /NODEFAULTLIB:msvcrtd)
 
 ELSE(WIN32)
+
+  # Used to create Start Menu shortcuts <EXEC> <LABEL>
+  SET(CPACK_PACKAGE_EXECUTABLES "${PACKAGE};${PACKAGE_NAME}")
+  SET(CPACK_STRIP_FILES "bin/${PACKAGE}")
 
   # DEBIAN
   SET(CPACK_DEBIAN_PACKAGE_SECTION "Sound")
@@ -46,10 +62,9 @@ ENDIF(WIN32)
 # ZIP
 SET(CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${AAXCONFIG_VERSION}" CACHE INTERNAL "tarball basename")
 
-INCLUDE (CPack)
+
 
 # Required libraries
-FIND_PACKAGE(Qt4 REQUIRED)
 FIND_PACKAGE(AAX COMPONENTS aax REQUIRED)
 FIND_PACKAGE(XML COMPONENTS xml REQUIRED)
 
@@ -132,9 +147,9 @@ SET( HEADERS src/aaxconfig.h src/aaxconfig_ui.h src/api.h )
 SET( GUI src/aaxconfig.ui )
 SET( RCS src/aaxconfig.qrc )
 
-QT4_WRAP_CPP( MOC_HEADERS ${HEADERS} )
 QT4_ADD_RESOURCES(RC_SRCS ${RCS})
 QT4_WRAP_UI( GUI_HDRS ${GUI} )
+QT4_WRAP_CPP( MOC_HEADERS ${HEADERS} )
 
 INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} ${AAX_INCLUDE_DIR} ${XML_INCLUDE_DIR} )
 
@@ -147,25 +162,47 @@ INSTALL(TARGETS aaxconfig
 )
 
 IF(WIN32)
-  # Used to create Start Menu shortcuts <EXEC> <LABEL>
-  SET(CPACK_PACKAGE_EXECUTABLES "aaxconfig" "AeonWave-Config")
-
   # Include Qt libraries
   SET(plugin_dest_dir bin)
-  SET(APPS "\${CMAKE_INSTALL_PREFIX}/bin/aaxconfig.exe")
-  SET(DIRS ${QT_LIBRARY_DIRS})
+  SET(qtconf_dest_dir bin)
 
+  # Install needed Qt plugins by copying directories from the qt installation
+  # One can cull what gets copied by using 'REGEX "..." EXCLUDE'
+  # Exclude debug libraries
+  INSTALL(DIRECTORY "${QT_PLUGINS_DIR}/imageformats" 
+          DESTINATION ${plugin_dest_dir}/plugins 
+          COMPONENT runtime 
+          REGEX ".*d4.dll" EXCLUDE
+          REGEX ".*d4.a" EXCLUDE)
+
+  # install a qt.conf file
+  # this inserts some cmake code into the install script to write the file
+  SET(QT_CONF_FILE [Paths]\nPlugins=plugins)
   INSTALL(CODE "
-    file(GLOB_RECURSE QTPLUGINS
-      \"\${CMAKE_INSTALL_PREFIX}/${plugin_dest_dir}/plugins/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
-    include(BundleUtilities)
-    fixup_bundle(\"${APPS}\" \"\${QTPLUGINS}\" \"${DIRS}\")
-    " COMPONENT Runtime)
+    file(WRITE \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${qtconf_dest_dir}/qt.conf\" \"${QT_CONF_FILE}\")
+    " COMPONENT Applications)
 
+  # directories to look for dependencies
+  SET(DIRS ${QT_LIBRARY_DIRS} ${PROJECT_SOURCE_DIR}/bin)
+  SET(APPS "\${CMAKE_INSTALL_PREFIX}/bin/aaxconfig.exe")
+
+  # Now the work of copying dependencies into the bundle/package
+  # The quotes are escaped and variables to use at install time have their $ escaped
+  # An alternative is the do a configure_file() on a script and use install(SCRIPT  ...).
+  # Note that the image plugins depend on QtSvg and QtXml, and it got those copied
+  # over.
+  # To find dependencies, cmake use "otool" on Apple and "dumpbin" on Windows (make sure you have one of them).
+#  INSTALL(CODE "
+#   file(GLOB_RECURSE QTPLUGINS \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${plugin_dest_dir}/plugins/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
+#    include(\"BundleUtilities\")
+#    fixup_bundle(\"${APPS}\" \"\${QTPLUGINS}\" \"${DIRS}\")
+#  " COMPONENT runtime)
+
+   CMP_QT_LIBRARIES_INSTALL_RULES("QtCore;QtGui" "bin")
 ENDIF(WIN32)
 
 IF(APPLE)
-SET(PLATFORM_SPECIFIC "aaxconfig.icns")
+  SET(PLATFORM_SPECIFIC "aaxconfig.icns")
   SET_SOURCE_FILES_PROPERTIES(
       "aaxconfig.icns"
       PROPERTIES
@@ -176,11 +213,13 @@ SET(PLATFORM_SPECIFIC "aaxconfig.icns")
 ENDIF()
 
 IF(UNIX AND NOT APPLE)
-  INSTALL(FILES admin/aaxconfig.png
-           DESTINATION share/icons)
-  INSTALL(FILES admin/aaxconfig.desktop
-          DESTINATION share/applications)
+  INSTALL(FILES admin/${PACKAGE}.desktop DESTINATION share/applications
+          COMPONENT Applications)
+  INSTALL(FILES admin/aaxconfig.png DESTINATION share/pixmaps
+          COMPONENT Applications)
 ENDIF(UNIX AND NOT APPLE)
+
+INCLUDE(CPack)
 
 #-----------------------------------------------------------------------------
 ### uninstall target

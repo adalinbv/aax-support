@@ -1,4 +1,10 @@
 
+# By default, do not warn when built on machines using only VS Express:
+IF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
+  SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS ON)
+ENDIF()
+INCLUDE(InstallRequiredSystemLibraries)
+
 # Component support
 SET(CPACK_COMPONENTS_ALL Applications)
 
@@ -16,8 +22,8 @@ SET(CPACK_COMPONENT_HEADERS_DESCRIPTION
    "Development header files and library components for use with the software")
 
 # Dependecies
-SET(CPACK_COMPONENT_HEADERS_DEPENDS Libraries)
-SET(CPACK_COMPONENT_APPLICATIONS_DEPENDS Libraries)
+#SET(CPACK_COMPONENT_HEADERS_DEPENDS Libraries)
+#SET(CPACK_COMPONENT_APPLICATIONS_DEPENDS Libraries)
 
 # Component grouping
 IF(WIN32)
@@ -36,7 +42,7 @@ IF(WIN32)
   SET(CPACK_COMPONENT_LIBRARIES_INSTALL_TYPES Runtime Developer)
   SET(CPACK_COMPONENT_HEADERS_INSTALL_TYPES Developer)
   SET(CPACK_COMPONENT_APPLICATIONS_INSTALL_TYPES Runtime)
-  
+
 ELSE(WIN32)
   SET(CPACK_COMPONENT_APPLICATIONS_GROUP "bin")
   SET(CPACK_COMPONENT_LIBRARIES_GROUP "bin")
@@ -53,3 +59,29 @@ ELSE(WIN32)
   SET(CPACK_COMPONENT_APPLICATIONS_INSTALL_TYPES bin)
 ENDIF(WIN32)
 
+
+# --------------------------------------------------------------------
+# 
+# 
+macro (CMP_QT_LIBRARIES_INSTALL_RULES QTLIBLIST destination)
+  # message(STATUS "CMP_COPY_QT4_RUNTIME_LIBRARIES")
+  if (MSVC)
+    if (DEFINED QT_QMAKE_EXECUTABLE)
+      set(TYPE "d")
+      FOREACH(qtlib ${QTLIBLIST})
+ 
+        GET_FILENAME_COMPONENT(QT_DLL_PATH_tmp ${QT_QMAKE_EXECUTABLE} PATH)
+        message(STATUS "Generating Install Rule for Qt Debug DLL Library ${QT_DLL_PATH_tmp}/${qtlib}d4.dll")  
+        INSTALL(FILES ${QT_DLL_PATH_tmp}/${qtlib}${type}d4.dll 
+                DESTINATION "${destination}"
+                CONFIGURATIONS Debug
+                COMPONENT Applications)
+        message(STATUS "Generating Install Rule for Qt Release DLL Library ${QT_DLL_PATH_tmp}/${qtlib}4.dll")
+        INSTALL(FILES ${QT_DLL_PATH_tmp}/${qtlib}4.dll 
+                DESTINATION "${destination}"
+                CONFIGURATIONS Release
+                COMPONENT Applications)  
+      ENDFOREACH(qtlib)
+    endif(DEFINED QT_QMAKE_EXECUTABLE)
+  endif()
+endmacro()
