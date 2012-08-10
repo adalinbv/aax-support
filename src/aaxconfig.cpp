@@ -26,8 +26,8 @@
 #include <xml.h>
 
 #include "aaxconfig.h"
+#include "types.h"
 #include "api.h"
-
 
 
 AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
@@ -53,6 +53,15 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
 
 AeonWaveConfig::~AeonWaveConfig()
 {
+    for (unsigned be=0; be<backends.size(); be++)
+    {
+        for (unsigned o=0; o<backends[be].output.size(); o++) {
+            delete backends[be].output[o];
+        }
+        for (unsigned i=0; i<backends[be].input.size(); i++) {
+            delete backends[be].input[i];
+        }
+    }
     delete ui;
 }
 
@@ -86,41 +95,45 @@ AeonWaveConfig::changeGeneralSampleFreq(int val)
 void
 AeonWaveConfig::changeSpeakerSetup(int val)
 {
-    unsigned pos = backends[current_backend].current_output_device;
-    backends[current_backend].output[pos]->setup = aaxRenderMode(val+1);
-    changeNoSpeakers(backends[current_backend].output[pos]->no_speakers/2-1);
+    unsigned dev = backends[current_backend].current_output_device;
+
+    backends[current_backend].output[dev]->setup = aaxRenderMode(val+1);
+    changeNoSpeakers(backends[current_backend].output[dev]->no_speakers/2-1);
 }
 
 void
 AeonWaveConfig::changeInputSampleFreq(int val)
 {
-    unsigned pos = backends[current_backend].current_input_device;
-    backends[current_backend].input[pos]->sample_freq = _freq[val];
+    unsigned dev = backends[current_backend].current_input_device;
+
+    backends[current_backend].input[dev]->sample_freq = _freq[val];
 }
 
 void
 AeonWaveConfig::changeOutputSampleFreq(int val)
 {
-    unsigned pos = backends[current_backend].current_output_device;
-    backends[current_backend].output[pos]->sample_freq = _freq[val];
+    unsigned dev = backends[current_backend].current_output_device;
+
+    backends[current_backend].output[dev]->sample_freq = _freq[val];
 }
 
 void
 AeonWaveConfig::changeNoSpeakers(int val)
 {
-    unsigned pos = backends[current_backend].current_output_device;
-    backends[current_backend].output[pos]->no_speakers = (val+1)*2;
+    unsigned be = current_backend;
+    unsigned dev = backends[be].current_output_device;
 
-    pos = current_backend;
-    int i = backends[pos].current_output_device;
+    backends[be].output[dev]->no_speakers = (val+1)*2;
 
     char *path = speaker_setup[STEREO].pixmap;
-    for (int s=0; s<MAX_SPEAKER_SETUP; s++)
+    for (int sp=0; sp<MAX_SPEAKER_SETUP; sp++)
     {
-       if (backends[pos].output[i]->setup == speaker_setup[s].setup &&
-           backends[pos].output[i]->no_speakers == speaker_setup[s].no_speakers)
+       if (backends[be].output[dev]->setup == speaker_setup[sp].setup
+            && backends[be].output[dev]->no_speakers
+                 == speaker_setup[sp].no_speakers
+          )
        {
-           path = speaker_setup[s].pixmap;
+           path = speaker_setup[sp].pixmap;
            break;
        }
     }
@@ -132,40 +145,37 @@ AeonWaveConfig::changeNoSpeakers(int val)
 void
 AeonWaveConfig::changeInputDevice(int val)
 {
-    if (val < 0) val = 0;
-    backends[current_backend].current_input_device = val;
+    unsigned be = current_backend;
+    unsigned dev = _MINMAX(val, 0, backends[be].input.size()-1);
 
-    int i = val;
-    int pos = current_backend;
+    backends[be].current_input_device = dev;
 
-    val = FreqToIndex(backends[pos].input[i]->sample_freq);
+    val = FreqToIndex(backends[be].input[dev]->sample_freq);
     ui->InputSampleFreq->setCurrentIndex(val);
 }
 
 void
 AeonWaveConfig::changeOutputDevice(int val)
 {
-    if (val < 0) val = 0;
-    backends[current_backend].current_output_device = val;
+    unsigned be = current_backend;
+    unsigned dev = _MINMAX(val, 0, backends[be].output.size()-1);
 
-    int i = val;
-    int pos = current_backend;
+    backends[be].current_output_device = dev;
 
-    val = (backends[pos].output[i]->no_speakers/2)-1;
+    val = (backends[be].output[dev]->no_speakers/2)-1;
     ui->OutputSpeakers->setCurrentIndex(val);
 
-    val = aaxRenderMode(backends[pos].output[i]->setup)-1;
+    val = aaxRenderMode(backends[be].output[dev]->setup)-1;
     ui->SpeakerSetup->setCurrentIndex(val);
 
-    val = FreqToIndex(backends[pos].output[i]->sample_freq);
+    val = FreqToIndex(backends[be].output[dev]->sample_freq);
     ui->OutputSampleFreq->setCurrentIndex(val);
 }
 
 void
 AeonWaveConfig::changeBackend(int val)
 {
-    if (val < 0) val = 0;
-    current_backend = val;
+    current_backend = _MINMAX(val, 0, backends.size()-1);
     displayUiDevicesConfig();
 }
 
@@ -179,11 +189,11 @@ AeonWaveConfig::writeConfig()
 unsigned int
 AeonWaveConfig::FreqToIndex(unsigned int freq)
 {
-   unsigned int i = 0;
-   while ( (freq > _freq[i]) && (i < MAX_FREQ) ) {
-      ++i;
-   }
-   return i;
+    unsigned int i = 0;
+    while ( (freq > _freq[i]) && (i < MAX_FREQ) ) {
+        ++i;
+    }
+    return i;
 }
 
 void
@@ -285,33 +295,28 @@ AeonWaveConfig::getSystemResources()
 void
 AeonWaveConfig::readConfigFiles()
 {
-    char *path;
-    void *xid;
- 
     /* read the system wide configuration file */
-    path = systemConfigFile();
-    if (path)
+    std::string path = systemConfigFile();
+    if (!path.empty())
     {
-        xid = xmlOpen(path);
+        void *xid = xmlOpen(path.c_str());
         if (xid)
         {
             readConfigSettings(xid);
             xmlClose(xid);
         }
-        free(path);
     }
 
      /* read the user configurstion file */
     path = userConfigFile();
-    if (path)
+    if (!path.empty())
     {
-        xid = xmlOpen(path);
+        void *xid = xmlOpen(path.c_str());
         if (xid)
         {
             readConfigSettings(xid);
             xmlClose(xid);
         }
-        free(path);
     }
 }
 
@@ -333,73 +338,92 @@ AeonWaveConfig::readConfigSettings(void* xid)
             i = xmlNodeGetInt(xoid, "interval-hz");
             if (i) refresh_rate = i;
 
-            str = xmlNodeGetString(xoid, "setup");
-            if (str)
+            char *setup = xmlNodeGetString(xoid, "setup");
+            if (setup)
             {
-                if (!strcasecmp(str, "stereo")) {
+                if (!strcasecmp(setup, "stereo")) {
                     general_setup = AAX_MODE_WRITE_STEREO;
-                } else if (!strcasecmp(str, "spatial")) {
+                } else if (!strcasecmp(setup, "spatial")) {
                     general_setup = AAX_MODE_WRITE_SPATIAL;
-                } else if (!strcasecmp(str, "surround")) {
+                } else if (!strcasecmp(setup, "surround")) {
                     general_setup = AAX_MODE_WRITE_SURROUND;
-                } else if (!strcasecmp(str, "hrtf")) {
+                } else if (!strcasecmp(setup, "hrtf")) {
                     general_setup = AAX_MODE_WRITE_HRTF;
                 }
+                xmlFree(setup);
             }
             xmlFree(xoid);
         }
 
         void* xbid = xmlMarkId(xcid);
         unsigned num = xmlNodeGetNum(xbid, "backend");
-        for (unsigned n=0; n<num; n++)
+        for (unsigned xbe=0; xbe<num; xbe++)
         {
-            unsigned int q;
-            char *name;
+            xmlNodeGetPos(xcid, xbid, "backend", xbe);
 
-            xmlNodeGetPos(xcid, xbid, "backend", n);
-
-            name = xmlNodeGetString(xbid, "name");
+            char *name = xmlNodeGetString(xbid, "name");
             if (!name) continue;
 
-            for (q=0; q<backends.size(); q++) {
-                if (!strcasecmp(backends[q].name.c_str(), name)) break;
+            bool found = false;
+            unsigned be = 0;
+            for (unsigned be=0; be<backends.size(); be++)
+            {
+                if (!strcasecmp(backends[be].name.c_str(), name)) 
+                {
+                    found = true;
+                    break;
+                }
             }
-            if (q == backends.size()) continue;
+            xmlFree(name);
+            if (!found) continue;
 
             void* output = xmlNodeGet(xbid, "output");
             if (output)
             {
-                char *str;
-
-                str = xmlNodeGetString(output, "renderer");
-                if (str)
+                char *renderer = xmlNodeGetString(output, "renderer");
+                if (renderer)
                 {
-                    for (unsigned i=0; i<backends[q].output.size(); i++)
+                    for (unsigned dev=0; dev<backends[be].output.size(); dev++)
                     {
-                        size_t found = backends[q].output[i]->name.find(str);
+                        size_t found = backends[be].output[dev]->name.find(renderer);
                         if (found != std::string::npos)
                         {
-                            backends[q].current_output_device = i;
+                            backends[be].current_output_device = dev;
 
                             int val = xmlNodeGetInt(output, "frequency-hz");
-                            if (val) backends[q].output[i]->sample_freq = val;
+                            if (val) {
+                                backends[be].output[dev]->sample_freq = val;
+                            }
 
                             val = xmlNodeGetInt(output, "channels");
-                            if (val) backends[q].output[i]->no_speakers = val;
+                            if (val) {
+                                backends[be].output[dev]->no_speakers = val;
+                            }
 
-                            str = xmlNodeGetString(output, "setup");
-                            if (str)
+                            char *setup = xmlNodeGetString(output, "setup");
+                            if (setup)
                             {
-                                if (!strcasecmp(str, "stereo")) {
-                                    backends[q].output[i]->setup = AAX_MODE_WRITE_STEREO;
-                                } else if (!strcasecmp(str, "spatial")) {
-                                    backends[q].output[i]->setup = AAX_MODE_WRITE_SPATIAL;
-                                } else if (!strcasecmp(str, "surround")) {
-                                    backends[q].output[i]->setup = AAX_MODE_WRITE_SURROUND;
-                                } else if (!strcasecmp(str, "hrtf")) {
-                                    backends[q].output[i]->setup = AAX_MODE_WRITE_HRTF;
+                                if (!strcasecmp(setup, "stereo"))
+                                {
+                                    backends[be].output[dev]->setup
+                                        = AAX_MODE_WRITE_STEREO;
                                 }
-                                free(str);
+                                else if (!strcasecmp(setup, "spatial"))
+                                {
+                                    backends[be].output[dev]->setup
+                                        = AAX_MODE_WRITE_SPATIAL;
+                                }
+                                else if (!strcasecmp(setup, "surround"))
+                                {
+                                    backends[be].output[dev]->setup
+                                        = AAX_MODE_WRITE_SURROUND;
+                                }
+                                else if (!strcasecmp(setup, "hrtf"))
+                                {
+                                    backends[be].output[dev]->setup
+                                        = AAX_MODE_WRITE_HRTF;
+                                }
+                                xmlFree(setup);
                             }
                             break;
                         }
@@ -414,24 +438,26 @@ AeonWaveConfig::readConfigSettings(void* xid)
                 char *renderer = xmlNodeGetString(input, "renderer");
                 if (renderer)
                 {
-                    for (unsigned i=0; i<backends[q].input.size(); i++)
+                    for (unsigned dev=0; dev<backends[be].input.size(); dev++)
                     {
-                        size_t found = backends[q].input[i]->name.find(renderer);
+                        size_t found;
+
+                        found = backends[be].input[dev]->name.find(renderer);
                         if (found != std::string::npos)
                         {
-                            backends[q].current_input_device = i;
+                            backends[be].current_input_device = dev;
 
                             int val = xmlNodeGetInt(input, "frequency-hz");
-                            if (val) backends[q].input[i]->sample_freq = val;
-
+                            if (val) {
+                                backends[be].input[dev]->sample_freq = val;
+                            }
                             break;
                         }
                     }
-                    free(renderer);
+                    xmlFree(renderer);
                 }
                 xmlFree(input);
             }
-            xmlFree(name);
         }
         xmlFree(xbid);
         xmlFree(xcid);
@@ -488,13 +514,9 @@ AeonWaveConfig::displayUiConfig()
 void
 AeonWaveConfig::writeConfigFile()
 {
-
-    char *path = userConfigFile();
-    if (path)
+    std::string from_path = userConfigFile();
+    if (!from_path.empty())
     {
-        std::string from_path = path;
-        free(path);
-
         const char *username = getenv("SUDO_USER");
         if (!username) username = getenv("USER");
         if (username)
@@ -559,28 +581,28 @@ AeonWaveConfig::writeConfigFile()
                 file << backends[be].output[dev]->no_speakers;
                 file <<"</channels>\n";
 
-                for (unsigned s=0; s<MAX_SPEAKER_SETUP; s++)
+                for (unsigned sp=0; sp<MAX_SPEAKER_SETUP; sp++)
                 {
                    if (backends[be].output[dev]->setup
-                           == speaker_setup[s].setup 
+                           == speaker_setup[sp].setup 
                        &&  backends[be].output[dev]->no_speakers
-                               == speaker_setup[s].no_speakers
+                               == speaker_setup[sp].no_speakers
                       )
                    {
-                       for (unsigned q=0; q<speaker_setup[s].no_speakers; q++)
+                       for (unsigned n=0; n<speaker_setup[sp].no_speakers; n++)
                        {
-                           file << "    <speaker n=\"" << q << "\">\n";
+                           file << "    <speaker n=\"" << n << "\">\n";
                            file << "     <channel>";
-                           file << speaker_setup[s].speaker[q].channel;
+                           file << speaker_setup[sp].speaker[n].channel;
                            file << "</channel>\n";
                            file << "     <pos-x>";
-                           file << speaker_setup[s].speaker[q].pos[0];
+                           file << speaker_setup[sp].speaker[n].pos[0];
                            file << "</pos-x>\n";
                            file << "     <pos-y>";
-                           file << speaker_setup[s].speaker[q].pos[1];
+                           file << speaker_setup[sp].speaker[n].pos[1];
                            file << "</pos-y>\n";
                            file << "     <pos-z>";
-                           file << speaker_setup[s].speaker[q].pos[2];
+                           file << speaker_setup[sp].speaker[n].pos[2];
                            file << "</pos-z>\n";
                            file << "    </speaker>\n";
                        }

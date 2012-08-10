@@ -87,7 +87,7 @@ IF(MSVC)
     ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
     ADD_DEFINITIONS(-D_CRT_NONSTDC_NO_DEPRECATE)
 
-    OPTION(FORCE_STATIC_VCRT "Force /MT for static VC runtimes" ON)
+    OPTION(FORCE_STATIC_VCRT "Force /MT for static VC runtimes" OFF)
     IF(FORCE_STATIC_VCRT)
         FOREACH(flag_var
                 CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE
@@ -143,7 +143,7 @@ ENDIF(MSVC)
 INCLUDE( ${QT_USE_FILE} )
 
 SET( SOURCES src/main.cpp src/aaxconfig.cpp src/api.c )
-SET( HEADERS src/aaxconfig.h src/aaxconfig_ui.h src/api.h )
+SET( HEADERS src/aaxconfig.h src/aaxconfig_ui.h src/api.h src/types.h )
 SET( GUI src/aaxconfig.ui )
 SET( RCS src/aaxconfig.qrc )
 
@@ -215,7 +215,7 @@ ENDIF()
 IF(UNIX AND NOT APPLE)
   INSTALL(FILES admin/${PACKAGE}.desktop DESTINATION share/applications
           COMPONENT Applications)
-  INSTALL(FILES admin/aaxconfig.png DESTINATION share/pixmaps
+  INSTALL(FILES admin/${PACKAGE}.png DESTINATION share/pixmaps
           COMPONENT Applications)
 ENDIF(UNIX AND NOT APPLE)
 

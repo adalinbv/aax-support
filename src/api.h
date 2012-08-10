@@ -24,15 +24,6 @@
 extern "C" {
 #endif
 
-#if _MSC_VER
-# include <Windows.h>
-# include <stdio.h>
-# define strtoll _strtoi64
-# define snprintf _snprintf
-# define strcasecmp _stricmp
-# define strncasecmp _strnicmp
-#endif
-
 enum
 {
     STEREO = 0,
