@@ -91,7 +91,7 @@ private:
     enum aaxRenderMode general_setup;
 
     unsigned int current_backend;
-    std::vector<backend_t> backends;
+    std::vector<backend_t*> backends;
 
     void getSystemResources();
     void readConfigFiles();

@@ -2,11 +2,18 @@
 # By default, do not warn when built on machines using only VS Express:
 IF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
   SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS ON)
-ENDIF()
+ENDIF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
+
+# InstallRequiredSystemLibraries installs the runtime libraries without
+# specifying COMPONENT Runtime. We have to do it manually here:
+SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP TRUE)
+SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS "c:/Windows/System32/msvcr100.dll")
+INSTALL(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin
+        COMPONENT Applications)
 INCLUDE(InstallRequiredSystemLibraries)
 
 # Component support
-SET(CPACK_COMPONENTS_ALL Applications)
+SET(CPACK_COMPONENTS_ALL Applications Unspecified)
 
 # Display name
 SET(CPACK_COMPONENT_APPLICATIONS_HIDDEN ON)

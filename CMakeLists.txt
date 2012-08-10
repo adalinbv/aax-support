@@ -33,7 +33,7 @@ INCLUDE( ${QT_USE_FILE} )
 IF(WIN32)
   # Used to create Start Menu shortcuts <EXEC> <LABEL>
   SET(CPACK_PACKAGE_EXECUTABLES "${PACKAGE}" "${PACKAGE_NAME}")
-  SET(CPACK_PACKAGE_ICON "${CMake_SOURCE_DIR}/admin\\\\aaxconfig.png")
+  SET(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/admin\\\\aaxconfig.png")
   SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\aaxconfig.exe")
 
   SET(CPACK_NSIS_MODIFY_PATH "ON")
@@ -169,11 +169,11 @@ IF(WIN32)
   # Install needed Qt plugins by copying directories from the qt installation
   # One can cull what gets copied by using 'REGEX "..." EXCLUDE'
   # Exclude debug libraries
-  INSTALL(DIRECTORY "${QT_PLUGINS_DIR}/imageformats" 
-          DESTINATION ${plugin_dest_dir}/plugins 
-          COMPONENT runtime 
-          REGEX ".*d4.dll" EXCLUDE
-          REGEX ".*d4.a" EXCLUDE)
+# INSTALL(DIRECTORY "${QT_PLUGINS_DIR}/imageformats" 
+#         DESTINATION ${plugin_dest_dir}/plugins 
+#         COMPONENT runtime 
+#         REGEX ".*d4.dll" EXCLUDE
+#         REGEX ".*d4.a" EXCLUDE)
 
   # install a qt.conf file
   # this inserts some cmake code into the install script to write the file

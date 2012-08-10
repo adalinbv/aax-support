@@ -23,7 +23,8 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    AeonWaveConfig w;
-    w.show();
+
+    AeonWaveConfig *w = new AeonWaveConfig;
+    w->show();
     return a.exec();
 }
