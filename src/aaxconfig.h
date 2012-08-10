@@ -61,6 +61,7 @@ private:
         enum aaxRenderMode setup;
 
         _device() :
+            name("default"),
             sample_freq(44100),
             no_speakers(2),
             setup(AAX_MODE_WRITE_STEREO) {};
@@ -69,6 +70,7 @@ private:
             sample_freq(44100),
             no_speakers(2),
             setup(AAX_MODE_WRITE_STEREO) {};
+        ~_device() {};
     } device_t;
 
     typedef struct _backend
@@ -76,10 +78,10 @@ private:
         std::string name;
 
         unsigned int current_output_device;
-        std::vector<device_t> output;
+        std::vector<device_t*> output;
 
         unsigned int current_input_device;
-        std::vector<device_t> input;
+        std::vector<device_t*> input;
            
     } backend_t;
  
