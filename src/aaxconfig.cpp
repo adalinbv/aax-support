@@ -146,7 +146,8 @@ void
 AeonWaveConfig::changeInputDevice(int val)
 {
     unsigned be = current_backend;
-    unsigned dev = _MINMAX(val, 0, backends[be].input.size()-1);
+    int max_input = _MAX(backends[be].input.size()-1, 0);
+    int dev = _MINMAX(val, 0, max_input);
 
     backends[be].current_input_device = dev;
 
@@ -158,7 +159,8 @@ void
 AeonWaveConfig::changeOutputDevice(int val)
 {
     unsigned be = current_backend;
-    unsigned dev = _MINMAX(val, 0, backends[be].output.size()-1);
+    int max_output = _MAX(backends[be].output.size()-1, 0);
+    int dev = _MINMAX(val, 0, max_output);
 
     backends[be].current_output_device = dev;
 
@@ -175,7 +177,8 @@ AeonWaveConfig::changeOutputDevice(int val)
 void
 AeonWaveConfig::changeBackend(int val)
 {
-    current_backend = _MINMAX(val, 0, backends.size()-1);
+    int max_backend = _MAX(backends.size()-1, 0);
+    current_backend = _MINMAX(val, 0, max_backend);
     displayUiDevicesConfig();
 }
 

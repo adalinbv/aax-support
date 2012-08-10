@@ -20,7 +20,7 @@
 #include <string.h>
 #include <stdlib.h>		/* for getenv */
 
-#include "api.h"
+#include "types.h"
 
 #define CONFIG_FILE             "config.xml"
 
