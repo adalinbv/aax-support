@@ -20,6 +20,14 @@
 #include <QtGui/QApplication>
 #include "aaxconfig.h"
 
+#if defined(WIN32)
+# ifndef NDEBUG
+#  pragma comment(linker, "/SUBSYSTEM:CONSOLE")
+# else
+#  pragma comment(linker, "/SUBSYSTEM:WINDOWS")
+# endif
+#endif
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
