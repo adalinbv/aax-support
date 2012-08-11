@@ -100,6 +100,8 @@ private:
     void displayUiConfig();
     void displayUiDevicesConfig();
     unsigned int FreqToIndex(unsigned int freq);
+
+    void alert(std::string);
 };
 
 #endif // AAXCONFIG_H

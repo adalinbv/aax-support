@@ -19,11 +19,14 @@
 
 #include <stdio.h>	/* std::rename */
 #include <sys/stat.h>	/* std::chmod  */
+#include <errno.h>
 
 #include <iostream>
 #include <fstream>
 
 #include <xml.h>
+
+#include <QMessageBox>
 
 #include "aaxconfig.h"
 #include "types.h"
@@ -57,6 +60,13 @@ AeonWaveConfig::~AeonWaveConfig()
 }
 
 /* ------------------------------------------------------------------------- */
+
+void
+AeonWaveConfig::alert(std::string msg)
+{
+   QMessageBox::warning(0, "AeonWave-Config", QString(msg.c_str()));
+}
+
 
 #define MAX_FREQ	12
 static unsigned int _freq[MAX_FREQ] = {
@@ -522,6 +532,14 @@ AeonWaveConfig::writeConfigFile()
 
         std::ofstream file;
         file.open(from_path.c_str());
+
+        if (file.fail() || file.bad())
+        {
+            alert("Error writing to file: "+from_path+"\n\r"+strerror(errno));
+            file.close();
+            return;
+        }
+
         file << "<?xml version=\"1.0\"?>\n\n";
         file << "<configuration>\n";
 //      file << " <version>1.1</version>\n";
