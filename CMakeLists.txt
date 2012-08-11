@@ -7,6 +7,24 @@ SET(PACKAGE "aaxconfig")
 
 OPTION(WERROR "Treat compile warnings as errors"   OFF)
 
+IF(WIN32)
+  # By default, do not warn when built on machines using only VS Express:
+  # and define the library location ourselves.
+  IF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
+    SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS ON)
+    SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS
+        "c:/Windows/System32/msvcr100.dll" 
+        "c:/Windows/System32/msvcp100.dll")
+  ENDIF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
+
+  # InstallRequiredSystemLibraries installs the runtime libraries without
+  # specifying COMPONENT Runtime. We have to do it manually here:
+  SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP TRUE)
+  INSTALL(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin
+          COMPONENT Applications)
+  INCLUDE(InstallRequiredSystemLibraries)
+ENDIF(WIN32)
+
 # read 'version' file into a variable (stripping any newlines or spaces)
 FILE(READ version versionFile)
 STRING(STRIP ${versionFile} AAXCONFIG_VERSION)
