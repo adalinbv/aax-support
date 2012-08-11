@@ -1,19 +1,24 @@
 
-# By default, do not warn when built on machines using only VS Express:
-IF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
-  SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS ON)
-ENDIF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
+IF(WIN32)
+  # By default, do not warn when built on machines using only VS Express:
+  # and define the library location ourselves.
+  IF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
+    SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS ON)
+    SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS
+        "c:/Windows/System32/msvcr100.dll" 
+        "c:/Windows/System32/msvcp100.dll")
+  ENDIF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
 
-# InstallRequiredSystemLibraries installs the runtime libraries without
-# specifying COMPONENT Runtime. We have to do it manually here:
-SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP TRUE)
-SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS "c:/Windows/System32/msvcr100.dll")
-INSTALL(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin
-        COMPONENT Applications)
-INCLUDE(InstallRequiredSystemLibraries)
+  # InstallRequiredSystemLibraries installs the runtime libraries without
+  # specifying COMPONENT Runtime. We have to do it manually here:
+  SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP TRUE)
+  INSTALL(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin
+          COMPONENT Applications)
+  INCLUDE(InstallRequiredSystemLibraries)
+ENDIF(WIN32)
 
-# Component support
-SET(CPACK_COMPONENTS_ALL Applications Unspecified)
+  # Component support
+  SET(CPACK_COMPONENTS_ALL Applications Unspecified)
 
 # Display name
 SET(CPACK_COMPONENT_APPLICATIONS_HIDDEN ON)
