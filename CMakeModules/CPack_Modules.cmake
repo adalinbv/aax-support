@@ -79,3 +79,21 @@ macro (CMP_QT_LIBRARIES_INSTALL_RULES QTLIBLIST destination)
     endif(DEFINED QT_QMAKE_EXECUTABLE)
   endif()
 endmacro()
+
+macro (INSTALL_CUSTOM_LIB customlib destination)
+  if (MSVC)
+    SET(LIBNAME "${customlib}")
+    IF(${customlib} MATCHES "/lib/")
+      STRING(REGEX REPLACE "/lib/" "/bin/" LIBNAME ${LIBNAME})
+    ENDIF(${customlib} MATCHES "/lib/")
+    IF(${customlib} MATCHES ".lib$")
+      STRING(REGEX REPLACE ".lib$" ".dll" LIBNAME ${LIBNAME})
+    ENDIF(${customlib} MATCHES ".lib$")
+
+    message(STATUS "Generating Install Rule for DLL Library ${LIBNAME}")
+    INSTALL(FILES ${LIBNAME} 
+             DESTINATION "${destination}"
+              CONFIGURATIONS Release
+              COMPONENT Applications)
+  endif()
+endmacro()
