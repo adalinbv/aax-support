@@ -40,7 +40,7 @@ SET(CPACK_PACKAGE_VERSION_PATCH ${CMAKE_MATCH_3})
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "AeonWave 4D audio library configuration applet")
 
 # We have some custom .cmake scripts not in the official distribution.
-SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
+SET(CMAKE_MODULE_PATH "${aaxconfig_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
 
 INCLUDE(CPack_Modules)
 INCLUDE(CPack_Defaults)
@@ -215,5 +215,5 @@ CONFIGURE_FILE(
   "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/cmake_uninstall.cmake.in"
   "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
   IMMEDIATE @ONLY)
-ADD_CUSTOM_TARGET(uninstall
-  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
+#ADD_CUSTOM_TARGET(uninstall
+#  "${CMAKE_COMMAND}" -P "${aaxconfig_BINARY_DIR}/cmake_uninstall.cmake")
