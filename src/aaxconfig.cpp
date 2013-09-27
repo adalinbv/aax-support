@@ -540,36 +540,50 @@ AeonWaveConfig::writeConfigFile()
             return;
         }
 
-        file << "<?xml version=\"1.0\"?>\n\n";
-        file << "<configuration>\n";
-//      file << " <version>1.1</version>\n";
-        file << " <product-key>" << product_key << "</product-key>\n";
-        file << " <output>\n";
-        file << "  <frequency-hz>"<< general_sample_freq << "</frequency-hz>\n";
-        file << "  <interval-hz>" << refresh_rate << "</interval-hz>\n";
+        file << "<?xml version=\"1.0\"?>" << std::endl << std::endl;
+        file << "<configuration>" << std::endl;
+//      file << " <version>1.1</version>" << std::endl;
+
+        file << " <product-key>" << product_key;
+        file << "</product-key>" << std::endl;
+
+        file << " <output>" << std::endl;
+        file << "  <frequency-hz>"<< general_sample_freq;
+        file << "</frequency-hz>" << std::endl;
+
+        file << "  <interval-hz>" << refresh_rate;
+        file << "</interval-hz>" << std::endl;
+
         file << "  <setup>";
         if (general_setup == AAX_MODE_WRITE_STEREO) file << "stereo";
         else if (general_setup == AAX_MODE_WRITE_SPATIAL) file << "spatial";
         else if (general_setup == AAX_MODE_WRITE_SURROUND) file << "surround";
         else if (general_setup == AAX_MODE_WRITE_HRTF) file << "hrtf";
-        file << "</setup>\n";
-        file << " </output>\n\n";
+        file << "</setup>" << std::endl;
+        file << "  <head>" << std::endl;
+        file << "   <side-delay-sec>64e-5</side-delay-sec>" << std::endl;
+        file << "   <forward-delay-sec>9e-5</forward-delay-sec>" << std::endl;
+        file << "   <up-delay-sec>25e-5</up-delay-sec>" << std::endl;
+        file << "   <up-offset-sec>1e-4</up-offset-sec>" << std::endl;
+        file << "  </head>" << std::endl;
+        file << " </output>" << std::endl << std::endl;
 
         for (unsigned be=0; be<backends.size(); be++)
         {
             for (unsigned dev=0; dev<backends[be]->output.size(); dev++)
             {
-                file << " <backend>\n";
-                file << "  <name>" << backends[be]->name << "</name>\n";
-                file << "  <output>\n";
+                file << " <backend>" << std::endl;
+                file << "  <name>" << backends[be]->name;
+                file << "</name>" << std::endl;
 
+                file << "  <output>" << std::endl;
                 file << "   <renderer>";
                 file << backends[be]->output[dev]->name;
-                file << "</renderer>\n";
+                file << "</renderer>" << std::endl;
 
                 file << "   <frequency-hz>";
                 file << backends[be]->output[dev]->sample_freq;
-                file << "</frequency-hz>\n";
+                file << "</frequency-hz>" << std::endl;
 
                 file << "   <setup>"; 
                 switch(backends[be]->output[dev]->setup)
@@ -588,11 +602,11 @@ AeonWaveConfig::writeConfigFile()
                     file << "stereo";
                     break;
                 }
-                file << "</setup>\n";
+                file << "</setup>" << std::endl;
 
                 file << "   <channels>";
                 file << backends[be]->output[dev]->no_speakers;
-                file <<"</channels>\n";
+                file <<"</channels>" << std::endl;
 
                 for (unsigned sp=0; sp<MAX_SPEAKER_SETUP; sp++)
                 {
@@ -604,47 +618,49 @@ AeonWaveConfig::writeConfigFile()
                    {
                        for (unsigned n=0; n<speaker_setup[sp].no_speakers; n++)
                        {
-                           file << "    <speaker n=\"" << n << "\">\n";
+                           file << "    <speaker n=\"" << n << "\">" << std::endl;
                            file << "     <channel>";
                            file << speaker_setup[sp].speaker[n].channel;
-                           file << "</channel>\n";
+                           file << "</channel>" << std::endl;
                            file << "     <pos-x>";
                            file << speaker_setup[sp].speaker[n].pos[0];
-                           file << "</pos-x>\n";
+                           file << "</pos-x>" << std::endl;
                            file << "     <pos-y>";
                            file << speaker_setup[sp].speaker[n].pos[1];
-                           file << "</pos-y>\n";
+                           file << "</pos-y>" << std::endl;
                            file << "     <pos-z>";
                            file << speaker_setup[sp].speaker[n].pos[2];
-                           file << "</pos-z>\n";
-                           file << "    </speaker>\n";
+                           file << "</pos-z>" << std::endl;
+                           file << "    </speaker>" << std::endl;
                        }
                        break;
                    }
                 }
-                file << "  </output>\n";
-                file << " </backend>\n\n";
+                file << "  </output>" << std::endl;
+                file << " </backend>"<< std::endl << std::endl;
             }
 
             for(unsigned dev=0; dev<backends[be]->input.size(); dev++)
             {
-                file << " <backend>\n";
-                file << "  <name>" << backends[be]->name << "</name>\n";
-                file << "  <input>\n";
+                file << " <backend>" << std::endl;
 
+                file << "  <name>" << backends[be]->name;
+                file << "</name>" << std::endl;
+
+                file << "  <input>" << std::endl;
                 file << "   <renderer>";
                 file << backends[be]->input[dev]->name;
-                file << "</renderer>\n";
+                file << "</renderer>" << std::endl;
 
                 file << "   <frequency-hz>";
                 file << backends[be]->input[dev]->sample_freq;
-                file << "</frequency-hz>\n";
+                file << "</frequency-hz>" << std::endl;
 
-                file << "  </input>\n";
-                file << " </backend>\n\n";
+                file << "  </input>" << std::endl;
+                file << " </backend>" << std::endl << std::endl;
             }
         }
-        file << "</configuration>\n";
+        file << "</configuration>" << std::endl;
         file.close();
 
 #ifndef _WIN32
