@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2012 by Adalin B.V.
+ * Copyright 2011-2014 by Adalin B.V.
  *
  * This file is part of AeonWave-Config.
  *
@@ -19,6 +19,7 @@
 
 #include <string.h>
 #include <stdlib.h>		/* for getenv */
+#include <assert.h>
 
 #include "types.h"
 
@@ -208,6 +209,68 @@ systemConfigFile()
     }
 
     return rv;
+}
+
+/*
+ * Input: Backend (ALSA/WASAP/OSS) and driver (<card>: <interface>)
+ * Output: Device (<backend> on <card>) and interface
+ */
+void
+cfgBackendDriverToDeviceConnector(char **backend, char **driver)
+{
+   char _str[2048], *ptr;
+   size_t len;
+
+   assert(backend && *backend);
+   assert(driver && *driver);
+
+   snprintf(_str, 2048, "%s on %s", *backend, *driver);
+   ptr = strstr(_str, ": ");
+   if (!ptr) return;
+
+   len = ptr - _str;
+   if (len > strlen(*backend))
+   {
+      char *tmp = realloc(*backend, len+1);
+      if (!tmp) return;
+
+      *backend = tmp;
+   }
+
+   *ptr++ = 0;
+   memcpy(*backend, _str, ptr - _str);
+   memcpy(*driver, (ptr+1), strlen(ptr));
+}
+/*
+ * Input: Device (<backend> on <card>) and interface
+ * Output: Backend (ALSA/WASAP/OSS) and driver (<card>: <interface>)
+ */
+void
+cfgDeviceConnectorToBackendDriver(char **device, char **interface)
+{
+   char _str[2048], *ptr;
+   size_t len;
+
+   assert(device && *device);
+   assert(interface && *interface);
+
+   snprintf(_str, 2048, "%s: %s", *device, *interface);
+   ptr = strstr(_str, " on ");
+
+   len = strlen(ptr)-strlen(" on ");
+   if (len > strlen(*interface))
+   {
+      char *tmp = realloc(*interface, len+1);
+      if (!tmp) return;
+
+      *interface = tmp;
+   }
+
+   *ptr = 0;
+   memcpy(*device, _str, ptr - _str);
+
+   ptr += strlen(" on ");
+   memcpy(*interface, ptr, strlen(ptr));
 }
 
 

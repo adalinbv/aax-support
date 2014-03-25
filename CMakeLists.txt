@@ -57,8 +57,6 @@ IF(WIN32)
   SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\aaxconfig.exe")
 
   SET(CPACK_NSIS_MODIFY_PATH "ON")
-  SET(CMAKE_INSTALL_PREFIX ${PACKAGE_NAME} CACHE PATH "Final directory"FORCE)
-  SET(CPACK_PACKAGE_INSTALL_DIRECTORY "${CMAKE_INSTALL_PREFIX}")
   ADD_DEFINITIONS("-D_WIN32")
 #  SET(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}\\\\admin\aaxconfig.png")
 #  ADD_DEFINITIONS(/NODEFAULTLIB:msvcrt /NODEFAULTLIB:msvcrtd)
@@ -165,13 +163,14 @@ ENDIF(MSVC)
 INCLUDE( ${QT_USE_FILE} )
 
 SET( SOURCES src/main.cpp src/aaxconfig.cpp src/api.c )
-SET( HEADERS src/aaxconfig.h src/aaxconfig_ui.h src/api.h src/types.h )
+SET( HEADERS src/aaxconfig_ui.h src/api.h src/types.h )
+SET( PREPROCESS_HEADERS src/aaxconfig.h src/widgets.h )
 SET( GUI src/aaxconfig.ui )
 SET( RCS src/aaxconfig.qrc )
 
 QT4_ADD_RESOURCES(RC_SRCS ${RCS})
 QT4_WRAP_UI( GUI_HDRS ${GUI} )
-QT4_WRAP_CPP( MOC_HEADERS ${HEADERS} )
+QT4_WRAP_CPP( MOC_HEADERS ${PREPROCESS_HEADERS} )
 
 INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} ${AAX_INCLUDE_DIR} ${XML_INCLUDE_DIR} )
 

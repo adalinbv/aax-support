@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2014 by Adalin B.V.
+ * Copyright (C) 2014 by Adalin B.V.
  *
  * This file is part of AeonWave-Config.
  *
@@ -17,30 +17,28 @@
  *  along with AeonWave-Config.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QtGui/QApplication>
+#ifndef AAXCONFIG_WIDGETS_H
+#define AAXCONFIG_WIDGETS_H
+
+#include <QLineEdit>
+#include <QEvent>
+
 #include "aaxconfig.h"
 
-#if defined(WIN32)
-# ifndef NDEBUG
-#  pragma comment(linker, "/SUBSYSTEM:CONSOLE")
-# else
-#  pragma comment(linker, "/SUBSYSTEM:WINDOWS")
-# endif
-#endif
-
-AeonWaveConfig *_mw = 0;
-
-int main(int argc, char *argv[])
+class aaxConfigLineEdit : public QLineEdit
 {
-    QApplication app(argc, argv);
-    int rv = -1;
 
-    _mw = new AeonWaveConfig;
-    if (_mw)
+    Q_OBJECT
+
+public:
+    aaxConfigLineEdit(QWidget* parent) : QLineEdit(parent)
     {
-        _mw->show();
-        rv = app.exec();
-        delete _mw;
+        installEventFilter(this);
     }
-    return rv;
-}
+    ~aaxConfigLineEdit() {};
+
+private:
+    bool eventFilter(QObject* object, QEvent* event);
+};
+
+#endif

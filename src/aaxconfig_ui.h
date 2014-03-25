@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'aaxconfig.ui'
 **
-** Created: Fri Aug 10 16:06:33 2012
+** Created: Tue Mar 25 10:49:33 2014
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -14,41 +14,47 @@
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
+#include <QtGui/QCheckBox>
 #include <QtGui/QComboBox>
 #include <QtGui/QDialog>
+#include <QtGui/QDialogButtonBox>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
-#include <QtGui/QPushButton>
 #include <QtGui/QSpinBox>
+#include "widgets.h"
 
 QT_BEGIN_NAMESPACE
 
 class Ui_Configuration
 {
 public:
-    QLineEdit *ProductKey;
+    aaxConfigLineEdit *ProductKey;
     QLabel *label_product_key;
     QComboBox *SpeakerSetup;
     QLabel *label_setup;
-    QComboBox *Backend;
+    QComboBox *Device;
     QLabel *label_backend;
     QLabel *label_output_sample_freq;
     QComboBox *OutputSampleFreq;
     QComboBox *OutputSpeakers;
     QLabel *label_speakers;
-    QComboBox *OutputDevice;
+    QComboBox *OutputConnector;
     QLabel *label_output_device;
     QLabel *label_input_sample_freq;
     QComboBox *InputSampleFreq;
     QLabel *label_input_device;
-    QComboBox *InputDevice;
-    QPushButton *OK;
+    QComboBox *InputConnector;
     QLabel *graphicsView;
     QLabel *label_general_sample_freq;
     QComboBox *GeneralSampleFreq;
     QSpinBox *RefreshRate;
     QLabel *label_refresh_rate;
+    QLabel *label_periods;
+    QComboBox *OutputPeriods;
+    QCheckBox *Timer;
+    QCheckBox *Shared;
+    QDialogButtonBox *OK;
+    QLabel *graphicsView_logo;
 
     void setupUi(QDialog *Configuration)
     {
@@ -57,39 +63,39 @@ public:
         Configuration->resize(579, 390);
         Configuration->setMinimumSize(QSize(579, 390));
         Configuration->setMaximumSize(QSize(579, 390));
-        ProductKey = new QLineEdit(Configuration);
+        ProductKey = new aaxConfigLineEdit(Configuration);
         ProductKey->setObjectName(QString::fromUtf8("ProductKey"));
-        ProductKey->setGeometry(QRect(10, 30, 311, 21));
+        ProductKey->setGeometry(QRect(340, 85, 231, 21));
         label_product_key = new QLabel(Configuration);
         label_product_key->setObjectName(QString::fromUtf8("label_product_key"));
-        label_product_key->setGeometry(QRect(10, 10, 91, 17));
+        label_product_key->setGeometry(QRect(340, 60, 91, 17));
         SpeakerSetup = new QComboBox(Configuration);
         SpeakerSetup->setObjectName(QString::fromUtf8("SpeakerSetup"));
-        SpeakerSetup->setGeometry(QRect(200, 260, 121, 27));
+        SpeakerSetup->setGeometry(QRect(200, 250, 121, 27));
         label_setup = new QLabel(Configuration);
         label_setup->setObjectName(QString::fromUtf8("label_setup"));
-        label_setup->setGeometry(QRect(200, 240, 101, 17));
-        Backend = new QComboBox(Configuration);
-        Backend->setObjectName(QString::fromUtf8("Backend"));
-        Backend->setGeometry(QRect(10, 80, 311, 27));
+        label_setup->setGeometry(QRect(200, 230, 121, 17));
+        Device = new QComboBox(Configuration);
+        Device->setObjectName(QString::fromUtf8("Device"));
+        Device->setGeometry(QRect(10, 30, 311, 27));
         label_backend = new QLabel(Configuration);
         label_backend->setObjectName(QString::fromUtf8("label_backend"));
-        label_backend->setGeometry(QRect(10, 60, 71, 17));
+        label_backend->setGeometry(QRect(10, 10, 71, 17));
         label_output_sample_freq = new QLabel(Configuration);
         label_output_sample_freq->setObjectName(QString::fromUtf8("label_output_sample_freq"));
-        label_output_sample_freq->setGeometry(QRect(200, 180, 81, 20));
+        label_output_sample_freq->setGeometry(QRect(200, 180, 121, 20));
         OutputSampleFreq = new QComboBox(Configuration);
         OutputSampleFreq->setObjectName(QString::fromUtf8("OutputSampleFreq"));
         OutputSampleFreq->setGeometry(QRect(200, 200, 121, 27));
         OutputSpeakers = new QComboBox(Configuration);
         OutputSpeakers->setObjectName(QString::fromUtf8("OutputSpeakers"));
-        OutputSpeakers->setGeometry(QRect(200, 320, 121, 27));
+        OutputSpeakers->setGeometry(QRect(200, 300, 121, 27));
         label_speakers = new QLabel(Configuration);
         label_speakers->setObjectName(QString::fromUtf8("label_speakers"));
-        label_speakers->setGeometry(QRect(200, 300, 121, 20));
-        OutputDevice = new QComboBox(Configuration);
-        OutputDevice->setObjectName(QString::fromUtf8("OutputDevice"));
-        OutputDevice->setGeometry(QRect(10, 140, 311, 27));
+        label_speakers->setGeometry(QRect(200, 280, 121, 20));
+        OutputConnector = new QComboBox(Configuration);
+        OutputConnector->setObjectName(QString::fromUtf8("OutputConnector"));
+        OutputConnector->setGeometry(QRect(10, 140, 311, 27));
         label_output_device = new QLabel(Configuration);
         label_output_device->setObjectName(QString::fromUtf8("label_output_device"));
         label_output_device->setGeometry(QRect(10, 120, 151, 20));
@@ -102,12 +108,9 @@ public:
         label_input_device = new QLabel(Configuration);
         label_input_device->setObjectName(QString::fromUtf8("label_input_device"));
         label_input_device->setGeometry(QRect(340, 120, 141, 20));
-        InputDevice = new QComboBox(Configuration);
-        InputDevice->setObjectName(QString::fromUtf8("InputDevice"));
-        InputDevice->setGeometry(QRect(340, 140, 231, 27));
-        OK = new QPushButton(Configuration);
-        OK->setObjectName(QString::fromUtf8("OK"));
-        OK->setGeometry(QRect(470, 350, 93, 27));
+        InputConnector = new QComboBox(Configuration);
+        InputConnector->setObjectName(QString::fromUtf8("InputConnector"));
+        InputConnector->setGeometry(QRect(340, 140, 231, 27));
         graphicsView = new QLabel(Configuration);
         graphicsView->setObjectName(QString::fromUtf8("graphicsView"));
         graphicsView->setGeometry(QRect(0, 190, 180, 180));
@@ -126,35 +129,52 @@ public:
         label_refresh_rate = new QLabel(Configuration);
         label_refresh_rate->setObjectName(QString::fromUtf8("label_refresh_rate"));
         label_refresh_rate->setGeometry(QRect(480, 10, 91, 17));
-        QWidget::setTabOrder(ProductKey, GeneralSampleFreq);
+        label_periods = new QLabel(Configuration);
+        label_periods->setObjectName(QString::fromUtf8("label_periods"));
+        label_periods->setGeometry(QRect(200, 330, 121, 20));
+        OutputPeriods = new QComboBox(Configuration);
+        OutputPeriods->setObjectName(QString::fromUtf8("OutputPeriods"));
+        OutputPeriods->setGeometry(QRect(200, 350, 121, 27));
+        Timer = new QCheckBox(Configuration);
+        Timer->setObjectName(QString::fromUtf8("Timer"));
+        Timer->setGeometry(QRect(10, 60, 221, 22));
+        Shared = new QCheckBox(Configuration);
+        Shared->setObjectName(QString::fromUtf8("Shared"));
+        Shared->setGeometry(QRect(10, 80, 97, 22));
+        OK = new QDialogButtonBox(Configuration);
+        OK->setObjectName(QString::fromUtf8("OK"));
+        OK->setGeometry(QRect(351, 348, 221, 32));
+        OK->setOrientation(Qt::Horizontal);
+        OK->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+        graphicsView_logo = new QLabel(Configuration);
+        graphicsView_logo->setObjectName(QString::fromUtf8("graphicsView_logo"));
+        graphicsView_logo->setGeometry(QRect(390, 260, 130, 48));
+        graphicsView_logo->setFrameShape(QFrame::NoFrame);
+        graphicsView_logo->setFrameShadow(QFrame::Sunken);
+        graphicsView_logo->setLineWidth(1);
+        graphicsView_logo->setAlignment(Qt::AlignHCenter|Qt::AlignTop);
+        QWidget::setTabOrder(Device, Timer);
+        QWidget::setTabOrder(Timer, Shared);
+        QWidget::setTabOrder(Shared, GeneralSampleFreq);
         QWidget::setTabOrder(GeneralSampleFreq, RefreshRate);
-        QWidget::setTabOrder(RefreshRate, Backend);
-        QWidget::setTabOrder(Backend, OutputDevice);
-        QWidget::setTabOrder(OutputDevice, OutputSampleFreq);
+        QWidget::setTabOrder(RefreshRate, ProductKey);
+        QWidget::setTabOrder(ProductKey, OutputConnector);
+        QWidget::setTabOrder(OutputConnector, OutputSampleFreq);
         QWidget::setTabOrder(OutputSampleFreq, SpeakerSetup);
         QWidget::setTabOrder(SpeakerSetup, OutputSpeakers);
-        QWidget::setTabOrder(OutputSpeakers, InputDevice);
-        QWidget::setTabOrder(InputDevice, InputSampleFreq);
+        QWidget::setTabOrder(OutputSpeakers, OutputPeriods);
+        QWidget::setTabOrder(OutputPeriods, InputConnector);
+        QWidget::setTabOrder(InputConnector, InputSampleFreq);
         QWidget::setTabOrder(InputSampleFreq, OK);
-        QWidget::setTabOrder(OK, graphicsView);
 
         retranslateUi(Configuration);
-        QObject::connect(OK, SIGNAL(clicked()), Configuration, SLOT(writeConfig()));
-        QObject::connect(ProductKey, SIGNAL(textEdited(QString)), Configuration, SLOT(changeProductKey(QString)));
-        QObject::connect(SpeakerSetup, SIGNAL(currentIndexChanged(int)), Configuration, SLOT(changeSpeakerSetup(int)));
-        QObject::connect(InputSampleFreq, SIGNAL(currentIndexChanged(int)), Configuration, SLOT(changeInputSampleFreq(int)));
-        QObject::connect(OutputSampleFreq, SIGNAL(currentIndexChanged(int)), Configuration, SLOT(changeOutputSampleFreq(int)));
-        QObject::connect(OutputSpeakers, SIGNAL(currentIndexChanged(int)), Configuration, SLOT(changeNoSpeakers(int)));
-        QObject::connect(InputDevice, SIGNAL(currentIndexChanged(int)), Configuration, SLOT(changeInputDevice(int)));
-        QObject::connect(OutputDevice, SIGNAL(currentIndexChanged(int)), Configuration, SLOT(changeOutputDevice(int)));
-        QObject::connect(Backend, SIGNAL(currentIndexChanged(int)), Configuration, SLOT(changeBackend(int)));
 
         QMetaObject::connectSlotsByName(Configuration);
     } // setupUi
 
     void retranslateUi(QDialog *Configuration)
     {
-        Configuration->setWindowTitle(QApplication::translate("Configuration", "Dialog", 0, QApplication::UnicodeUTF8));
+        Configuration->setWindowTitle(QApplication::translate("Configuration", "AeonWave Configuration", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
         ProductKey->setToolTip(QApplication::translate("Configuration", "product-key", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
@@ -167,7 +187,7 @@ public:
          << QApplication::translate("Configuration", "HRTF", 0, QApplication::UnicodeUTF8)
         );
         label_setup->setText(QApplication::translate("Configuration", "Speaker Setup:", 0, QApplication::UnicodeUTF8));
-        label_backend->setText(QApplication::translate("Configuration", "Backend:", 0, QApplication::UnicodeUTF8));
+        label_backend->setText(QApplication::translate("Configuration", "Device:", 0, QApplication::UnicodeUTF8));
         label_output_sample_freq->setText(QApplication::translate("Configuration", "Frequency:", 0, QApplication::UnicodeUTF8));
         OutputSampleFreq->clear();
         OutputSampleFreq->insertItems(0, QStringList()
@@ -192,7 +212,7 @@ public:
          << QApplication::translate("Configuration", "7.1", 0, QApplication::UnicodeUTF8)
         );
         label_speakers->setText(QApplication::translate("Configuration", "No. Speakers:", 0, QApplication::UnicodeUTF8));
-        label_output_device->setText(QApplication::translate("Configuration", "Output Device:", 0, QApplication::UnicodeUTF8));
+        label_output_device->setText(QApplication::translate("Configuration", "Output Port:", 0, QApplication::UnicodeUTF8));
         label_input_sample_freq->setText(QApplication::translate("Configuration", "Frequency:", 0, QApplication::UnicodeUTF8));
         InputSampleFreq->clear();
         InputSampleFreq->insertItems(0, QStringList()
@@ -209,8 +229,7 @@ public:
          << QApplication::translate("Configuration", "176400 Hz", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("Configuration", "192000 Hz", 0, QApplication::UnicodeUTF8)
         );
-        label_input_device->setText(QApplication::translate("Configuration", "Input Device:", 0, QApplication::UnicodeUTF8));
-        OK->setText(QApplication::translate("Configuration", "OK", 0, QApplication::UnicodeUTF8));
+        label_input_device->setText(QApplication::translate("Configuration", "Input Port:", 0, QApplication::UnicodeUTF8));
         label_general_sample_freq->setText(QApplication::translate("Configuration", "Sample Frequency:", 0, QApplication::UnicodeUTF8));
         GeneralSampleFreq->clear();
         GeneralSampleFreq->insertItems(0, QStringList()
@@ -228,6 +247,24 @@ public:
          << QApplication::translate("Configuration", "192000 Hz", 0, QApplication::UnicodeUTF8)
         );
         label_refresh_rate->setText(QApplication::translate("Configuration", "Refresh Rate:", 0, QApplication::UnicodeUTF8));
+        label_periods->setText(QApplication::translate("Configuration", "Buffer Periods:", 0, QApplication::UnicodeUTF8));
+        OutputPeriods->clear();
+        OutputPeriods->insertItems(0, QStringList()
+         << QApplication::translate("Configuration", "2", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("Configuration", "3", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("Configuration", "4", 0, QApplication::UnicodeUTF8)
+        );
+#ifndef QT_NO_TOOLTIP
+        OutputPeriods->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>For lowest latencies set this option to 2 (default).</p><p>Some devices require a higer number of playback periods for higher refresh rates which decreases latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        Timer->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Enable the system timer for pushing data to the audio device.</p><p>This will save power consumption but is less reliable for lower latencies. Therefore this option is only used for refresh rates below 75Hz.</p></body></html>", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+        Timer->setText(QApplication::translate("Configuration", "Timer Driven (Experimental)", 0, QApplication::UnicodeUTF8));
+#ifndef QT_NO_TOOLTIP
+        Shared->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Allow this device to be shared with other applications.</p><p>This will increase latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+        Shared->setText(QApplication::translate("Configuration", "Shared", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

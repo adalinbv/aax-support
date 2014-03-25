@@ -23,14 +23,14 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>AeonWave Configuration</string>
   </property>
-  <widget class="QLineEdit" name="ProductKey">
+  <widget class="aaxConfigLineEdit" name="ProductKey">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>30</y>
-     <width>311</width>
+     <x>340</x>
+     <y>85</y>
+     <width>231</width>
      <height>21</height>
     </rect>
    </property>
@@ -41,8 +41,8 @@
   <widget class="QLabel" name="label_product_key">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>10</y>
+     <x>340</x>
+     <y>60</y>
      <width>91</width>
      <height>17</height>
     </rect>
@@ -55,7 +55,7 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>260</y>
+     <y>250</y>
      <width>121</width>
      <height>27</height>
     </rect>
@@ -85,8 +85,8 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>240</y>
-     <width>101</width>
+     <y>230</y>
+     <width>121</width>
      <height>17</height>
     </rect>
    </property>
@@ -94,11 +94,11 @@
     <string>Speaker Setup:</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="Backend">
+  <widget class="QComboBox" name="Device">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>80</y>
+     <y>30</y>
      <width>311</width>
      <height>27</height>
     </rect>
@@ -108,13 +108,13 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>60</y>
+     <y>10</y>
      <width>71</width>
      <height>17</height>
     </rect>
    </property>
    <property name="text">
-    <string>Backend:</string>
+    <string>Device:</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_output_sample_freq">
@@ -122,7 +122,7 @@
     <rect>
      <x>200</x>
      <y>180</y>
-     <width>81</width>
+     <width>121</width>
      <height>20</height>
     </rect>
    </property>
@@ -204,7 +204,7 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>320</y>
+     <y>300</y>
      <width>121</width>
      <height>27</height>
     </rect>
@@ -234,7 +234,7 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>300</y>
+     <y>280</y>
      <width>121</width>
      <height>20</height>
     </rect>
@@ -243,7 +243,7 @@
     <string>No. Speakers:</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="OutputDevice">
+  <widget class="QComboBox" name="OutputConnector">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -263,7 +263,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Output Device:</string>
+    <string>Output Port:</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_input_sample_freq">
@@ -359,10 +359,10 @@
     </rect>
    </property>
    <property name="text">
-    <string>Input Device:</string>
+    <string>Input Port:</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="InputDevice">
+  <widget class="QComboBox" name="InputConnector">
    <property name="geometry">
     <rect>
      <x>340</x>
@@ -370,19 +370,6 @@
      <width>231</width>
      <height>27</height>
     </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="OK">
-   <property name="geometry">
-    <rect>
-     <x>470</x>
-     <y>350</y>
-     <width>93</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>OK</string>
    </property>
   </widget>
   <widget class="QLabel" name="graphicsView">
@@ -510,168 +497,143 @@
     <string>Refresh Rate:</string>
    </property>
   </widget>
+  <widget class="QLabel" name="label_periods">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>330</y>
+     <width>121</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Buffer Periods:</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="OutputPeriods">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>350</y>
+     <width>121</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;For lowest latencies set this option to 2 (default).&lt;/p&gt;&lt;p&gt;Some devices require a higer number of playback periods for higher refresh rates which decreases latency.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <item>
+    <property name="text">
+     <string>2</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>3</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>4</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QCheckBox" name="Timer">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>60</y>
+     <width>221</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enable the system timer for pushing data to the audio device.&lt;/p&gt;&lt;p&gt;This will save power consumption but is less reliable for lower latencies. Therefore this option is only used for refresh rates below 75Hz.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="text">
+    <string>Timer Driven (Experimental)</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="Shared">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>80</y>
+     <width>97</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Allow this device to be shared with other applications.&lt;/p&gt;&lt;p&gt;This will increase latency.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="text">
+    <string>Shared</string>
+   </property>
+  </widget>
+  <widget class="QDialogButtonBox" name="OK">
+   <property name="geometry">
+    <rect>
+     <x>351</x>
+     <y>348</y>
+     <width>221</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="graphicsView_logo">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>260</y>
+     <width>130</width>
+     <height>48</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::NoFrame</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Sunken</enum>
+   </property>
+   <property name="lineWidth">
+    <number>1</number>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignHCenter|Qt::AlignTop</set>
+   </property>
+  </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>aaxConfigLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>widgets.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
-  <tabstop>ProductKey</tabstop>
+  <tabstop>Device</tabstop>
+  <tabstop>Timer</tabstop>
+  <tabstop>Shared</tabstop>
   <tabstop>GeneralSampleFreq</tabstop>
   <tabstop>RefreshRate</tabstop>
-  <tabstop>Backend</tabstop>
-  <tabstop>OutputDevice</tabstop>
+  <tabstop>ProductKey</tabstop>
+  <tabstop>OutputConnector</tabstop>
   <tabstop>OutputSampleFreq</tabstop>
   <tabstop>SpeakerSetup</tabstop>
   <tabstop>OutputSpeakers</tabstop>
-  <tabstop>InputDevice</tabstop>
+  <tabstop>OutputPeriods</tabstop>
+  <tabstop>InputConnector</tabstop>
   <tabstop>InputSampleFreq</tabstop>
   <tabstop>OK</tabstop>
-  <tabstop>graphicsView</tabstop>
  </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>OK</sender>
-   <signal>clicked()</signal>
-   <receiver>Configuration</receiver>
-   <slot>writeConfig()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>556</x>
-     <y>330</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>550</x>
-     <y>295</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>ProductKey</sender>
-   <signal>textEdited(QString)</signal>
-   <receiver>Configuration</receiver>
-   <slot>changeProductKey(QString)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>123</x>
-     <y>35</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>116</x>
-     <y>51</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>SpeakerSetup</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>Configuration</receiver>
-   <slot>changeSpeakerSetup(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>82</x>
-     <y>165</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>167</x>
-     <y>166</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>InputSampleFreq</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>Configuration</receiver>
-   <slot>changeInputSampleFreq(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>339</x>
-     <y>282</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>340</x>
-     <y>311</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>OutputSampleFreq</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>Configuration</receiver>
-   <slot>changeOutputSampleFreq(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>375</x>
-     <y>167</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>241</x>
-     <y>196</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>OutputSpeakers</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>Configuration</receiver>
-   <slot>changeNoSpeakers(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>483</x>
-     <y>167</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>174</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>InputDevice</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>Configuration</receiver>
-   <slot>changeInputDevice(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>403</x>
-     <y>230</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>46</x>
-     <y>333</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>OutputDevice</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>Configuration</receiver>
-   <slot>changeOutputDevice(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>450</x>
-     <y>113</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>36</x>
-     <y>293</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>Backend</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>Configuration</receiver>
-   <slot>changeBackend(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>324</x>
-     <y>49</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>41</x>
-     <y>249</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <slots>
   <slot>changeProductKey(QString)</slot>
   <slot>changeRefreshRate(int)</slot>
@@ -680,9 +642,9 @@
   <slot>changeNoSpeakers(int)</slot>
   <slot>changeOutputSampleFreq(int)</slot>
   <slot>changeInputSampleFreq(int)</slot>
-  <slot>changeInputDevice(int)</slot>
-  <slot>changeOutputDevice(int)</slot>
-  <slot>changeBackend(int)</slot>
+  <slot>changeInputConnector(int)</slot>
+  <slot>changeOutputConnector(int)</slot>
+  <slot>changeDevice(int)</slot>
   <slot>writeConfig()</slot>
  </slots>
 </ui>

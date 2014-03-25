@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2012 by Adalin B.V.
+ * Copyright 2011-2014 by Adalin B.V.
  *
  * This file is part of AeonWave-Config.
  *
@@ -57,6 +57,10 @@ extern speaker_t speaker_setup[MAX_SPEAKER_SETUP];
 const char* userHomeDir();
 char* userConfigFile();
 char* systemConfigFile();
+
+
+void cfgBackendDriverToDeviceConnector(char **, char **);
+void cfgDeviceConnectorToBackendDriver(char **, char **);
 
 #if defined(__cplusplus)
 }  /* extern "C" */

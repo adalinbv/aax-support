@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Adalin B.V.
+ * Copyright (C) 2011-2014 by Adalin B.V.
  *
  * This file is part of AeonWave-Config.
  *
@@ -27,7 +27,7 @@
 
 #include <QtGui/QDialog>
 
-#include "aaxconfig_ui.h"
+class Ui_Configuration;
 
 class AeonWaveConfig : public QDialog
 {
@@ -37,71 +37,95 @@ public:
     AeonWaveConfig(QWidget *parent = 0);
     ~AeonWaveConfig();
 
+    std::string get_productkey() {
+        return product_key;
+    }
+
+    Ui_Configuration *ui;
+
 private slots:
-    void changeProductKey(QString str);
+    void changeTimerDriven(bool);
+    void changeShared(bool);
     void changeRefreshRate(int val);
     void changeSpeakerSetup(int val);
     void changeGeneralSampleFreq(int val);
     void changeInputSampleFreq(int val);
     void changeOutputSampleFreq(int val);
     void changeNoSpeakers(int val);
-    void changeInputDevice(int val);
-    void changeOutputDevice(int val);
-    void changeBackend(int val);
+     void changeNoPeriods(int val);
+    void changeInputConnector(int val);
+    void changeOutputConnector(int val);
+    void changeDevice(int val);
     void writeConfig();
 
-private:
-    Ui_Configuration *ui;
+    void changeProductKey(QString str);
 
-    typedef struct _device
+private:
+    typedef struct _connector
     {
         std::string name;
         unsigned int sample_freq;
         unsigned int no_speakers;
+        unsigned int no_periods;
         enum aaxRenderMode setup;
 
-        _device() :
+        _connector() :
             name("default"),
             sample_freq(44100),
             no_speakers(2),
+            no_periods(2),
             setup(AAX_MODE_WRITE_STEREO) {};
-        _device(std::string n) :
+        _connector(std::string n) :
             name(n),
             sample_freq(44100),
             no_speakers(2),
+            no_periods(2),
             setup(AAX_MODE_WRITE_STEREO) {};
-        ~_device() {};
-    } device_t;
+        ~_connector() {};
+    } connector_t;
 
-    typedef struct _backend
+    typedef struct _device
     {
         std::string name;
+        bool shared;
+        bool timed;
 
-        unsigned int current_output_device;
-        std::vector<device_t*> output;
+        unsigned int current_output_connector;
+        std::vector<connector_t*> output;
 
-        unsigned int current_input_device;
-        std::vector<device_t*> input;
+        unsigned int current_input_connector;
+        std::vector<connector_t*> input;
+
+        _device() :
+          shared(false),
+          timed(false) {};
            
-    } backend_t;
+    } device_t;
  
     std::string product_key;
     unsigned int refresh_rate;
     unsigned int general_sample_freq;
     enum aaxRenderMode general_setup;
 
-    unsigned int current_backend;
-    std::vector<backend_t*> backends;
+    unsigned int current_device;
+    std::vector<device_t*> devices;
 
     void getSystemResources();
     void readConfigFiles();
+    void readOldConfigSettings(void*);
+    void readNewConfigSettings(void*);
+    void readConnectorOutSettings(void*, unsigned, unsigned);
+    void readConnectorInSettings(void*, unsigned, unsigned);
     void readConfigSettings(void*);
     void writeConfigFile();
+
     void displayUiConfig();
     void displayUiDevicesConfig();
-    unsigned int FreqToIndex(unsigned int freq);
-
     void alert(std::string);
+
+    unsigned int FreqToIndex(unsigned int freq);
 };
+
+extern AeonWaveConfig *_mw;
 
 #endif // AAXCONFIG_H
