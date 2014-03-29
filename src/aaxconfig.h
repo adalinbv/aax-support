@@ -48,6 +48,7 @@ private slots:
     void changeShared(bool);
     void changeRefreshRate(int val);
     void changeSpeakerSetup(int val);
+    void changeInputBitrate(int val);
     void changeGeneralSampleFreq(int val);
     void changeInputSampleFreq(int val);
     void changeOutputSampleFreq(int val);
@@ -64,41 +65,44 @@ private:
     typedef struct _connector
     {
         std::string name;
+        unsigned int bitrate;
         unsigned int sample_freq;
         unsigned int no_speakers;
         unsigned int no_periods;
         enum aaxRenderMode setup;
+        bool shared;
+        bool timed;
 
         _connector() :
             name("default"),
+            bitrate(320),
             sample_freq(44100),
             no_speakers(2),
             no_periods(2),
-            setup(AAX_MODE_WRITE_STEREO) {};
+            setup(AAX_MODE_WRITE_STEREO),
+            shared(false),
+            timed(false) {};
         _connector(std::string n) :
             name(n),
+            bitrate(320),
             sample_freq(44100),
             no_speakers(2),
             no_periods(2),
-            setup(AAX_MODE_WRITE_STEREO) {};
+            setup(AAX_MODE_WRITE_STEREO),
+            shared(false),
+            timed(false) {};
         ~_connector() {};
     } connector_t;
 
     typedef struct _device
     {
         std::string name;
-        bool shared;
-        bool timed;
 
         unsigned int current_output_connector;
         std::vector<connector_t*> output;
 
         unsigned int current_input_connector;
         std::vector<connector_t*> input;
-
-        _device() :
-          shared(false),
-          timed(false) {};
            
     } device_t;
  
@@ -107,6 +111,7 @@ private:
     unsigned int general_sample_freq;
     enum aaxRenderMode general_setup;
 
+    int file_be_pos;
     unsigned int current_device;
     std::vector<device_t*> devices;
 

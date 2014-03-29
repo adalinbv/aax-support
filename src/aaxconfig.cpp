@@ -39,6 +39,7 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     refresh_rate(46),
     general_sample_freq(48000),
     general_setup(AAX_MODE_WRITE_STEREO),
+    file_be_pos(-1),
     current_device(0)
 {
     getSystemResources();   
@@ -66,6 +67,7 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     connect(ui->OK, SIGNAL(rejected()), this, SLOT(close()));
     connect(ui->SpeakerSetup, SIGNAL(currentIndexChanged(int)), this, SLOT(changeSpeakerSetup(int)));
     connect(ui->InputSampleFreq, SIGNAL(currentIndexChanged(int)), this, SLOT(changeInputSampleFreq(int)));
+    connect(ui->InputBitrate, SIGNAL(currentIndexChanged(int)), this, SLOT(changeInputBitrate(int)));
     connect(ui->OutputSampleFreq, SIGNAL(currentIndexChanged(int)), this, SLOT(changeOutputSampleFreq(int)));
     connect(ui->InputConnector, SIGNAL(currentIndexChanged(int)), this, SLOT(changeInputConnector(int)));
     connect(ui->OutputConnector, SIGNAL(currentIndexChanged(int)), this, SLOT(changeOutputConnector(int)));
@@ -119,20 +121,21 @@ AeonWaveConfig::changeGeneralSampleFreq(int val)
 void
 AeonWaveConfig::changeTimerDriven(bool val)
 {
-    devices[current_device]->timed = val;
+    unsigned dev = devices[current_device]->current_output_connector;
+    devices[current_device]->output[dev]->timed = val;
 }
 
 void
 AeonWaveConfig::changeShared(bool val)
 {
-    devices[current_device]->shared = val;
+    unsigned dev = devices[current_device]->current_output_connector;
+    devices[current_device]->output[dev]->shared = val;
 }
 
 void
 AeonWaveConfig::changeSpeakerSetup(int val)
 {
     unsigned dev = devices[current_device]->current_output_connector;
-
     devices[current_device]->output[dev]->setup = aaxRenderMode(val+1);
     changeNoSpeakers(devices[current_device]->output[dev]->no_speakers/2-1);
 }
@@ -141,15 +144,21 @@ void
 AeonWaveConfig::changeInputSampleFreq(int val)
 {
     unsigned dev = devices[current_device]->current_input_connector;
-
     devices[current_device]->input[dev]->sample_freq = _freq[val];
 }
+
+void
+AeonWaveConfig::changeInputBitrate(int val)
+{
+    unsigned dev = devices[current_device]->current_input_connector;
+    devices[current_device]->input[dev]->bitrate = (val+1)*64;
+}
+
 
 void
 AeonWaveConfig::changeOutputSampleFreq(int val)
 {
     unsigned dev = devices[current_device]->current_output_connector;
-
     devices[current_device]->output[dev]->sample_freq = _freq[val];
 }
 
@@ -198,6 +207,9 @@ AeonWaveConfig::changeInputConnector(int val)
 
     val = FreqToIndex(devices[be]->input[dev]->sample_freq);
     ui->InputSampleFreq->setCurrentIndex(val);
+
+    val = (devices[be]->input[dev]->bitrate/64)-1;
+    ui->InputBitrate->setCurrentIndex(val);
 }
 
 void
@@ -208,6 +220,9 @@ AeonWaveConfig::changeOutputConnector(int val)
     int dev = _MINMAX(val, 0, max_output);
 
     devices[be]->current_output_connector = dev;
+
+    ui->Timer->setChecked(devices[be]->output[dev]->timed);
+    ui->Shared->setChecked(devices[be]->output[dev]->shared);
 
     val = (devices[be]->output[dev]->no_speakers/2)-1;
     ui->OutputSpeakers->setCurrentIndex(val);
@@ -332,8 +347,13 @@ AeonWaveConfig::getSystemResources()
                         device->name = devname;
                         devices.push_back(device);
                     }
-                    else {
+                    else
+                    {
                         device = devices[q];
+
+                        if (devname == "AeonWave on Audio Files") {
+                            file_be_pos = q;
+                        }
                     }
 
                     max_ifs = aaxDriverGetInterfaceCount(cfg, r.c_str(), mode);
@@ -607,8 +627,8 @@ AeonWaveConfig::readNewConfigSettings(void* xcid)
 void
 AeonWaveConfig::readConnectorOutSettings(void *xiid, unsigned be, unsigned dev)
 {
-    devices[be]->timed = xmlNodeGetBool(xiid, "timed");
-    devices[be]->shared = xmlNodeGetBool(xiid, "shared");
+    devices[be]->output[dev]->timed = xmlNodeGetBool(xiid, "timed");
+    devices[be]->output[dev]->shared = xmlNodeGetBool(xiid, "shared");
 
     int val = xmlNodeGetInt(xiid, "frequency-hz");
     if (val) {
@@ -650,6 +670,11 @@ AeonWaveConfig::readConnectorInSettings(void *xiid, unsigned be, unsigned dev)
     if (val) {
         devices[be]->input[dev]->sample_freq = val;
     }
+
+    val = xmlNodeGetInt(xiid, "bitrate");
+    if (val) {
+        devices[be]->input[dev]->bitrate = val;
+    }
 }
 
 void
@@ -657,9 +682,6 @@ AeonWaveConfig::displayUiDevicesConfig()
 {
     unsigned be = current_device;
     int idx;
-
-    ui->Timer->setChecked(devices[be]->timed);
-    ui->Shared->setChecked(devices[be]->shared);
 
     /* Output connectors */
     idx = devices[be]->current_output_connector;
@@ -682,6 +704,12 @@ AeonWaveConfig::displayUiDevicesConfig()
     }
     ui->InputConnector->setCurrentIndex(idx);
     changeInputConnector(idx);
+
+    if (current_device == (unsigned)file_be_pos) {
+        ui->InputBitrate->setEnabled(true);
+    } else {
+        ui->InputBitrate->setEnabled(false);
+    }
 }
 
 void
@@ -781,10 +809,10 @@ AeonWaveConfig::writeConfigFile()
                 file << "  <connector name=\"" << devices[be]->output[dev]->name;
                 file << "\" type=\"out\">" << std::endl;
 
-                file << "   <shared>" << (devices[be]->shared ? "true" : "false");
+                file << "   <shared>" << (devices[be]->output[dev]->shared ? "true" : "false");
                 file << "</shared>" << std::endl;
 
-                file << "   <timed>" << (devices[be]->timed ? "true" : "false");
+                file << "   <timed>" << (devices[be]->output[dev]->timed ? "true" : "false");
                 file << "</timed>" << std::endl;
 
                 file << "   <setup>"; 
@@ -854,15 +882,19 @@ AeonWaveConfig::writeConfigFile()
                 file << "  <connector name=\"" << devices[be]->input[dev]->name;
                 file << "\" type=\"in\">" << std::endl;
 
-                file << "   <shared>" << (devices[be]->shared ? "true" : "false");
-                file << "</shared>" << std::endl;
-
-                file << "   <timed>" << (devices[be]->timed ? "true" : "false");
-                file << "</timed>" << std::endl;
+                file << "   <shared>false</shared>" << std::endl;
+                file << "   <timed>false</timed>" << std::endl;
 
                 file << "   <frequency-hz>";
                 file << devices[be]->input[dev]->sample_freq;
                 file << "</frequency-hz>" << std::endl;
+
+                if (be == (unsigned)file_be_pos)
+                {
+                    file << "   <bitrate>";
+                    file << devices[be]->input[dev]->bitrate;
+                    file << "</bitrate>" << std::endl;
+                }
 
                 file << " </connector>" << std::endl;
             }

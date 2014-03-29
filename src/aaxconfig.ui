@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>579</width>
-    <height>390</height>
+    <height>400</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>579</width>
-    <height>390</height>
+    <height>400</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>579</width>
-    <height>390</height>
+    <height>400</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -55,7 +55,7 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>250</y>
+     <y>260</y>
      <width>121</width>
      <height>27</height>
     </rect>
@@ -85,7 +85,7 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>230</y>
+     <y>240</y>
      <width>121</width>
      <height>17</height>
     </rect>
@@ -121,7 +121,7 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>180</y>
+     <y>190</y>
      <width>121</width>
      <height>20</height>
     </rect>
@@ -134,7 +134,7 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>200</y>
+     <y>210</y>
      <width>121</width>
      <height>27</height>
     </rect>
@@ -204,7 +204,7 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>300</y>
+     <y>310</y>
      <width>121</width>
      <height>27</height>
     </rect>
@@ -234,7 +234,7 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>280</y>
+     <y>290</y>
      <width>121</width>
      <height>20</height>
     </rect>
@@ -247,7 +247,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>140</y>
+     <y>130</y>
      <width>311</width>
      <height>27</height>
     </rect>
@@ -257,7 +257,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>120</y>
+     <y>110</y>
      <width>151</width>
      <height>20</height>
     </rect>
@@ -270,7 +270,7 @@
    <property name="geometry">
     <rect>
      <x>450</x>
-     <y>180</y>
+     <y>190</y>
      <width>81</width>
      <height>20</height>
     </rect>
@@ -283,7 +283,7 @@
    <property name="geometry">
     <rect>
      <x>450</x>
-     <y>200</y>
+     <y>210</y>
      <width>121</width>
      <height>27</height>
     </rect>
@@ -353,7 +353,7 @@
    <property name="geometry">
     <rect>
      <x>340</x>
-     <y>120</y>
+     <y>110</y>
      <width>141</width>
      <height>20</height>
     </rect>
@@ -366,7 +366,7 @@
    <property name="geometry">
     <rect>
      <x>340</x>
-     <y>140</y>
+     <y>130</y>
      <width>231</width>
      <height>27</height>
     </rect>
@@ -376,7 +376,7 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>190</y>
+     <y>200</y>
      <width>180</width>
      <height>180</height>
     </rect>
@@ -394,8 +394,8 @@
   <widget class="QLabel" name="label_general_sample_freq">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>10</y>
+     <x>10</x>
+     <y>60</y>
      <width>131</width>
      <height>20</height>
     </rect>
@@ -407,8 +407,8 @@
   <widget class="QComboBox" name="GeneralSampleFreq">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>30</y>
+     <x>10</x>
+     <y>80</y>
      <width>121</width>
      <height>27</height>
     </rect>
@@ -477,8 +477,8 @@
   <widget class="QSpinBox" name="RefreshRate">
    <property name="geometry">
     <rect>
-     <x>480</x>
-     <y>30</y>
+     <x>230</x>
+     <y>80</y>
      <width>91</width>
      <height>27</height>
     </rect>
@@ -487,8 +487,8 @@
   <widget class="QLabel" name="label_refresh_rate">
    <property name="geometry">
     <rect>
-     <x>480</x>
-     <y>10</y>
+     <x>230</x>
+     <y>60</y>
      <width>91</width>
      <height>17</height>
     </rect>
@@ -501,7 +501,7 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>330</y>
+     <y>340</y>
      <width>121</width>
      <height>20</height>
     </rect>
@@ -514,7 +514,7 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>350</y>
+     <y>360</y>
      <width>121</width>
      <height>27</height>
     </rect>
@@ -541,8 +541,8 @@
   <widget class="QCheckBox" name="Timer">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>60</y>
+     <x>110</x>
+     <y>160</y>
      <width>221</width>
      <height>22</height>
     </rect>
@@ -558,7 +558,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>80</y>
+     <y>160</y>
      <width>97</width>
      <height>22</height>
     </rect>
@@ -574,7 +574,7 @@
    <property name="geometry">
     <rect>
      <x>351</x>
-     <y>348</y>
+     <y>359</y>
      <width>221</width>
      <height>32</height>
     </rect>
@@ -589,8 +589,8 @@
   <widget class="QLabel" name="graphicsView_logo">
    <property name="geometry">
     <rect>
-     <x>390</x>
-     <y>260</y>
+     <x>440</x>
+     <y>10</y>
      <width>130</width>
      <height>48</height>
     </rect>
@@ -608,6 +608,57 @@
     <set>Qt::AlignHCenter|Qt::AlignTop</set>
    </property>
   </widget>
+  <widget class="QComboBox" name="InputBitrate">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>450</x>
+     <y>260</y>
+     <width>121</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>64kbps</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>128kpbs</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>192kbps</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>256kbps</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>320kbps</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLabel" name="label_input_sample_bitrate">
+   <property name="geometry">
+    <rect>
+     <x>450</x>
+     <y>240</y>
+     <width>81</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Bitrate</string>
+   </property>
+  </widget>
  </widget>
  <customwidgets>
   <customwidget>
@@ -618,12 +669,12 @@
  </customwidgets>
  <tabstops>
   <tabstop>Device</tabstop>
-  <tabstop>Timer</tabstop>
-  <tabstop>Shared</tabstop>
+  <tabstop>ProductKey</tabstop>
   <tabstop>GeneralSampleFreq</tabstop>
   <tabstop>RefreshRate</tabstop>
-  <tabstop>ProductKey</tabstop>
   <tabstop>OutputConnector</tabstop>
+  <tabstop>Shared</tabstop>
+  <tabstop>Timer</tabstop>
   <tabstop>OutputSampleFreq</tabstop>
   <tabstop>SpeakerSetup</tabstop>
   <tabstop>OutputSpeakers</tabstop>
