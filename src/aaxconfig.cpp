@@ -67,7 +67,7 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     connect(ui->OK, SIGNAL(rejected()), this, SLOT(close()));
     connect(ui->SpeakerSetup, SIGNAL(currentIndexChanged(int)), this, SLOT(changeSpeakerSetup(int)));
     connect(ui->InputSampleFreq, SIGNAL(currentIndexChanged(int)), this, SLOT(changeInputSampleFreq(int)));
-    connect(ui->InputBitrate, SIGNAL(currentIndexChanged(int)), this, SLOT(changeInputBitrate(int)));
+    connect(ui->OutputBitrate, SIGNAL(currentIndexChanged(int)), this, SLOT(changeOutputBitrate(int)));
     connect(ui->OutputSampleFreq, SIGNAL(currentIndexChanged(int)), this, SLOT(changeOutputSampleFreq(int)));
     connect(ui->InputConnector, SIGNAL(currentIndexChanged(int)), this, SLOT(changeInputConnector(int)));
     connect(ui->OutputConnector, SIGNAL(currentIndexChanged(int)), this, SLOT(changeOutputConnector(int)));
@@ -113,12 +113,6 @@ AeonWaveConfig::changeRefreshRate(int val)
 }
 
 void
-AeonWaveConfig::changeGeneralSampleFreq(int val)
-{
-    general_sample_freq = _freq[val];
-}
-
-void
 AeonWaveConfig::changeTimerDriven(bool val)
 {
     unsigned dev = devices[current_device]->current_output_connector;
@@ -148,10 +142,10 @@ AeonWaveConfig::changeInputSampleFreq(int val)
 }
 
 void
-AeonWaveConfig::changeInputBitrate(int val)
+AeonWaveConfig::changeOutputBitrate(int val)
 {
     unsigned dev = devices[current_device]->current_input_connector;
-    devices[current_device]->input[dev]->bitrate = (val+1)*64;
+    devices[current_device]->output[dev]->bitrate = (val+1)*64;
 }
 
 
@@ -207,9 +201,6 @@ AeonWaveConfig::changeInputConnector(int val)
 
     val = FreqToIndex(devices[be]->input[dev]->sample_freq);
     ui->InputSampleFreq->setCurrentIndex(val);
-
-    val = (devices[be]->input[dev]->bitrate/64)-1;
-    ui->InputBitrate->setCurrentIndex(val);
 }
 
 void
@@ -235,6 +226,9 @@ AeonWaveConfig::changeOutputConnector(int val)
 
     val = FreqToIndex(devices[be]->output[dev]->sample_freq);
     ui->OutputSampleFreq->setCurrentIndex(val);
+
+    val = (devices[be]->output[dev]->bitrate/64)-1;
+    ui->OutputBitrate->setCurrentIndex(val);
 }
 
 void
@@ -631,16 +625,22 @@ AeonWaveConfig::readConnectorOutSettings(void *xiid, unsigned be, unsigned dev)
     devices[be]->output[dev]->shared = xmlNodeGetBool(xiid, "shared");
 
     int val = xmlNodeGetInt(xiid, "frequency-hz");
-    if (val) {
+    if (val >= 4000 && val <= 192000) {
         devices[be]->output[dev]->sample_freq = val;
     }
+
+    val = xmlNodeGetInt(xiid, "bitrate");
+    if (val >= 64 && val <= 320) {
+        devices[be]->output[dev]->bitrate = val;
+    }
+
     val = xmlNodeGetInt(xiid, "channels");
-    if (val) {
+    if (val > 0 && val <= 8) {
         devices[be]->output[dev]->no_speakers = val;
     }
 
     val = xmlNodeGetInt(xiid, "periods");
-    if (val) {
+    if (val > 0 && val <= 16) {
         devices[be]->output[dev]->no_periods = val;
     }
 
@@ -669,11 +669,6 @@ AeonWaveConfig::readConnectorInSettings(void *xiid, unsigned be, unsigned dev)
     int val = xmlNodeGetInt(xiid, "frequency-hz");
     if (val) {
         devices[be]->input[dev]->sample_freq = val;
-    }
-
-    val = xmlNodeGetInt(xiid, "bitrate");
-    if (val) {
-        devices[be]->input[dev]->bitrate = val;
     }
 }
 
@@ -706,9 +701,9 @@ AeonWaveConfig::displayUiDevicesConfig()
     changeInputConnector(idx);
 
     if (current_device == (unsigned)file_be_pos) {
-        ui->InputBitrate->setEnabled(true);
+        ui->OutputBitrate->setEnabled(true);
     } else {
-        ui->InputBitrate->setEnabled(false);
+        ui->OutputBitrate->setEnabled(false);
     }
 }
 
@@ -721,7 +716,6 @@ AeonWaveConfig::displayUiConfig()
     hidden.assign(product_key.size(), '*');
     ui->ProductKey->setText( QString::fromStdString(hidden) );
 
-    ui->GeneralSampleFreq->setCurrentIndex( FreqToIndex(general_sample_freq) );
     ui->RefreshRate->setValue( refresh_rate );
 
     /* Devices */
@@ -809,11 +803,10 @@ AeonWaveConfig::writeConfigFile()
                 file << "  <connector name=\"" << devices[be]->output[dev]->name;
                 file << "\" type=\"out\">" << std::endl;
 
-                file << "   <shared>" << (devices[be]->output[dev]->shared ? "true" : "false");
-                file << "</shared>" << std::endl;
-
                 file << "   <timed>" << (devices[be]->output[dev]->timed ? "true" : "false");
                 file << "</timed>" << std::endl;
+                file << "   <shared>" << (devices[be]->output[dev]->shared ? "true" : "false");
+                file << "</shared>" << std::endl;
 
                 file << "   <setup>"; 
                 switch(devices[be]->output[dev]->setup)
@@ -834,13 +827,20 @@ AeonWaveConfig::writeConfigFile()
                 }
                 file << "</setup>" << std::endl;
 
-                file << "   <channels>";
-                file << devices[be]->output[dev]->no_speakers;
-                file <<"</channels>" << std::endl;
-
                 file << "   <periods>";
                 file << devices[be]->output[dev]->no_periods;
                 file <<"</periods>" << std::endl;
+
+                if (be == (unsigned)file_be_pos)
+                {
+                    file << "   <bitrate>";
+                    file << devices[be]->output[dev]->bitrate;
+                    file << "</bitrate>" << std::endl;
+                }
+
+                file << "   <channels>";
+                file << devices[be]->output[dev]->no_speakers;
+                file <<"</channels>" << std::endl;
 
                 file << "   <frequency-hz>";
                 file << devices[be]->output[dev]->sample_freq;
@@ -882,21 +882,14 @@ AeonWaveConfig::writeConfigFile()
                 file << "  <connector name=\"" << devices[be]->input[dev]->name;
                 file << "\" type=\"in\">" << std::endl;
 
-                file << "   <shared>false</shared>" << std::endl;
                 file << "   <timed>false</timed>" << std::endl;
+                file << "   <shared>false</shared>" << std::endl;
 
                 file << "   <frequency-hz>";
                 file << devices[be]->input[dev]->sample_freq;
                 file << "</frequency-hz>" << std::endl;
 
-                if (be == (unsigned)file_be_pos)
-                {
-                    file << "   <bitrate>";
-                    file << devices[be]->input[dev]->bitrate;
-                    file << "</bitrate>" << std::endl;
-                }
-
-                file << " </connector>" << std::endl;
+                file << "  </connector>" << std::endl;
             }
             file << " </device>" << std::endl << std::endl;
         }

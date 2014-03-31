@@ -48,8 +48,7 @@ private slots:
     void changeShared(bool);
     void changeRefreshRate(int val);
     void changeSpeakerSetup(int val);
-    void changeInputBitrate(int val);
-    void changeGeneralSampleFreq(int val);
+    void changeOutputBitrate(int val);
     void changeInputSampleFreq(int val);
     void changeOutputSampleFreq(int val);
     void changeNoSpeakers(int val);
