@@ -1,3 +1,12 @@
+* Sun Apr 06 2014 - tech@adalin.org
+- Support configuration file version 2.0
+- Hide the product key when not selected
+- Add the option to use a device in shared mode
+- Add support for specifying the number of buffer periods (ALSA)
+- Allow specifying the output bitrate (used by the file backend for mp3)
+- Add the experimental option to trigger playback using the system timer
+- Add a cancel button which exits the program without saving the configuration
+
 * Wed Aug 08 2012 - tech@adalin.org
 - Add support for a per device configuration
 - Add a graphical representation of the speaker setup

@@ -65,6 +65,7 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
 
     connect(ui->OK, SIGNAL(accepted()), this, SLOT(writeConfig()));
     connect(ui->OK, SIGNAL(rejected()), this, SLOT(close()));
+    connect(ui->RefreshRate, SIGNAL(valueChanged(int)), this, SLOT(changeRefreshRate(int)));
     connect(ui->SpeakerSetup, SIGNAL(currentIndexChanged(int)), this, SLOT(changeSpeakerSetup(int)));
     connect(ui->InputSampleFreq, SIGNAL(currentIndexChanged(int)), this, SLOT(changeInputSampleFreq(int)));
     connect(ui->OutputBitrate, SIGNAL(currentIndexChanged(int)), this, SLOT(changeOutputBitrate(int)));
