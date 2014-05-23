@@ -195,41 +195,47 @@ void
 AeonWaveConfig::changeInputConnector(int val)
 {
     unsigned be = current_device;
-    int max_input = _MAX(devices[be]->input.size()-1, 0);
-    int dev = _MINMAX(val, 0, max_input);
+    int max_input = (int)devices[be]->input.size() - 1;
+    if (max_input >= 0)
+    {
+        int dev = _MINMAX(val, 0, max_input);
 
-    devices[be]->current_input_connector = dev;
+        devices[be]->current_input_connector = dev;
 
-    val = FreqToIndex(devices[be]->input[dev]->sample_freq);
-    ui->InputSampleFreq->setCurrentIndex(val);
+        val = FreqToIndex(devices[be]->input[dev]->sample_freq);
+        ui->InputSampleFreq->setCurrentIndex(val);
+    }
 }
 
 void
 AeonWaveConfig::changeOutputConnector(int val)
 {
     unsigned be = current_device;
-    int max_output = _MAX(devices[be]->output.size()-1, 0);
-    int dev = _MINMAX(val, 0, max_output);
+    int max_output = (int)devices[be]->output.size() - 1;
+    if (max_output >= 0)
+    {
+        int dev = _MINMAX(val, 0, max_output);
 
-    devices[be]->current_output_connector = dev;
+        devices[be]->current_output_connector = dev;
 
-    ui->Timer->setChecked(devices[be]->output[dev]->timed);
-    ui->Shared->setChecked(devices[be]->output[dev]->shared);
+        ui->Timer->setChecked(devices[be]->output[dev]->timed);
+        ui->Shared->setChecked(devices[be]->output[dev]->shared);
 
-    val = (devices[be]->output[dev]->no_speakers/2)-1;
-    ui->OutputSpeakers->setCurrentIndex(val);
+        val = (devices[be]->output[dev]->no_speakers/2)-1;
+        ui->OutputSpeakers->setCurrentIndex(val);
 
-    val = devices[be]->output[dev]->no_periods - 2;
-    ui->OutputPeriods->setCurrentIndex(val);
+        val = devices[be]->output[dev]->no_periods - 2;
+        ui->OutputPeriods->setCurrentIndex(val);
 
-    val = aaxRenderMode(devices[be]->output[dev]->setup)-1;
-    ui->SpeakerSetup->setCurrentIndex(val);
+        val = aaxRenderMode(devices[be]->output[dev]->setup)-1;
+        ui->SpeakerSetup->setCurrentIndex(val);
 
-    val = FreqToIndex(devices[be]->output[dev]->sample_freq);
-    ui->OutputSampleFreq->setCurrentIndex(val);
+        val = FreqToIndex(devices[be]->output[dev]->sample_freq);
+        ui->OutputSampleFreq->setCurrentIndex(val);
 
-    val = (devices[be]->output[dev]->bitrate/64)-1;
-    ui->OutputBitrate->setCurrentIndex(val);
+        val = (devices[be]->output[dev]->bitrate/64)-1;
+        ui->OutputBitrate->setCurrentIndex(val);
+    }
 }
 
 void
@@ -775,12 +781,6 @@ AeonWaveConfig::writeConfigFile()
         else if (general_setup == AAX_MODE_WRITE_SURROUND) file << "surround";
         else if (general_setup == AAX_MODE_WRITE_HRTF) file << "hrtf";
         file << "</setup>" << std::endl;
-        file << "  <head>" << std::endl;
-        file << "   <side-delay-sec>64e-5</side-delay-sec>" << std::endl;
-        file << "   <forward-delay-sec>9e-5</forward-delay-sec>" << std::endl;
-        file << "   <up-delay-sec>25e-5</up-delay-sec>" << std::endl;
-        file << "   <up-offset-sec>1e-4</up-offset-sec>" << std::endl;
-        file << "  </head>" << std::endl;
         file << " </output>" << std::endl << std::endl;
 
         for (unsigned be=0; be<devices.size(); be++)
@@ -847,32 +847,46 @@ AeonWaveConfig::writeConfigFile()
                 file << devices[be]->output[dev]->sample_freq;
                 file << "</frequency-hz>" << std::endl;
 
-                for (unsigned sp=0; sp<MAX_SPEAKER_SETUP; sp++)
+                if (devices[be]->output[dev]->setup == AAX_MODE_WRITE_HRTF)
                 {
-                   if (devices[be]->output[dev]->setup
-                           == speaker_setup[sp].setup 
-                       &&  devices[be]->output[dev]->no_speakers
-                               == speaker_setup[sp].no_speakers
-                      )
-                   {
-                       for (unsigned n=0; n<speaker_setup[sp].no_speakers; n++)
+                    file << "   <hrtf>" << std::endl;
+                    file << "    <side-delay-sec>640e-6</side-delay-sec>" << std::endl;
+//                  file << "    <side-offset-sec>0.0</side-offset-sec>" << std::endl;
+                    file << "    <forward-delay-sec>65e-6</forward-delay-sec>" << std::endl;
+                    file << "    <forward-offset-sec>15e-6</forward-offset-sec>" << std::endl;
+                    file << "    <up-delay-sec>-110e-6</up-delay-sec>" << std::endl;
+                    file << "    <up-offset-sec>200e-6</up-offset-sec>" << std::endl;
+                    file << "   </hrtf>" << std::endl;
+                }
+                else
+                {
+                    for (unsigned sp=0; sp<MAX_SPEAKER_SETUP; sp++)
+                    {
+                       if (devices[be]->output[dev]->setup
+                               == speaker_setup[sp].setup 
+                           &&  devices[be]->output[dev]->no_speakers
+                                   == speaker_setup[sp].no_speakers
+                          )
                        {
-                           file << "    <speaker n=\"" << n << "\">" << std::endl;
-                           file << "     <channel>";
-                           file << speaker_setup[sp].speaker[n].channel;
-                           file << "</channel>" << std::endl;
-                           file << "     <pos-x>";
-                           file << speaker_setup[sp].speaker[n].pos[0];
-                           file << "</pos-x>" << std::endl;
-                           file << "     <pos-y>";
-                           file << speaker_setup[sp].speaker[n].pos[1];
-                           file << "</pos-y>" << std::endl;
-                           file << "     <pos-z>";
-                           file << speaker_setup[sp].speaker[n].pos[2];
-                           file << "</pos-z>" << std::endl;
-                           file << "    </speaker>" << std::endl;
-                       }
-                       break;
+                           for (unsigned n=0; n<speaker_setup[sp].no_speakers; n++)
+                           {
+                               file << "    <speaker n=\"" << n << "\">" << std::endl;
+                               file << "     <channel>";
+                               file << speaker_setup[sp].speaker[n].channel;
+                               file << "</channel>" << std::endl;
+                               file << "     <pos-x>";
+                               file << speaker_setup[sp].speaker[n].pos[0];
+                               file << "</pos-x>" << std::endl;
+                               file << "     <pos-y>";
+                               file << speaker_setup[sp].speaker[n].pos[1];
+                               file << "</pos-y>" << std::endl;
+                               file << "     <pos-z>";
+                               file << speaker_setup[sp].speaker[n].pos[2];
+                               file << "</pos-z>" << std::endl;
+                               file << "    </speaker>" << std::endl;
+                           }
+                           break;
+                        }
                     }
                 }
                 file << "  </connector>" << std::endl;
