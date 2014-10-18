@@ -18,12 +18,12 @@
  */
 
 #ifndef AAXCONFIG_H
-#define AAXCONFIG_H
+#define AAXCONFIG_H 1
 
 #include <vector>
 #include <string>
 
-#include <aax.h>
+#include <aax/aax.h>
 
 #include <QtGui/QDialog>
 
@@ -37,7 +37,7 @@ public:
     AeonWaveConfig(QWidget *parent = 0);
     ~AeonWaveConfig();
 
-    std::string get_productkey() {
+    inline std::string get_productkey() {
         return product_key;
     }
 
@@ -65,9 +65,9 @@ private:
     {
         std::string name;
         unsigned int bitrate;
-        unsigned int sample_freq;
-        unsigned int no_speakers;
-        unsigned int no_periods;
+        unsigned int sample_freq, min_frequency, max_frequency;
+        unsigned int no_speakers, min_speakers, max_speakers;
+        unsigned int no_periods, min_periods, max_periods;
         enum aaxRenderMode setup;
         bool shared;
         bool timed;
@@ -75,18 +75,18 @@ private:
         _connector() :
             name("default"),
             bitrate(320),
-            sample_freq(44100),
-            no_speakers(2),
-            no_periods(2),
+            sample_freq(44100), min_frequency(4000), max_frequency(192000),
+            no_speakers(2), min_speakers(1), max_speakers(8),
+            no_periods(2), min_periods(1), max_periods(16),
             setup(AAX_MODE_WRITE_STEREO),
             shared(false),
             timed(false) {};
         _connector(std::string n) :
             name(n),
             bitrate(320),
-            sample_freq(44100),
-            no_speakers(2),
-            no_periods(2),
+            sample_freq(44100), min_frequency(4000), max_frequency(192000),
+            no_speakers(2), min_speakers(1), max_speakers(8),
+            no_periods(2), min_periods(1), max_periods(16),
             setup(AAX_MODE_WRITE_STEREO),
             shared(false),
             timed(false) {};

@@ -83,12 +83,9 @@ endmacro()
 macro (INSTALL_CUSTOM_LIB customlib destination)
   if (MSVC)
     SET(LIBNAME "${customlib}")
-    IF(${customlib} MATCHES "/lib/")
-      STRING(REGEX REPLACE "/lib/" "/bin/" LIBNAME ${LIBNAME})
-    ENDIF(${customlib} MATCHES "/lib/")
-    IF(${customlib} MATCHES ".lib$")
-      STRING(REGEX REPLACE ".lib$" ".dll" LIBNAME ${LIBNAME})
-    ENDIF(${customlib} MATCHES ".lib$")
+    IF(${customlib} MATCHES "/lib/lib[A-Za-z0-9]+.lib$")
+      STRING(REGEX REPLACE "/lib/lib([A-Za-z0-9]+).lib$" "/bin/\\1.dll" LIBNAME ${LIBNAME})
+    ENDIF(${customlib} MATCHES "/lib/lib[A-Za-z0-9]+.lib$")
 
     message(STATUS "Generating Install Rule for DLL Library ${LIBNAME}")
     INSTALL(FILES ${LIBNAME} 
@@ -96,4 +93,15 @@ macro (INSTALL_CUSTOM_LIB customlib destination)
               CONFIGURATIONS Release
               COMPONENT Applications)
   endif()
+endmacro()
+
+macro (INSTALL_CUSTOM_FILES FILELIST destination)
+  FILE(GLOB FILES ${FILELIST})
+  FOREACH(instfile ${FILES})
+    message(STATUS "Adding ${instfile} to ${destination}")
+    INSTALL(FILES ${instfile}
+            DESTINATION "${destination}"
+            CONFIGURATIONS Release Debug
+            COMPONENT Applications)
+  ENDFOREACH(instfile)
 endmacro()

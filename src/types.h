@@ -35,11 +35,11 @@ extern "C" {
 # define _WIN32_WINNT 0x0500
 # include <Windows.h>
 # include <stdio.h>
-# define strtoll _strtoi64
+// # define strtoll _strtoi64
 # define snprintf _snprintf
 # define strcasecmp _stricmp
-# define strncasecmp _strnicmp
-# define rintf(v) (int)(v+0.5f)
+// # define strncasecmp _strnicmp
+// # define rintf(v) (int)(v+0.5f)
 #endif
 
 #if defined(__cplusplus)

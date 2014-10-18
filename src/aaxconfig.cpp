@@ -712,6 +712,44 @@ AeonWaveConfig::displayUiDevicesConfig()
     } else {
         ui->OutputBitrate->setEnabled(false);
     }
+
+    idx = devices[be]->current_output_connector;
+    const char *devname = devices[be]->name.c_str();
+    const char *ifname = devices[be]->output[idx]->name.c_str();
+    std::string name = devname + std::string(": ") + ifname;
+
+    aaxConfig cfg = aaxDriverOpenByName(name.c_str(), AAX_MODE_WRITE_STEREO);
+    if (cfg)
+    {
+       int min, max;
+       bool x;
+
+       aaxMixerSetState(cfg, AAX_INITIALIZED);
+
+       x = aaxMixerGetSetup(cfg, AAX_TIMER_MODE);
+       ui->Timer->setEnabled(x);
+
+       x = aaxMixerGetSetup(cfg, AAX_SHARED_MODE);
+       ui->Shared->setEnabled(x);
+
+       min = aaxMixerGetSetup(cfg, AAX_TRACKS_MIN);
+       max = aaxMixerGetSetup(cfg, AAX_TRACKS_MAX);
+       devices[be]->output[idx]->min_speakers = min;
+       devices[be]->output[idx]->max_speakers = max;
+
+       min = aaxMixerGetSetup(cfg, AAX_FREQUENCY_MIN);
+       max = aaxMixerGetSetup(cfg, AAX_FREQUENCY_MAX);
+       devices[be]->output[idx]->min_frequency = min;
+       devices[be]->output[idx]->max_frequency = max;
+
+       min = aaxMixerGetSetup(cfg, AAX_PERIODS_MIN);
+       max = aaxMixerGetSetup(cfg, AAX_PERIODS_MAX);
+       devices[be]->output[idx]->min_periods = min;
+       devices[be]->output[idx]->max_periods = max;
+
+       aaxDriverClose(cfg);
+       aaxDriverDestroy(cfg);
+    }
 }
 
 void

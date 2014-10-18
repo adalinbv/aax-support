@@ -31,7 +31,7 @@ class aaxConfigLineEdit : public QLineEdit
     Q_OBJECT
 
 public:
-    aaxConfigLineEdit(QWidget* parent) : QLineEdit(parent)
+    inline aaxConfigLineEdit(QWidget* parent) : QLineEdit(parent)
     {
         installEventFilter(this);
     }
