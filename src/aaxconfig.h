@@ -26,6 +26,7 @@
 #include <aax/aax.h>
 
 #include <QtGui/QDialog>
+#include <QtGui/QComboBox>
 
 class Ui_Configuration;
 
@@ -65,9 +66,9 @@ private:
     {
         std::string name;
         unsigned int bitrate;
-        unsigned int sample_freq, min_frequency, max_frequency;
-        unsigned int no_speakers, min_speakers, max_speakers;
-        unsigned int no_periods, min_periods, max_periods;
+        unsigned int sample_freq;
+        unsigned int no_speakers;
+        unsigned int no_periods;
         enum aaxRenderMode setup;
         bool shared;
         bool timed;
@@ -75,18 +76,18 @@ private:
         _connector() :
             name("default"),
             bitrate(320),
-            sample_freq(44100), min_frequency(4000), max_frequency(192000),
-            no_speakers(2), min_speakers(1), max_speakers(8),
-            no_periods(2), min_periods(1), max_periods(16),
+            sample_freq(44100),
+            no_speakers(2),
+            no_periods(2),
             setup(AAX_MODE_WRITE_STEREO),
             shared(false),
             timed(false) {};
         _connector(std::string n) :
             name(n),
             bitrate(320),
-            sample_freq(44100), min_frequency(4000), max_frequency(192000),
-            no_speakers(2), min_speakers(1), max_speakers(8),
-            no_periods(2), min_periods(1), max_periods(16),
+            sample_freq(44100),
+            no_speakers(2),
+            no_periods(2),
             setup(AAX_MODE_WRITE_STEREO),
             shared(false),
             timed(false) {};
@@ -125,6 +126,7 @@ private:
 
     void displayUiConfig();
     void displayUiDevicesConfig();
+    void itemsGrayOut(QComboBox*, unsigned int, unsigned int);
     void alert(std::string);
 
     unsigned int FreqToIndex(unsigned int freq);

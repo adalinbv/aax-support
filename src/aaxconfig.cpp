@@ -27,6 +27,7 @@
 #include <xml.h>
 
 #include <QMessageBox>
+#include <QStandardItemModel>
 
 #include "aaxconfig_ui.h"
 #include "aaxconfig.h"
@@ -715,8 +716,13 @@ AeonWaveConfig::displayUiDevicesConfig()
 
     idx = devices[be]->current_output_connector;
     const char *devname = devices[be]->name.c_str();
-    const char *ifname = devices[be]->output[idx]->name.c_str();
-    std::string name = devname + std::string(": ") + ifname;
+    std::string name = devname;
+
+    if (devices[be]->output.size() > 0)
+    {
+        const char *ifname = devices[be]->output[idx]->name.c_str();
+        name += std::string(": ") + ifname;
+    }
 
     aaxConfig cfg = aaxDriverOpenByName(name.c_str(), AAX_MODE_WRITE_STEREO);
     if (cfg)
@@ -734,18 +740,15 @@ AeonWaveConfig::displayUiDevicesConfig()
 
        min = aaxMixerGetSetup(cfg, AAX_TRACKS_MIN);
        max = aaxMixerGetSetup(cfg, AAX_TRACKS_MAX);
-       devices[be]->output[idx]->min_speakers = min;
-       devices[be]->output[idx]->max_speakers = max;
+       itemsGrayOut(ui->OutputSpeakers, min, max);
 
        min = aaxMixerGetSetup(cfg, AAX_FREQUENCY_MIN);
        max = aaxMixerGetSetup(cfg, AAX_FREQUENCY_MAX);
-       devices[be]->output[idx]->min_frequency = min;
-       devices[be]->output[idx]->max_frequency = max;
+       itemsGrayOut(ui->OutputSampleFreq, min, max);
 
        min = aaxMixerGetSetup(cfg, AAX_PERIODS_MIN);
        max = aaxMixerGetSetup(cfg, AAX_PERIODS_MAX);
-       devices[be]->output[idx]->min_periods = min;
-       devices[be]->output[idx]->max_periods = max;
+       itemsGrayOut(ui->OutputPeriods, min, max);
 
        aaxDriverClose(cfg);
        aaxDriverDestroy(cfg);
@@ -773,6 +776,38 @@ AeonWaveConfig::displayUiConfig()
     ui->Device->setCurrentIndex(current_device);
 
     displayUiDevicesConfig();
+}
+
+void
+AeonWaveConfig::itemsGrayOut(QComboBox *combobox, unsigned int min, unsigned int max)
+{
+   bool disabled;
+
+   for (int i=0; i<combobox->count(); i++)
+   {
+       const QStandardItemModel* model;
+       model = qobject_cast<const QStandardItemModel*>(combobox->model());
+
+       unsigned int val = combobox->itemText(i).toInt();
+       if (val == 0 && combobox->itemText(i).contains(" ")) {
+          val = combobox->itemText(i).split(" ")[0].toInt();
+       }
+       else if (val == 0 && combobox->itemText(i).contains(".")) {
+           val = combobox->itemText(i).split(".")[0].toInt() +
+                 combobox->itemText(i).split(".")[1].toInt();
+       }
+       if ((val < min) || (val > max)) disabled = true;
+       else disabled = false;
+
+       QStandardItem* item = model->item(i);
+       Qt::ItemFlags flags = item->flags();
+       if (disabled) {
+           flags &= ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+       } else {
+           flags |= (Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+       }
+       item->setFlags(flags);
+   }
 }
 
 void
