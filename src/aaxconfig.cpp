@@ -267,10 +267,10 @@ AeonWaveConfig::FreqToIndex(unsigned int freq)
 void
 AeonWaveConfig::getSystemResources()
 {
-    if (aaxGetMajorVersion() < 2 || aaxGetMinorVersion() < 4)
+    if (aaxGetMajorVersion() < 2 || aaxGetMinorVersion() < 5)
     {
         alert("WARNING:\n"
-              "This software only works with AeonWave 2.4.0 or later.\n");
+              "This software only works with AeonWave 2.5.0 or later.\n");
         exit(-1);
     }
 
@@ -317,6 +317,11 @@ AeonWaveConfig::getSystemResources()
                             connector_t *connector = new connector_t(i);
                             device->output.push_back(connector);
                         }
+                    }
+                    else
+                    {
+                        connector_t *connector = new connector_t("default");
+                        device->output.push_back(connector);
                     }
                 }
             }
@@ -370,6 +375,11 @@ AeonWaveConfig::getSystemResources()
                             connector_t *connector = new connector_t(i);
                             device->input.push_back(connector);
                         }
+                    }
+                    else
+                    {
+                        connector_t *connector = new connector_t("default");
+                        device->input.push_back(connector);
                     }
                 }
             }
