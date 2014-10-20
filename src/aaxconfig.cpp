@@ -684,18 +684,10 @@ void
 AeonWaveConfig::displayUiDevicesConfig()
 {
     unsigned be = current_device;
+    const char *devname;
+    std::string name;
+    aaxConfig cfg;
     int idx;
-
-    /* Output connectors */
-    idx = devices[be]->current_output_connector;
-    ui->OutputConnector->clear();
-    for (unsigned i=0; i<devices[be]->output.size(); i++)
-    {
-        QString name = QString::fromStdString(devices[be]->output[i]->name);
-        ui->OutputConnector->addItem(name);
-    }
-    ui->OutputConnector->setCurrentIndex(idx);
-    changeOutputConnector(idx);
 
     /* Input connectors */
     idx = devices[be]->current_input_connector;
@@ -708,6 +700,43 @@ AeonWaveConfig::displayUiDevicesConfig()
     ui->InputConnector->setCurrentIndex(idx);
     changeInputConnector(idx);
 
+    idx = devices[be]->current_input_connector;
+    devname = devices[be]->name.c_str();
+    name = devname;
+
+    if (devices[be]->input.size() > 0)
+    {
+        const char *ifname = devices[be]->input[idx]->name.c_str();
+        name += std::string(": ") + ifname;
+    }
+
+    cfg = aaxDriverOpenByName(name.c_str(), AAX_MODE_READ);
+    if (cfg)
+    {
+       int min, max;
+       bool x;
+
+       aaxMixerSetState(cfg, AAX_INITIALIZED);
+
+       min = aaxMixerGetSetup(cfg, AAX_FREQUENCY_MIN);
+       max = aaxMixerGetSetup(cfg, AAX_FREQUENCY_MAX);
+       itemsGrayOut(ui->InputSampleFreq, min, max);
+
+       aaxDriverClose(cfg);
+       aaxDriverDestroy(cfg);
+    }
+
+    /* Output connectors */
+    idx = devices[be]->current_output_connector;
+    ui->OutputConnector->clear();
+    for (unsigned i=0; i<devices[be]->output.size(); i++)
+    {
+        QString name = QString::fromStdString(devices[be]->output[i]->name);
+        ui->OutputConnector->addItem(name);
+    }
+    ui->OutputConnector->setCurrentIndex(idx);
+    changeOutputConnector(idx);
+
     if (current_device == (unsigned)file_be_pos) {
         ui->OutputBitrate->setEnabled(true);
     } else {
@@ -715,8 +744,8 @@ AeonWaveConfig::displayUiDevicesConfig()
     }
 
     idx = devices[be]->current_output_connector;
-    const char *devname = devices[be]->name.c_str();
-    std::string name = devname;
+    devname = devices[be]->name.c_str();
+    name = devname;
 
     if (devices[be]->output.size() > 0)
     {
@@ -724,7 +753,7 @@ AeonWaveConfig::displayUiDevicesConfig()
         name += std::string(": ") + ifname;
     }
 
-    aaxConfig cfg = aaxDriverOpenByName(name.c_str(), AAX_MODE_WRITE_STEREO);
+    cfg = aaxDriverOpenByName(name.c_str(), AAX_MODE_WRITE_STEREO);
     if (cfg)
     {
        int min, max;
