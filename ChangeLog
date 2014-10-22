@@ -1,3 +1,8 @@
+* Mon Oct 20 2014 - tech@adalin.org
+- Make use of the new capabilities interface of AeonWave:
+- limit the supported number of tracks and periods
+- limit the sample frequency range
+
 * Fri May 23 2014 - tech@adalin.org
 - Support configuration file version 2.0
 - Hide the product key when not selected
