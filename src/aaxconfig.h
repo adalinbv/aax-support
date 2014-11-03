@@ -27,6 +27,7 @@
 
 #include <QtGui/QDialog>
 #include <QtGui/QComboBox>
+#include <QShortcut>
 
 class Ui_Configuration;
 
@@ -53,15 +54,18 @@ private slots:
     void changeInputSampleFreq(int val);
     void changeOutputSampleFreq(int val);
     void changeNoSpeakers(int val);
-     void changeNoPeriods(int val);
+    void changeNoPeriods(int val);
     void changeInputConnector(int val);
     void changeOutputConnector(int val);
     void changeDevice(int val);
+    void writeConfigFile();
     void writeConfig();
 
     void changeProductKey(QString str);
 
 private:
+    QShortcut *saveAct;
+
     typedef struct _connector
     {
         std::string name;
@@ -122,7 +126,6 @@ private:
     void readConnectorOutSettings(void*, unsigned, unsigned);
     void readConnectorInSettings(void*, unsigned, unsigned);
     void readConfigSettings(void*);
-    void writeConfigFile();
 
     void displayUiConfig();
     void displayUiDevicesConfig();

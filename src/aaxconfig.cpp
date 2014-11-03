@@ -80,6 +80,12 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     connect(ui->Shared, SIGNAL(clicked(bool)), this, SLOT(changeShared(bool)));
 
     connect(ui->ProductKey, SIGNAL(textEdited(QString)), this, SLOT(changeProductKey(QString)));
+
+
+    saveAct = new QShortcut(this);
+    saveAct->setKey(tr("Ctrl+S"));
+    saveAct->setContext(Qt::ApplicationShortcut);
+    connect(saveAct, SIGNAL(activated()), this, SLOT(writeConfigFile()));
 }
 
 AeonWaveConfig::~AeonWaveConfig()
