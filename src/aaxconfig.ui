@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>579</width>
+    <width>530</width>
     <height>400</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>579</width>
+    <width>530</width>
     <height>400</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>579</width>
+    <width>530</width>
     <height>400</height>
    </size>
   </property>
@@ -28,9 +28,9 @@
   <widget class="aaxConfigLineEdit" name="ProductKey">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>305</y>
-     <width>231</width>
+     <x>300</x>
+     <y>35</y>
+     <width>211</width>
      <height>21</height>
     </rect>
    </property>
@@ -41,8 +41,8 @@
   <widget class="QLabel" name="label_product_key">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>280</y>
+     <x>300</x>
+     <y>10</y>
      <width>91</width>
      <height>17</height>
     </rect>
@@ -51,55 +51,12 @@
     <string>Product-Key:</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="SpeakerSetup">
-   <property name="geometry">
-    <rect>
-     <x>200</x>
-     <y>200</y>
-     <width>121</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <item>
-    <property name="text">
-     <string>Stereo</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Spatial</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Surround</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>HRTF</string>
-    </property>
-   </item>
-  </widget>
-  <widget class="QLabel" name="label_setup">
-   <property name="geometry">
-    <rect>
-     <x>200</x>
-     <y>180</y>
-     <width>121</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Speaker Setup:</string>
-   </property>
-  </widget>
   <widget class="QComboBox" name="Device">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>30</y>
-     <width>311</width>
+     <width>271</width>
      <height>27</height>
     </rect>
    </property>
@@ -117,381 +74,11 @@
     <string>Device:</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_output_sample_freq">
-   <property name="geometry">
-    <rect>
-     <x>200</x>
-     <y>130</y>
-     <width>121</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Frequency:</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="OutputSampleFreq">
-   <property name="geometry">
-    <rect>
-     <x>200</x>
-     <y>150</y>
-     <width>121</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <item>
-    <property name="text">
-     <string>8000 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>11025 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>16000 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>22050 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>32000 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>44056 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>44100 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>48000 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>88200 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>96000 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>176400 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>192000 Hz</string>
-    </property>
-   </item>
-  </widget>
-  <widget class="QComboBox" name="OutputSpeakers">
-   <property name="geometry">
-    <rect>
-     <x>200</x>
-     <y>250</y>
-     <width>121</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <item>
-    <property name="text">
-     <string>2</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>4</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>5.1</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>7.1</string>
-    </property>
-   </item>
-  </widget>
-  <widget class="QLabel" name="label_speakers">
-   <property name="geometry">
-    <rect>
-     <x>200</x>
-     <y>230</y>
-     <width>121</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>No. Speakers:</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="OutputConnector">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>80</y>
-     <width>311</width>
-     <height>27</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_output_device">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>60</y>
-     <width>151</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Output Port:</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_input_sample_freq">
-   <property name="geometry">
-    <rect>
-     <x>450</x>
-     <y>130</y>
-     <width>81</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Frequency:</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="InputSampleFreq">
-   <property name="geometry">
-    <rect>
-     <x>450</x>
-     <y>150</y>
-     <width>121</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <item>
-    <property name="text">
-     <string>8000 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>11025 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>16000 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>22050 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>32000 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>44056 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>44100 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>48000 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>88200 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>96000 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>176400 Hz</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>192000 Hz</string>
-    </property>
-   </item>
-  </widget>
-  <widget class="QLabel" name="label_input_device">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>60</y>
-     <width>141</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Input Port:</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="InputConnector">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>80</y>
-     <width>231</width>
-     <height>27</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="graphicsView">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>200</y>
-     <width>180</width>
-     <height>180</height>
-    </rect>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::NoFrame</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Sunken</enum>
-   </property>
-   <property name="lineWidth">
-    <number>1</number>
-   </property>
-  </widget>
-  <widget class="QSpinBox" name="RefreshRate">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>30</y>
-     <width>91</width>
-     <height>27</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_refresh_rate">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>10</y>
-     <width>91</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Refresh Rate:</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_periods">
-   <property name="geometry">
-    <rect>
-     <x>200</x>
-     <y>280</y>
-     <width>121</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Buffer Periods:</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="OutputPeriods">
-   <property name="geometry">
-    <rect>
-     <x>200</x>
-     <y>300</y>
-     <width>121</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <property name="toolTip">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;For lowest latencies set this option to 2 (default).&lt;/p&gt;&lt;p&gt;Some devices require a higer number of playback periods for higher refresh rates which decreases latency.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-   <item>
-    <property name="text">
-     <string>2</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>3</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>4</string>
-    </property>
-   </item>
-  </widget>
-  <widget class="QCheckBox" name="Timer">
-   <property name="geometry">
-    <rect>
-     <x>110</x>
-     <y>110</y>
-     <width>221</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="toolTip">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enable the system timer for pushing data to the audio device.&lt;/p&gt;&lt;p&gt;This will save power consumption but is less reliable for lower latencies. Therefore this option is only used for refresh rates below 75Hz.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-   <property name="text">
-    <string>Timer Driven (Experimental)</string>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="Shared">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>110</y>
-     <width>97</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="toolTip">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Allow this device to be shared with other applications.&lt;/p&gt;&lt;p&gt;This will increase latency.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-   <property name="text">
-    <string>Shared</string>
-   </property>
-  </widget>
   <widget class="QDialogButtonBox" name="OK">
    <property name="geometry">
     <rect>
-     <x>351</x>
-     <y>359</y>
+     <x>300</x>
+     <y>360</y>
      <width>221</width>
      <height>32</height>
     </rect>
@@ -503,78 +90,516 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QLabel" name="graphicsView_logo">
+  <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
     <rect>
-     <x>440</x>
-     <y>15</y>
-     <width>130</width>
-     <height>48</height>
+     <x>10</x>
+     <y>60</y>
+     <width>511</width>
+     <height>291</height>
     </rect>
    </property>
-   <property name="frameShape">
-    <enum>QFrame::NoFrame</enum>
+   <property name="currentIndex">
+    <number>0</number>
    </property>
-   <property name="frameShadow">
-    <enum>QFrame::Sunken</enum>
-   </property>
-   <property name="lineWidth">
-    <number>1</number>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignHCenter|Qt::AlignTop</set>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="OutputBitrate">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>200</x>
-     <y>350</y>
-     <width>121</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <item>
-    <property name="text">
-     <string>64kbps</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>128kpbs</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>192kbps</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>256kbps</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>320kbps</string>
-    </property>
-   </item>
-  </widget>
-  <widget class="QLabel" name="label_input_sample_bitrate">
-   <property name="geometry">
-    <rect>
-     <x>200</x>
-     <y>330</y>
-     <width>81</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Bitrate</string>
-   </property>
+   <widget class="QWidget" name="tab">
+    <attribute name="title">
+     <string>Info</string>
+    </attribute>
+    <widget class="QComboBox" name="Mixer">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>311</width>
+       <height>27</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="graphicsView_logo">
+     <property name="geometry">
+      <rect>
+       <x>360</x>
+       <y>10</y>
+       <width>130</width>
+       <height>48</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignHCenter|Qt::AlignTop</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="MixerInfo">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>50</y>
+       <width>461</width>
+       <height>191</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_2">
+    <attribute name="title">
+     <string>Output</string>
+    </attribute>
+    <widget class="QLabel" name="label_input_sample_bitrate">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>170</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Bitrate</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_output_sample_freq">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>70</y>
+       <width>121</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Frequency:</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="OutputSampleFreq">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>90</y>
+       <width>121</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>8000 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>11025 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>16000 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>22050 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>32000 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>44056 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>44100 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>48000 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>88200 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>96000 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>176400 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>192000 Hz</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QComboBox" name="OutputConnector">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>311</width>
+       <height>27</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="OutputSpeakers">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>140</y>
+       <width>121</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>2</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>4</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>5.1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>7.1</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QLabel" name="label_periods">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>170</y>
+       <width>121</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Buffer Periods:</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="SpeakerSetup">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>140</y>
+       <width>121</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>Stereo</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Spatial</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Surround</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>HRTF</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QCheckBox" name="Timer">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>40</y>
+       <width>221</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enable the system timer for pushing data to the audio device.&lt;/p&gt;&lt;p&gt;This will save power consumption but is less reliable for lower latencies. Therefore this option is only used for refresh rates below 75Hz.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Timer Driven (Experimental)</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="OutputPeriods">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>190</y>
+       <width>121</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;For lowest latencies set this option to 2 (default).&lt;/p&gt;&lt;p&gt;Some devices require a higer number of playback periods for higher refresh rates which decreases latency.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <item>
+      <property name="text">
+       <string>2</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>3</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>4</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QLabel" name="label_speakers">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>120</y>
+       <width>121</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>No. Speakers:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_setup">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>120</y>
+       <width>121</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Speaker Setup:</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="OutputBitrate">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>190</y>
+       <width>121</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>64kbps</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>128kpbs</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>192kbps</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>256kbps</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>320kbps</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QCheckBox" name="Shared">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>97</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Allow this device to be shared with other applications.&lt;/p&gt;&lt;p&gt;This will increase latency.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Shared</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_refresh_rate">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>70</y>
+       <width>91</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Refresh Rate:</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="RefreshRate">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>90</y>
+       <width>121</width>
+       <height>27</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="graphicsView">
+     <property name="geometry">
+      <rect>
+       <x>310</x>
+       <y>60</y>
+       <width>180</width>
+       <height>180</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_3">
+    <attribute name="title">
+     <string>Input</string>
+    </attribute>
+    <widget class="QComboBox" name="InputConnector">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>311</width>
+       <height>27</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="InputSampleFreq">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>90</y>
+       <width>121</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>8000 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>11025 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>16000 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>22050 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>32000 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>44056 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>44100 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>48000 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>88200 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>96000 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>176400 Hz</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>192000 Hz</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QLabel" name="label_input_sample_freq">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>70</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Frequency:</string>
+     </property>
+    </widget>
+   </widget>
   </widget>
  </widget>
  <customwidgets>

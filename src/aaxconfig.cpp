@@ -73,6 +73,7 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     connect(ui->OutputSampleFreq, SIGNAL(currentIndexChanged(int)), this, SLOT(changeOutputSampleFreq(int)));
     connect(ui->InputConnector, SIGNAL(currentIndexChanged(int)), this, SLOT(changeInputConnector(int)));
     connect(ui->OutputConnector, SIGNAL(currentIndexChanged(int)), this, SLOT(changeOutputConnector(int)));
+    connect(ui->OutputConnector, SIGNAL(currentIndexChanged(int)), this, SLOT(changeMixer(int)));
     connect(ui->Device, SIGNAL(currentIndexChanged(int)), this, SLOT(changeDevice(int)));
     connect(ui->OutputSpeakers, SIGNAL(currentIndexChanged(int)), this, SLOT(changeNoSpeakers(int)));
     connect(ui->OutputPeriods, SIGNAL(currentIndexChanged(int)), this, SLOT(changeNoPeriods(int)));
@@ -242,6 +243,19 @@ AeonWaveConfig::changeOutputConnector(int val)
 
         val = (devices[be]->output[dev]->bitrate/64)-1;
         ui->OutputBitrate->setCurrentIndex(val);
+    }
+}
+
+void
+AeonWaveConfig::changeMixer(int val)
+{
+    unsigned be = current_device;
+    int max_output = (int)devices[be]->output.size() - 1;
+    if (max_output >= 0)
+    {
+        int dev = _MINMAX(val, 0, max_output);
+
+        devices[be]->current_output_connector = dev;
     }
 }
 
@@ -749,8 +763,10 @@ AeonWaveConfig::displayUiDevicesConfig()
     {
         QString name = QString::fromStdString(devices[be]->output[i]->name);
         ui->OutputConnector->addItem(name);
+        ui->Mixer->addItem(name);
     }
     ui->OutputConnector->setCurrentIndex(idx);
+    ui->Mixer->setCurrentIndex(idx);
     changeOutputConnector(idx);
 
     if (current_device == (unsigned)file_be_pos) {

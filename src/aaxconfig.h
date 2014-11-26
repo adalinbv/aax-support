@@ -57,6 +57,7 @@ private slots:
     void changeNoPeriods(int val);
     void changeInputConnector(int val);
     void changeOutputConnector(int val);
+    void changeMixer(int val);
     void changeDevice(int val);
     void writeConfigFile();
     void writeConfig();
