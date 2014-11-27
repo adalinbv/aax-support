@@ -309,10 +309,10 @@ AeonWaveConfig::changeMixer(int val)
             max = aaxMixerGetSetup(cfg, AAX_FREQUENCY_MAX);
             desc += tr("<tr><td>Frequency range:</td><td>%1 - %2 kHz</td></tr>").arg(min/1000.0f).arg(max/1000.0f);
 
-            x = aaxMixerGetSetup(cfg, AAX_REFRESHRATE);
+            x = aaxMixerGetSetup(cfg, AAX_FREQUENCY);
             desc += tr("<tr><td>Mixer frequency:</td><td>%1 Hz</td></tr>").arg(x);
 
-            x = aaxMixerGetSetup(cfg, AAX_UPDATERATE);
+            x = aaxMixerGetSetup(cfg, AAX_REFRESHRATE);
             if (x) {
                desc += tr("<tr><td>Mixer refresh rate:</td><td>%1 Hz</td></tr>").arg(x);
             }
