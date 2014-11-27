@@ -278,7 +278,7 @@ public:
         );
         label_input_sample_freq->setText(QApplication::translate("Configuration", "Frequency:", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("Configuration", "Capture", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("Configuration", "Info", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("Configuration", "Information", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

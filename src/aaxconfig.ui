@@ -552,7 +552,7 @@
    </widget>
    <widget class="QWidget" name="tab">
     <attribute name="title">
-     <string>Info</string>
+     <string>Information</string>
     </attribute>
     <widget class="QComboBox" name="Mixer">
      <property name="geometry">
