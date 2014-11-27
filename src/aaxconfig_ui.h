@@ -35,10 +35,6 @@ public:
     QLabel *label_backend;
     QDialogButtonBox *OK;
     QTabWidget *tabWidget;
-    QWidget *tab;
-    QComboBox *Mixer;
-    QLabel *graphicsView_logo;
-    QLabel *MixerInfo;
     QWidget *tab_2;
     QLabel *label_input_sample_bitrate;
     QLabel *label_output_sample_freq;
@@ -60,6 +56,10 @@ public:
     QComboBox *InputConnector;
     QComboBox *InputSampleFreq;
     QLabel *label_input_sample_freq;
+    QWidget *tab;
+    QComboBox *Mixer;
+    QLabel *graphicsView_logo;
+    QLabel *MixerInfo;
 
     void setupUi(QDialog *Configuration)
     {
@@ -88,22 +88,6 @@ public:
         tabWidget = new QTabWidget(Configuration);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
         tabWidget->setGeometry(QRect(10, 60, 511, 291));
-        tab = new QWidget();
-        tab->setObjectName(QString::fromUtf8("tab"));
-        Mixer = new QComboBox(tab);
-        Mixer->setObjectName(QString::fromUtf8("Mixer"));
-        Mixer->setGeometry(QRect(10, 10, 311, 27));
-        graphicsView_logo = new QLabel(tab);
-        graphicsView_logo->setObjectName(QString::fromUtf8("graphicsView_logo"));
-        graphicsView_logo->setGeometry(QRect(360, 10, 130, 48));
-        graphicsView_logo->setFrameShape(QFrame::NoFrame);
-        graphicsView_logo->setFrameShadow(QFrame::Sunken);
-        graphicsView_logo->setLineWidth(1);
-        graphicsView_logo->setAlignment(Qt::AlignHCenter|Qt::AlignTop);
-        MixerInfo = new QLabel(tab);
-        MixerInfo->setObjectName(QString::fromUtf8("MixerInfo"));
-        MixerInfo->setGeometry(QRect(30, 50, 461, 191));
-        tabWidget->addTab(tab, QString());
         tab_2 = new QWidget();
         tab_2->setObjectName(QString::fromUtf8("tab_2"));
         label_input_sample_bitrate = new QLabel(tab_2);
@@ -171,6 +155,22 @@ public:
         label_input_sample_freq->setObjectName(QString::fromUtf8("label_input_sample_freq"));
         label_input_sample_freq->setGeometry(QRect(20, 70, 81, 20));
         tabWidget->addTab(tab_3, QString());
+        tab = new QWidget();
+        tab->setObjectName(QString::fromUtf8("tab"));
+        Mixer = new QComboBox(tab);
+        Mixer->setObjectName(QString::fromUtf8("Mixer"));
+        Mixer->setGeometry(QRect(10, 10, 311, 27));
+        graphicsView_logo = new QLabel(tab);
+        graphicsView_logo->setObjectName(QString::fromUtf8("graphicsView_logo"));
+        graphicsView_logo->setGeometry(QRect(360, 0, 130, 48));
+        graphicsView_logo->setFrameShape(QFrame::NoFrame);
+        graphicsView_logo->setFrameShadow(QFrame::Sunken);
+        graphicsView_logo->setLineWidth(1);
+        graphicsView_logo->setAlignment(Qt::AlignHCenter|Qt::AlignTop);
+        MixerInfo = new QLabel(tab);
+        MixerInfo->setObjectName(QString::fromUtf8("MixerInfo"));
+        MixerInfo->setGeometry(QRect(10, 40, 491, 211));
+        tabWidget->addTab(tab, QString());
         QWidget::setTabOrder(Device, ProductKey);
         QWidget::setTabOrder(ProductKey, RefreshRate);
         QWidget::setTabOrder(RefreshRate, OutputConnector);
@@ -200,8 +200,6 @@ public:
 #endif // QT_NO_TOOLTIP
         label_product_key->setText(QApplication::translate("Configuration", "Product-Key:", 0, QApplication::UnicodeUTF8));
         label_backend->setText(QApplication::translate("Configuration", "Device:", 0, QApplication::UnicodeUTF8));
-        MixerInfo->setText(QString());
-        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("Configuration", "Info", 0, QApplication::UnicodeUTF8));
         label_input_sample_bitrate->setText(QApplication::translate("Configuration", "Bitrate", 0, QApplication::UnicodeUTF8));
         label_output_sample_freq->setText(QApplication::translate("Configuration", "Frequency:", 0, QApplication::UnicodeUTF8));
         OutputSampleFreq->clear();
@@ -262,7 +260,7 @@ public:
 #endif // QT_NO_TOOLTIP
         Shared->setText(QApplication::translate("Configuration", "Shared", 0, QApplication::UnicodeUTF8));
         label_refresh_rate->setText(QApplication::translate("Configuration", "Refresh Rate:", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("Configuration", "Output", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("Configuration", "Playback", 0, QApplication::UnicodeUTF8));
         InputSampleFreq->clear();
         InputSampleFreq->insertItems(0, QStringList()
          << QApplication::translate("Configuration", "8000 Hz", 0, QApplication::UnicodeUTF8)
@@ -279,7 +277,8 @@ public:
          << QApplication::translate("Configuration", "192000 Hz", 0, QApplication::UnicodeUTF8)
         );
         label_input_sample_freq->setText(QApplication::translate("Configuration", "Frequency:", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("Configuration", "Input", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("Configuration", "Capture", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("Configuration", "Info", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

@@ -73,7 +73,7 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     connect(ui->OutputSampleFreq, SIGNAL(currentIndexChanged(int)), this, SLOT(changeOutputSampleFreq(int)));
     connect(ui->InputConnector, SIGNAL(currentIndexChanged(int)), this, SLOT(changeInputConnector(int)));
     connect(ui->OutputConnector, SIGNAL(currentIndexChanged(int)), this, SLOT(changeOutputConnector(int)));
-    connect(ui->OutputConnector, SIGNAL(currentIndexChanged(int)), this, SLOT(changeMixer(int)));
+    connect(ui->Mixer, SIGNAL(currentIndexChanged(int)), this, SLOT(changeMixer(int)));
     connect(ui->Device, SIGNAL(currentIndexChanged(int)), this, SLOT(changeDevice(int)));
     connect(ui->OutputSpeakers, SIGNAL(currentIndexChanged(int)), this, SLOT(changeNoSpeakers(int)));
     connect(ui->OutputPeriods, SIGNAL(currentIndexChanged(int)), this, SLOT(changeNoPeriods(int)));
@@ -87,6 +87,19 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     saveAct->setKey(tr("Ctrl+S"));
     saveAct->setContext(Qt::ApplicationShortcut);
     connect(saveAct, SIGNAL(activated()), this, SLOT(writeConfigFile()));
+
+    QFont font;
+    font.setFamily(QString::fromUtf8("Open Sans"));
+//  font.setFamily(QString::fromUtf8("Proxima Nova"));
+    font.setPointSize(9);
+    font.setBold(false);
+    font.setWeight(50);
+    font.setLetterSpacing(QFont::PercentageSpacing, 95.0f);
+    ui->MixerInfo->setFont(font);
+    ui->MixerInfo->setLineWidth(1);
+    ui->MixerInfo->setTextFormat(Qt::RichText);
+    ui->MixerInfo->setAlignment(Qt::AlignLeft|Qt::AlignTop);
+    changeMixer(0);
 }
 
 AeonWaveConfig::~AeonWaveConfig()
@@ -254,8 +267,92 @@ AeonWaveConfig::changeMixer(int val)
     if (max_output >= 0)
     {
         int dev = _MINMAX(val, 0, max_output);
+        std::string name;
+        aaxConfig cfg;
+        QString desc;
 
-        devices[be]->current_output_connector = dev;
+        name = devices[be]->name.c_str();
+        if (devices[be]->output.size() > 0)
+        {
+            const char *ifname = devices[be]->output[dev]->name.c_str();
+            name += std::string(": ") + ifname;
+        }
+
+        cfg = aaxDriverOpenByName(name.c_str(), AAX_MODE_WRITE_STEREO);
+        if (cfg)
+        {
+            unsigned int x, y, min, max;
+            const char *s;
+
+            desc = tr("<tabel>");
+            aaxMixerSetState(cfg, AAX_INITIALIZED);
+
+            s = aaxDriverGetSetup(cfg, AAX_DRIVER_STRING);
+            desc += tr("<tr><td>Driver:</td><td>%1</td></tr>").arg(s);
+
+            s = aaxDriverGetSetup(cfg, AAX_RENDERER_STRING);
+            desc += tr("<tr><td>Renderer:</td><td>%1</td></tr>").arg(s);
+
+            x = aaxGetMajorVersion();
+            y = aaxGetMinorVersion();
+            s = aaxGetVersionString(cfg);
+            desc += tr("<tr><td>Version:</td><td>%1 (%2.%3)</td></tr>").arg(s).arg(x).arg(y);
+
+            s = aaxDriverGetSetup(cfg, AAX_VENDOR_STRING);
+            desc += tr("<tr><td>Vendor:</td><td>%1</td></tr>").arg(s);
+
+            min = aaxMixerGetSetup(cfg, AAX_TRACKS_MIN);
+            max = aaxMixerGetSetup(cfg, AAX_TRACKS_MAX);
+            desc += tr("<tr><td>Supported tacks:</td><td>%1 - %2 tracks</td></tr>").arg(min).arg(max);
+
+            min = aaxMixerGetSetup(cfg, AAX_FREQUENCY_MIN);
+            max = aaxMixerGetSetup(cfg, AAX_FREQUENCY_MAX);
+            desc += tr("<tr><td>Frequency range:</td><td>%1 - %2 kHz</td></tr>").arg(min/1000.0f).arg(max/1000.0f);
+
+            x = aaxMixerGetSetup(cfg, AAX_REFRESHRATE);
+            desc += tr("<tr><td>Mixer frequency:</td><td>%1 Hz</td></tr>").arg(x);
+
+            x = aaxMixerGetSetup(cfg, AAX_UPDATERATE);
+            if (x) {
+               desc += tr("<tr><td>Mixer refresh rate:</td><td>%1 Hz</td></tr>").arg(x);
+            }
+
+            x = aaxMixerGetSetup(cfg, AAX_LATENCY);
+            if (x) {
+               desc += tr("<tr><td>Mixer latency:</td><td>%1 ms</td></tr>").arg(x/1000.0f, 5, 'f', 2);
+            }
+
+            x = aaxMixerGetSetup(cfg, AAX_MONO_EMITTERS);
+            desc += tr("<tr><td>Max. mono emitters:</td>");
+            if (x == UINT_MAX) {
+               desc += tr("<td>infinite</td></tr>");
+            } else {
+               desc += tr("<td>%1</td></tr>").arg(x);
+            }
+
+            y = aaxMixerGetSetup(cfg, AAX_STEREO_EMITTERS);
+            desc += tr("<tr><td>Max. stereo emitters:</td>");
+            if (y == UINT_MAX/2) {
+               desc += tr("<td>infinite</td></tr>");
+            } else {
+               desc += tr("<td>%1</td></tr>").arg(y);
+            }
+
+            desc += tr("<tr><td>Max. audio-frames:</td>");
+            x = aaxMixerGetSetup(cfg, AAX_AUDIO_FRAMES);
+            if (x == UINT_MAX) {
+               desc += tr("<td>infinite</td></tr>");
+            } else {
+               desc += tr("<td>%1</td></tr>").arg(x);
+            }
+
+            desc += tr("</table>");
+            ui->MixerInfo->setText(desc);
+            ui->MixerInfo->show();
+
+            aaxDriverClose(cfg);
+            aaxDriverDestroy(cfg);
+        }
     }
 }
 
@@ -758,6 +855,7 @@ AeonWaveConfig::displayUiDevicesConfig()
 
     /* Output connectors */
     idx = devices[be]->current_output_connector;
+    ui->Mixer->clear();
     ui->OutputConnector->clear();
     for (unsigned i=0; i<devices[be]->output.size(); i++)
     {
