@@ -549,6 +549,113 @@
       <string>Frequency:</string>
      </property>
     </widget>
+    <widget class="QSpinBox" name="InputRefreshRate">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>90</y>
+       <width>121</width>
+       <height>27</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_refresh_rate_2">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>70</y>
+       <width>91</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Refresh Rate:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_setup_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>120</y>
+       <width>121</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Line-in Setup</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_periods_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>170</y>
+       <width>121</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Buffer Periods:</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="LineInSetup">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>140</y>
+       <width>121</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>Stereo</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Mono Left</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Mono Right</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Mono Mix</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QComboBox" name="InputPeriods">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>190</y>
+       <width>121</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;For lowest latencies set this option to 2 (default).&lt;/p&gt;&lt;p&gt;Some devices require a higer number of playback periods for higher refresh rates which decreases latency.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <item>
+      <property name="text">
+       <string>2</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>3</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>4</string>
+      </property>
+     </item>
+    </widget>
    </widget>
    <widget class="QWidget" name="tab">
     <attribute name="title">

@@ -67,20 +67,26 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     connect(ui->OK, SIGNAL(accepted()), this, SLOT(writeConfig()));
     connect(ui->OK, SIGNAL(rejected()), this, SLOT(close()));
     connect(ui->RefreshRate, SIGNAL(valueChanged(int)), this, SLOT(changeRefreshRate(int)));
+    connect(ui->InputRefreshRate, SIGNAL(valueChanged(int)), this, SLOT(changeInputRefreshRate(int)));
     connect(ui->SpeakerSetup, SIGNAL(currentIndexChanged(int)), this, SLOT(changeSpeakerSetup(int)));
+    connect(ui->LineInSetup, SIGNAL(currentIndexChanged(int)), this, SLOT(changeLineInSetup(int)));
+    connect(ui->OutputSampleFreq, SIGNAL(currentIndexChanged(int)), this, SLOT(changeOutputSampleFreq(int)));
     connect(ui->InputSampleFreq, SIGNAL(currentIndexChanged(int)), this, SLOT(changeInputSampleFreq(int)));
     connect(ui->OutputBitrate, SIGNAL(currentIndexChanged(int)), this, SLOT(changeOutputBitrate(int)));
-    connect(ui->OutputSampleFreq, SIGNAL(currentIndexChanged(int)), this, SLOT(changeOutputSampleFreq(int)));
     connect(ui->InputConnector, SIGNAL(currentIndexChanged(int)), this, SLOT(changeInputConnector(int)));
     connect(ui->OutputConnector, SIGNAL(currentIndexChanged(int)), this, SLOT(changeOutputConnector(int)));
     connect(ui->Mixer, SIGNAL(currentIndexChanged(int)), this, SLOT(changeMixer(int)));
     connect(ui->Device, SIGNAL(currentIndexChanged(int)), this, SLOT(changeDevice(int)));
     connect(ui->OutputSpeakers, SIGNAL(currentIndexChanged(int)), this, SLOT(changeNoSpeakers(int)));
     connect(ui->OutputPeriods, SIGNAL(currentIndexChanged(int)), this, SLOT(changeNoPeriods(int)));
+    connect(ui->InputPeriods, SIGNAL(currentIndexChanged(int)), this, SLOT(changeNoInputPeriods(int)));
     connect(ui->Timer, SIGNAL(clicked(bool)), this, SLOT(changeTimerDriven(bool)));
     connect(ui->Shared, SIGNAL(clicked(bool)), this, SLOT(changeShared(bool)));
 
     connect(ui->ProductKey, SIGNAL(textEdited(QString)), this, SLOT(changeProductKey(QString)));
+
+
+    ui->InputRefreshRate->setEnabled(false);
 
 
     saveAct = new QShortcut(this);
@@ -131,7 +137,16 @@ AeonWaveConfig::changeProductKey(QString str)
 void
 AeonWaveConfig::changeRefreshRate(int val)
 {
+    unsigned dev = devices[current_device]->current_output_connector;
+    devices[current_device]->output[dev]->refresh_rate = val;
     refresh_rate = val;
+}
+
+void
+AeonWaveConfig::changeInputRefreshRate(int val)
+{
+    unsigned dev = devices[current_device]->current_input_connector;
+    devices[current_device]->input[dev]->refresh_rate = val;
 }
 
 void
@@ -152,8 +167,18 @@ void
 AeonWaveConfig::changeSpeakerSetup(int val)
 {
     unsigned dev = devices[current_device]->current_output_connector;
-    devices[current_device]->output[dev]->setup = aaxRenderMode(val+1);
-    changeNoSpeakers(devices[current_device]->output[dev]->no_speakers/2-1);
+    devices[current_device]->output[dev]->setup = val+1;
+    changeNoSpeakers(devices[current_device]->input[dev]->no_speakers/2-1);
+}
+
+void
+AeonWaveConfig::changeLineInSetup(int val)
+{
+    static int track_dest[4] = {
+        AAX_TRACK_ALL, AAX_TRACK_LEFT, AAX_TRACK_RIGHT, AAX_TRACK_MIX
+    };
+    unsigned dev = devices[current_device]->current_input_connector;
+    devices[current_device]->input[dev]->setup = track_dest[val];
 }
 
 void
@@ -213,6 +238,15 @@ AeonWaveConfig::changeNoPeriods(int val)
 }
 
 void
+AeonWaveConfig::changeNoInputPeriods(int val)
+{
+    unsigned be = current_device;
+    unsigned dev = devices[be]->current_input_connector;
+
+    devices[be]->input[dev]->no_periods = val+2;
+}
+
+void
 AeonWaveConfig::changeInputConnector(int val)
 {
     unsigned be = current_device;
@@ -225,6 +259,26 @@ AeonWaveConfig::changeInputConnector(int val)
 
         val = FreqToIndex(devices[be]->input[dev]->sample_freq);
         ui->InputSampleFreq->setCurrentIndex(val);
+
+        val = devices[be]->input[dev]->no_periods - 2;
+        ui->InputPeriods->setCurrentIndex(val);
+
+        switch(devices[be]->input[dev]->setup)
+        {
+        case AAX_TRACK_ALL:
+            val = 0;
+            break;
+        case AAX_TRACK_LEFT:
+            val = 1;
+            break;
+        case AAX_TRACK_RIGHT:
+            val = 2;
+            break;
+        default:
+            val = 3;
+            break;
+        }
+        ui->LineInSetup->setCurrentIndex(val);
     }
 }
 
@@ -489,13 +543,13 @@ AeonWaveConfig::getSystemResources()
                             i = aaxDriverGetInterfaceNameByPos(cfg, r.c_str(),
                                                                ifs, mode);
 
-                            connector_t *connector = new connector_t(i);
+                            connector_t *connector = new connector_t(i, false);
                             device->input.push_back(connector);
                         }
                     }
                     else
                     {
-                        connector_t *connector = new connector_t("default");
+                        connector_t *connector = new connector_t("default", false);
                         device->input.push_back(connector);
                     }
                 }
@@ -805,6 +859,29 @@ AeonWaveConfig::readConnectorInSettings(void *xiid, unsigned be, unsigned dev)
     if (val) {
         devices[be]->input[dev]->sample_freq = val;
     }
+
+    val = xmlNodeGetInt(xiid, "periods");
+    if (val > 0 && val <= 16) {
+        devices[be]->input[dev]->no_periods = val;
+    }
+
+    char *setup = xmlNodeGetString(xiid, "setup");
+    if (setup)
+    {
+        if (!strcasecmp(setup, "stereo")) {
+            devices[be]->input[dev]->setup = AAX_TRACK_ALL;
+        }
+        else if (!strcasecmp(setup, "left")) {
+            devices[be]->input[dev]->setup = AAX_TRACK_LEFT;
+        }
+        else if (!strcasecmp(setup, "right")) {
+            devices[be]->input[dev]->setup = AAX_TRACK_RIGHT;
+        }
+        else if (!strcasecmp(setup, "mix")) {
+            devices[be]->input[dev]->setup = AAX_TRACK_MIX;
+        }
+        xmlFree(setup);
+    }
 }
 
 void
@@ -841,7 +918,6 @@ AeonWaveConfig::displayUiDevicesConfig()
     if (cfg)
     {
        int min, max;
-       bool x;
 
        aaxMixerSetState(cfg, AAX_INITIALIZED);
 
@@ -924,6 +1000,7 @@ AeonWaveConfig::displayUiConfig()
     ui->ProductKey->setText( QString::fromStdString(hidden) );
 
     ui->RefreshRate->setValue( refresh_rate );
+    ui->InputRefreshRate->setValue( refresh_rate );
 
     /* Devices */
     ui->Device->clear();
@@ -1131,6 +1208,29 @@ AeonWaveConfig::writeConfigFile()
 
                 file << "   <timed>false</timed>" << std::endl;
                 file << "   <shared>false</shared>" << std::endl;
+
+                file << "   <setup>";
+                switch(devices[be]->input[dev]->setup)
+                {
+                case AAX_TRACK_ALL:
+                    file << "stereo";
+                    break;
+                case AAX_TRACK_LEFT:
+                    file << "left";
+                    break;
+                case AAX_TRACK_RIGHT:
+                    file << "right";
+                    break;
+                case AAX_TRACK_MIX:
+                default:
+                    file << "mix";
+                    break;
+                }
+                file << "</setup>" << std::endl;
+
+                file << "   <periods>";
+                file << devices[be]->input[dev]->no_periods;
+                file <<"</periods>" << std::endl;
 
                 file << "   <frequency-hz>";
                 file << devices[be]->input[dev]->sample_freq;

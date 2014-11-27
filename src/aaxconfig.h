@@ -49,12 +49,15 @@ private slots:
     void changeTimerDriven(bool);
     void changeShared(bool);
     void changeRefreshRate(int val);
+    void changeInputRefreshRate(int val);
     void changeSpeakerSetup(int val);
-    void changeOutputBitrate(int val);
+    void changeLineInSetup(int val);
     void changeInputSampleFreq(int val);
     void changeOutputSampleFreq(int val);
+    void changeOutputBitrate(int val);
     void changeNoSpeakers(int val);
     void changeNoPeriods(int val);
+    void changeNoInputPeriods(int val);
     void changeInputConnector(int val);
     void changeOutputConnector(int val);
     void changeMixer(int val);
@@ -71,29 +74,32 @@ private:
     {
         std::string name;
         unsigned int bitrate;
+        unsigned int refresh_rate;
         unsigned int sample_freq;
         unsigned int no_speakers;
         unsigned int no_periods;
-        enum aaxRenderMode setup;
+        unsigned int setup;
         bool shared;
         bool timed;
 
-        _connector() :
+        _connector(bool m = true) :
             name("default"),
             bitrate(320),
+            refresh_rate(46),
             sample_freq(44100),
             no_speakers(2),
             no_periods(2),
-            setup(AAX_MODE_WRITE_STEREO),
+            setup(m ? int(AAX_MODE_WRITE_STEREO) : AAX_TRACK_ALL),
             shared(false),
             timed(false) {};
-        _connector(std::string n) :
+        _connector(std::string n, bool m = true) :
             name(n),
             bitrate(320),
+            refresh_rate(46),
             sample_freq(44100),
             no_speakers(2),
             no_periods(2),
-            setup(AAX_MODE_WRITE_STEREO),
+            setup(m ? int(AAX_MODE_WRITE_STEREO) : AAX_TRACK_ALL),
             shared(false),
             timed(false) {};
         ~_connector() {};

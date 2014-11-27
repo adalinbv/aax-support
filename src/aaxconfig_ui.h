@@ -56,6 +56,12 @@ public:
     QComboBox *InputConnector;
     QComboBox *InputSampleFreq;
     QLabel *label_input_sample_freq;
+    QSpinBox *InputRefreshRate;
+    QLabel *label_refresh_rate_2;
+    QLabel *label_setup_2;
+    QLabel *label_periods_2;
+    QComboBox *LineInSetup;
+    QComboBox *InputPeriods;
     QWidget *tab;
     QComboBox *Mixer;
     QLabel *graphicsView_logo;
@@ -154,6 +160,24 @@ public:
         label_input_sample_freq = new QLabel(tab_3);
         label_input_sample_freq->setObjectName(QString::fromUtf8("label_input_sample_freq"));
         label_input_sample_freq->setGeometry(QRect(20, 70, 81, 20));
+        InputRefreshRate = new QSpinBox(tab_3);
+        InputRefreshRate->setObjectName(QString::fromUtf8("InputRefreshRate"));
+        InputRefreshRate->setGeometry(QRect(160, 90, 121, 27));
+        label_refresh_rate_2 = new QLabel(tab_3);
+        label_refresh_rate_2->setObjectName(QString::fromUtf8("label_refresh_rate_2"));
+        label_refresh_rate_2->setGeometry(QRect(160, 70, 91, 17));
+        label_setup_2 = new QLabel(tab_3);
+        label_setup_2->setObjectName(QString::fromUtf8("label_setup_2"));
+        label_setup_2->setGeometry(QRect(20, 120, 121, 17));
+        label_periods_2 = new QLabel(tab_3);
+        label_periods_2->setObjectName(QString::fromUtf8("label_periods_2"));
+        label_periods_2->setGeometry(QRect(20, 170, 121, 20));
+        LineInSetup = new QComboBox(tab_3);
+        LineInSetup->setObjectName(QString::fromUtf8("LineInSetup"));
+        LineInSetup->setGeometry(QRect(20, 140, 121, 27));
+        InputPeriods = new QComboBox(tab_3);
+        InputPeriods->setObjectName(QString::fromUtf8("InputPeriods"));
+        InputPeriods->setGeometry(QRect(20, 190, 121, 27));
         tabWidget->addTab(tab_3, QString());
         tab = new QWidget();
         tab->setObjectName(QString::fromUtf8("tab"));
@@ -277,6 +301,25 @@ public:
          << QApplication::translate("Configuration", "192000 Hz", 0, QApplication::UnicodeUTF8)
         );
         label_input_sample_freq->setText(QApplication::translate("Configuration", "Frequency:", 0, QApplication::UnicodeUTF8));
+        label_refresh_rate_2->setText(QApplication::translate("Configuration", "Refresh Rate:", 0, QApplication::UnicodeUTF8));
+        label_setup_2->setText(QApplication::translate("Configuration", "Line-in Setup", 0, QApplication::UnicodeUTF8));
+        label_periods_2->setText(QApplication::translate("Configuration", "Buffer Periods:", 0, QApplication::UnicodeUTF8));
+        LineInSetup->clear();
+        LineInSetup->insertItems(0, QStringList()
+         << QApplication::translate("Configuration", "Stereo", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("Configuration", "Mono Left", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("Configuration", "Mono Right", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("Configuration", "Mono Mix", 0, QApplication::UnicodeUTF8)
+        );
+        InputPeriods->clear();
+        InputPeriods->insertItems(0, QStringList()
+         << QApplication::translate("Configuration", "2", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("Configuration", "3", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("Configuration", "4", 0, QApplication::UnicodeUTF8)
+        );
+#ifndef QT_NO_TOOLTIP
+        InputPeriods->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>For lowest latencies set this option to 2 (default).</p><p>Some devices require a higer number of playback periods for higher refresh rates which decreases latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("Configuration", "Capture", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("Configuration", "Information", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
