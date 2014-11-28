@@ -44,7 +44,7 @@ typedef struct
     unsigned no_speakers;
     char *name;
     char *pixmap;
-    unsigned setup;
+    unsigned int setup;
     struct
     {
         int channel;

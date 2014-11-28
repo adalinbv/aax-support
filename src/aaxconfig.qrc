@@ -8,5 +8,6 @@
     <file alias="surround6.png">../admin/surround6.png</file>
     <file alias="surround7_1.png">../admin/surround7_1.png</file>
     <file alias="surround8.png">../admin/surround8.png</file>
+    <file alias="microphone.png">../admin/microphone.png</file>
  </qresource>
 </RCC>

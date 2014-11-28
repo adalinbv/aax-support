@@ -62,6 +62,7 @@ public:
     QLabel *label_periods_2;
     QComboBox *LineInSetup;
     QComboBox *InputPeriods;
+    QLabel *graphicsViewInput;
     QWidget *tab;
     QComboBox *Mixer;
     QLabel *graphicsView_logo;
@@ -178,6 +179,12 @@ public:
         InputPeriods = new QComboBox(tab_3);
         InputPeriods->setObjectName(QString::fromUtf8("InputPeriods"));
         InputPeriods->setGeometry(QRect(20, 190, 121, 27));
+        graphicsViewInput = new QLabel(tab_3);
+        graphicsViewInput->setObjectName(QString::fromUtf8("graphicsViewInput"));
+        graphicsViewInput->setGeometry(QRect(310, 60, 180, 180));
+        graphicsViewInput->setFrameShape(QFrame::NoFrame);
+        graphicsViewInput->setFrameShadow(QFrame::Sunken);
+        graphicsViewInput->setLineWidth(1);
         tabWidget->addTab(tab_3, QString());
         tab = new QWidget();
         tab->setObjectName(QString::fromUtf8("tab"));

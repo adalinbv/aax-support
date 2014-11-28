@@ -61,6 +61,9 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     QPixmap pixmap(speaker_setup[STEREO].pixmap);
     ui->graphicsView->setPixmap(pixmap);
 
+    QPixmap pixmap_input(":/microphone.png");
+    ui->graphicsViewInput->setPixmap(pixmap_input);
+
     setMinimumSize( size() );
     setMaximumSize( size() );
 
@@ -168,7 +171,7 @@ AeonWaveConfig::changeSpeakerSetup(int val)
 {
     unsigned dev = devices[current_device]->current_output_connector;
     devices[current_device]->output[dev]->setup = val+1;
-    changeNoSpeakers(devices[current_device]->input[dev]->no_speakers/2-1);
+    changeNoSpeakers(devices[current_device]->output[dev]->no_speakers/2-1);
 }
 
 void
@@ -212,12 +215,12 @@ AeonWaveConfig::changeNoSpeakers(int val)
     devices[be]->output[dev]->no_speakers = (val+1)*2;
 
     char *path = speaker_setup[STEREO].pixmap;
+    unsigned int setup = devices[be]->output[dev]->setup;
+    unsigned speakers = devices[be]->output[dev]->no_speakers;
     for (int sp=0; sp<MAX_SPEAKER_SETUP; sp++)
     {
-       if (devices[be]->output[dev]->setup == speaker_setup[sp].setup
-            && devices[be]->output[dev]->no_speakers
-                 == speaker_setup[sp].no_speakers
-          )
+       if (setup == speaker_setup[sp].setup &&
+           speakers == speaker_setup[sp].no_speakers)
        {
            path = speaker_setup[sp].pixmap;
            break;
