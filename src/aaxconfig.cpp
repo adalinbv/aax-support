@@ -237,7 +237,7 @@ AeonWaveConfig::changeNoPeriods(int val)
     unsigned be = current_device;
     unsigned dev = devices[be]->current_output_connector;
 
-    devices[be]->output[dev]->no_periods = val+2;
+    devices[be]->output[dev]->no_periods = val+1;
 }
 
 void
@@ -246,7 +246,7 @@ AeonWaveConfig::changeNoInputPeriods(int val)
     unsigned be = current_device;
     unsigned dev = devices[be]->current_input_connector;
 
-    devices[be]->input[dev]->no_periods = val+2;
+    devices[be]->input[dev]->no_periods = val+1;
 }
 
 void
@@ -263,7 +263,7 @@ AeonWaveConfig::changeInputConnector(int val)
         val = FreqToIndex(devices[be]->input[dev]->sample_freq);
         ui->InputSampleFreq->setCurrentIndex(val);
 
-        val = devices[be]->input[dev]->no_periods - 2;
+        val = devices[be]->input[dev]->no_periods - 1;
         ui->InputPeriods->setCurrentIndex(val);
 
         switch(devices[be]->input[dev]->setup)
@@ -302,7 +302,7 @@ AeonWaveConfig::changeOutputConnector(int val)
         val = (devices[be]->output[dev]->no_speakers/2)-1;
         ui->OutputSpeakers->setCurrentIndex(val);
 
-        val = devices[be]->output[dev]->no_periods - 2;
+        val = devices[be]->output[dev]->no_periods - 1;
         ui->OutputPeriods->setCurrentIndex(val);
 
         val = aaxRenderMode(devices[be]->output[dev]->setup)-1;
