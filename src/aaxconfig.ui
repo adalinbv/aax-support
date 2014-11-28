@@ -100,7 +100,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -313,6 +313,11 @@
      <property name="toolTip">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;For lowest latencies set this option to 2 (default).&lt;/p&gt;&lt;p&gt;Some devices require a higer number of playback periods for higher refresh rates which decreases latency.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
+     <item>
+      <property name="text">
+       <string>1</string>
+      </property>
+     </item>
      <item>
       <property name="text">
        <string>2</string>
@@ -642,6 +647,11 @@
      </property>
      <item>
       <property name="text">
+       <string>1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>2</string>
       </property>
      </item>
@@ -735,16 +745,22 @@
  <tabstops>
   <tabstop>Device</tabstop>
   <tabstop>ProductKey</tabstop>
-  <tabstop>RefreshRate</tabstop>
+  <tabstop>tabWidget</tabstop>
   <tabstop>OutputConnector</tabstop>
   <tabstop>Shared</tabstop>
   <tabstop>Timer</tabstop>
   <tabstop>OutputSampleFreq</tabstop>
+  <tabstop>RefreshRate</tabstop>
   <tabstop>SpeakerSetup</tabstop>
   <tabstop>OutputSpeakers</tabstop>
   <tabstop>OutputPeriods</tabstop>
+  <tabstop>OutputBitrate</tabstop>
   <tabstop>InputConnector</tabstop>
   <tabstop>InputSampleFreq</tabstop>
+  <tabstop>InputRefreshRate</tabstop>
+  <tabstop>LineInSetup</tabstop>
+  <tabstop>InputPeriods</tabstop>
+  <tabstop>Mixer</tabstop>
   <tabstop>OK</tabstop>
  </tabstops>
  <resources/>

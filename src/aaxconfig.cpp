@@ -928,6 +928,10 @@ AeonWaveConfig::displayUiDevicesConfig()
        max = aaxMixerGetSetup(cfg, AAX_FREQUENCY_MAX);
        itemsGrayOut(ui->InputSampleFreq, min, max);
 
+       min = aaxMixerGetSetup(cfg, AAX_PERIODS_MIN);
+       max = aaxMixerGetSetup(cfg, AAX_PERIODS_MAX);
+       itemsGrayOut(ui->InputPeriods, min, max);
+
        aaxDriverClose(cfg);
        aaxDriverDestroy(cfg);
     }
@@ -1020,6 +1024,7 @@ AeonWaveConfig::displayUiConfig()
 void
 AeonWaveConfig::itemsGrayOut(QComboBox *combobox, unsigned int min, unsigned int max)
 {
+   int valmin = 0, valmax = 0;
    bool disabled;
 
    for (int i=0; i<combobox->count(); i++)
@@ -1040,13 +1045,19 @@ AeonWaveConfig::itemsGrayOut(QComboBox *combobox, unsigned int min, unsigned int
 
        QStandardItem* item = model->item(i);
        Qt::ItemFlags flags = item->flags();
-       if (disabled) {
+       if (disabled)
+       {
            flags &= ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-       } else {
+       }
+       else
+       {
            flags |= (Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+           if (valmin <= 0) valmin = i;
+           if (valmin) valmax = i;
        }
        item->setFlags(flags);
    }
+   combobox->setCurrentIndex(_MINMAX(combobox->currentIndex(), valmin, valmax));
 }
 
 void

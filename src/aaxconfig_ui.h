@@ -203,21 +203,27 @@ public:
         MixerInfo->setGeometry(QRect(10, 40, 491, 211));
         tabWidget->addTab(tab, QString());
         QWidget::setTabOrder(Device, ProductKey);
-        QWidget::setTabOrder(ProductKey, RefreshRate);
-        QWidget::setTabOrder(RefreshRate, OutputConnector);
+        QWidget::setTabOrder(ProductKey, tabWidget);
+        QWidget::setTabOrder(tabWidget, OutputConnector);
         QWidget::setTabOrder(OutputConnector, Shared);
         QWidget::setTabOrder(Shared, Timer);
         QWidget::setTabOrder(Timer, OutputSampleFreq);
-        QWidget::setTabOrder(OutputSampleFreq, SpeakerSetup);
+        QWidget::setTabOrder(OutputSampleFreq, RefreshRate);
+        QWidget::setTabOrder(RefreshRate, SpeakerSetup);
         QWidget::setTabOrder(SpeakerSetup, OutputSpeakers);
         QWidget::setTabOrder(OutputSpeakers, OutputPeriods);
-        QWidget::setTabOrder(OutputPeriods, InputConnector);
+        QWidget::setTabOrder(OutputPeriods, OutputBitrate);
+        QWidget::setTabOrder(OutputBitrate, InputConnector);
         QWidget::setTabOrder(InputConnector, InputSampleFreq);
-        QWidget::setTabOrder(InputSampleFreq, OK);
+        QWidget::setTabOrder(InputSampleFreq, InputRefreshRate);
+        QWidget::setTabOrder(InputRefreshRate, LineInSetup);
+        QWidget::setTabOrder(LineInSetup, InputPeriods);
+        QWidget::setTabOrder(InputPeriods, Mixer);
+        QWidget::setTabOrder(Mixer, OK);
 
         retranslateUi(Configuration);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(Configuration);
@@ -269,6 +275,7 @@ public:
         Timer->setText(QApplication::translate("Configuration", "Timer Driven (Experimental)", 0, QApplication::UnicodeUTF8));
         OutputPeriods->clear();
         OutputPeriods->insertItems(0, QStringList()
+         << QApplication::translate("Configuration", "1", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("Configuration", "2", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("Configuration", "3", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("Configuration", "4", 0, QApplication::UnicodeUTF8)
@@ -320,6 +327,7 @@ public:
         );
         InputPeriods->clear();
         InputPeriods->insertItems(0, QStringList()
+         << QApplication::translate("Configuration", "1", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("Configuration", "2", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("Configuration", "3", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("Configuration", "4", 0, QApplication::UnicodeUTF8)
