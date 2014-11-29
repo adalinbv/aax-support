@@ -1024,7 +1024,7 @@ AeonWaveConfig::displayUiConfig()
 void
 AeonWaveConfig::itemsGrayOut(QComboBox *combobox, unsigned int min, unsigned int max)
 {
-   int valmin = 0, valmax = 0;
+   int valmin = -1, valmax = 0;
    bool disabled;
 
    for (int i=0; i<combobox->count(); i++)
@@ -1052,11 +1052,13 @@ AeonWaveConfig::itemsGrayOut(QComboBox *combobox, unsigned int min, unsigned int
        else
        {
            flags |= (Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-           if (valmin <= 0) valmin = i;
-           if (valmin) valmax = i;
+           if (valmin < 0) valmin = i;
+           if (valmin >= 0) valmax = i;
        }
        item->setFlags(flags);
    }
+
+   if (valmin < 0) valmin = 0;
    combobox->setCurrentIndex(_MINMAX(combobox->currentIndex(), valmin, valmax));
 }
 
