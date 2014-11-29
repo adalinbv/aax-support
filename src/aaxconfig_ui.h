@@ -139,7 +139,7 @@ public:
         Shared->setGeometry(QRect(10, 40, 97, 22));
         label_refresh_rate = new QLabel(tab_2);
         label_refresh_rate->setObjectName(QString::fromUtf8("label_refresh_rate"));
-        label_refresh_rate->setGeometry(QRect(160, 70, 91, 17));
+        label_refresh_rate->setGeometry(QRect(160, 70, 121, 17));
         RefreshRate = new QSpinBox(tab_2);
         RefreshRate->setObjectName(QString::fromUtf8("RefreshRate"));
         RefreshRate->setGeometry(QRect(160, 90, 121, 27));
@@ -166,7 +166,7 @@ public:
         InputRefreshRate->setGeometry(QRect(160, 90, 121, 27));
         label_refresh_rate_2 = new QLabel(tab_3);
         label_refresh_rate_2->setObjectName(QString::fromUtf8("label_refresh_rate_2"));
-        label_refresh_rate_2->setGeometry(QRect(160, 70, 91, 17));
+        label_refresh_rate_2->setGeometry(QRect(160, 70, 121, 17));
         label_setup_2 = new QLabel(tab_3);
         label_setup_2->setObjectName(QString::fromUtf8("label_setup_2"));
         label_setup_2->setGeometry(QRect(20, 120, 121, 17));
@@ -223,7 +223,7 @@ public:
 
         retranslateUi(Configuration);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(Configuration);
@@ -297,7 +297,10 @@ public:
         Shared->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Allow this device to be shared with other applications.</p><p>This will increase latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
         Shared->setText(QApplication::translate("Configuration", "Shared", 0, QApplication::UnicodeUTF8));
-        label_refresh_rate->setText(QApplication::translate("Configuration", "Refresh Rate:", 0, QApplication::UnicodeUTF8));
+        label_refresh_rate->setText(QApplication::translate("Configuration", "Refresh Rate (Hz):", 0, QApplication::UnicodeUTF8));
+#ifndef QT_NO_TOOLTIP
+        RefreshRate->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>The refresh rate defines how often new data is retrieved from the device.</p><p>Higher values result in lower latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("Configuration", "Playback", 0, QApplication::UnicodeUTF8));
         InputSampleFreq->clear();
         InputSampleFreq->insertItems(0, QStringList()
@@ -315,7 +318,10 @@ public:
          << QApplication::translate("Configuration", "192000 Hz", 0, QApplication::UnicodeUTF8)
         );
         label_input_sample_freq->setText(QApplication::translate("Configuration", "Frequency:", 0, QApplication::UnicodeUTF8));
-        label_refresh_rate_2->setText(QApplication::translate("Configuration", "Refresh Rate:", 0, QApplication::UnicodeUTF8));
+#ifndef QT_NO_TOOLTIP
+        InputRefreshRate->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>The refresh rate defines how often new data is retrieved from the device.</p><p>Higher values result in lower latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+        label_refresh_rate_2->setText(QApplication::translate("Configuration", "Refresh Rate (Hz):", 0, QApplication::UnicodeUTF8));
         label_setup_2->setText(QApplication::translate("Configuration", "Line-in Setup", 0, QApplication::UnicodeUTF8));
         label_periods_2->setText(QApplication::translate("Configuration", "Buffer Periods:", 0, QApplication::UnicodeUTF8));
         LineInSetup->clear();

@@ -100,7 +100,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -419,12 +419,12 @@
       <rect>
        <x>160</x>
        <y>70</y>
-       <width>91</width>
+       <width>121</width>
        <height>17</height>
       </rect>
      </property>
      <property name="text">
-      <string>Refresh Rate:</string>
+      <string>Refresh Rate (Hz):</string>
      </property>
     </widget>
     <widget class="QSpinBox" name="RefreshRate">
@@ -435,6 +435,9 @@
        <width>121</width>
        <height>27</height>
       </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The refresh rate defines how often new data is retrieved from the device.&lt;/p&gt;&lt;p&gt;Higher values result in lower latency.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QLabel" name="graphicsView">
@@ -563,18 +566,21 @@
        <height>27</height>
       </rect>
      </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The refresh rate defines how often new data is retrieved from the device.&lt;/p&gt;&lt;p&gt;Higher values result in lower latency.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
     </widget>
     <widget class="QLabel" name="label_refresh_rate_2">
      <property name="geometry">
       <rect>
        <x>160</x>
        <y>70</y>
-       <width>91</width>
+       <width>121</width>
        <height>17</height>
       </rect>
      </property>
      <property name="text">
-      <string>Refresh Rate:</string>
+      <string>Refresh Rate (Hz):</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_setup_2">
