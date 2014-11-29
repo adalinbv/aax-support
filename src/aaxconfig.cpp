@@ -88,10 +88,6 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
 
     connect(ui->ProductKey, SIGNAL(textEdited(QString)), this, SLOT(changeProductKey(QString)));
 
-
-    ui->InputRefreshRate->setEnabled(false);
-
-
     saveAct = new QShortcut(this);
     saveAct->setKey(tr("Ctrl+S"));
     saveAct->setContext(Qt::ApplicationShortcut);
@@ -99,7 +95,6 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
 
     QFont font;
     font.setFamily(QString::fromUtf8("Open Sans"));
-//  font.setFamily(QString::fromUtf8("Proxima Nova"));
     font.setPointSize(9);
     font.setBold(false);
     font.setWeight(50);
@@ -142,7 +137,6 @@ AeonWaveConfig::changeRefreshRate(int val)
 {
     unsigned dev = devices[current_device]->current_output_connector;
     devices[current_device]->output[dev]->refresh_rate = val;
-    refresh_rate = val;
 }
 
 void
@@ -263,6 +257,9 @@ AeonWaveConfig::changeInputConnector(int val)
         val = FreqToIndex(devices[be]->input[dev]->sample_freq);
         ui->InputSampleFreq->setCurrentIndex(val);
 
+        val = devices[be]->input[dev]->refresh_rate;
+        ui->InputRefreshRate->setValue(val);
+
         val = devices[be]->input[dev]->no_periods - 1;
         ui->InputPeriods->setCurrentIndex(val);
 
@@ -307,6 +304,9 @@ AeonWaveConfig::changeOutputConnector(int val)
 
         val = aaxRenderMode(devices[be]->output[dev]->setup)-1;
         ui->SpeakerSetup->setCurrentIndex(val);
+
+        val = devices[be]->output[dev]->refresh_rate;
+        ui->RefreshRate->setValue(val);
 
         val = FreqToIndex(devices[be]->output[dev]->sample_freq);
         ui->OutputSampleFreq->setCurrentIndex(val);
@@ -821,6 +821,10 @@ AeonWaveConfig::readConnectorOutSettings(void *xiid, unsigned be, unsigned dev)
         devices[be]->output[dev]->sample_freq = val;
     }
 
+    val = xmlNodeGetInt(xiid, "interval-hz");
+    if (!val) val = refresh_rate;
+    devices[be]->output[dev]->refresh_rate = val;
+
     val = xmlNodeGetInt(xiid, "bitrate");
     if (val >= 64 && val <= 320) {
         devices[be]->output[dev]->bitrate = val;
@@ -862,6 +866,10 @@ AeonWaveConfig::readConnectorInSettings(void *xiid, unsigned be, unsigned dev)
     if (val) {
         devices[be]->input[dev]->sample_freq = val;
     }
+
+    val = xmlNodeGetInt(xiid, "interval-hz");
+    if (!val) val = refresh_rate;
+    devices[be]->input[dev]->refresh_rate = val;
 
     val = xmlNodeGetInt(xiid, "periods");
     if (val > 0 && val <= 16) {
@@ -1006,9 +1014,6 @@ AeonWaveConfig::displayUiConfig()
     hidden.assign(product_key.size(), '*');
     ui->ProductKey->setText( QString::fromStdString(hidden) );
 
-    ui->RefreshRate->setValue( refresh_rate );
-    ui->InputRefreshRate->setValue( refresh_rate );
-
     /* Devices */
     ui->Device->clear();
     for(unsigned be=0; be<devices.size(); be++)
@@ -1097,9 +1102,6 @@ AeonWaveConfig::writeConfigFile()
         file << "  <frequency-hz>"<< general_sample_freq;
         file << "</frequency-hz>" << std::endl;
 
-        file << "  <interval-hz>" << refresh_rate;
-        file << "</interval-hz>" << std::endl;
-
         file << "  <setup>";
         if (general_setup == AAX_MODE_WRITE_STEREO) file << "stereo";
         else if (general_setup == AAX_MODE_WRITE_SPATIAL) file << "spatial";
@@ -1171,6 +1173,10 @@ AeonWaveConfig::writeConfigFile()
                 file << "   <frequency-hz>";
                 file << devices[be]->output[dev]->sample_freq;
                 file << "</frequency-hz>" << std::endl;
+
+                file << "   <interval-hz>";
+                file << devices[be]->output[dev]->refresh_rate;
+                file << "</interval-hz>" << std::endl;
 
                 if (devices[be]->output[dev]->setup == AAX_MODE_WRITE_HRTF)
                 {
@@ -1251,6 +1257,10 @@ AeonWaveConfig::writeConfigFile()
                 file << "   <frequency-hz>";
                 file << devices[be]->input[dev]->sample_freq;
                 file << "</frequency-hz>" << std::endl;
+
+                file << "   <interval-hz>";
+                file << devices[be]->input[dev]->refresh_rate;
+                file << "</interval-hz>" << std::endl;
 
                 file << "  </connector>" << std::endl;
             }
