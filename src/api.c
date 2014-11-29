@@ -39,6 +39,7 @@
 # define USER_AAX_DIR		"\\Adalin\\AAX\\"
 
 # define USER_DIR		getenv("USERPROFILE")
+# define TEMP_DIR		getenv("TEMP")
 
 static int createDACL(void*);
 
@@ -55,6 +56,7 @@ static int createDACL(void*);
 # define USER_AAX_DIR		"/.aax/"
 
 # define USER_DIR		getenv("HOME")
+# define TEMP_DIR		"/tmp"
 #endif
 
 
@@ -90,6 +92,12 @@ moveOldCfgFile()
 #else
 # define moveOldCfgFile()
 #endif
+
+const char*
+tmpDir()
+{
+   return TEMP_DIR;
+}
 
 const char*
 userHomeDir()

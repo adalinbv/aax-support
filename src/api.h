@@ -54,6 +54,7 @@ typedef struct
 
 extern speaker_t speaker_setup[MAX_SPEAKER_SETUP];
 
+const char* tmpDir();
 const char* userHomeDir();
 char* userConfigFile();
 char* systemConfigFile();

@@ -329,10 +329,16 @@ AeonWaveConfig::changeMixer(int val)
         QString desc;
 
         name = devices[be]->name.c_str();
-        if (devices[be]->output.size() > 0)
+        if (be != (unsigned)file_be_pos)
         {
-            const char *ifname = devices[be]->output[dev]->name.c_str();
-            name += std::string(": ") + ifname;
+            if (devices[be]->output.size() > 0)
+            {
+                const char *ifname = devices[be]->output[dev]->name.c_str();
+                name += std::string(": ") + ifname;
+            }
+        }
+        else {
+            name += ": " + std::string(tmpDir()) + "/.aax.wav";
         }
 
         cfg = aaxDriverOpenByName(name.c_str(), AAX_MODE_WRITE_STEREO);
@@ -968,10 +974,16 @@ AeonWaveConfig::displayUiDevicesConfig()
     devname = devices[be]->name.c_str();
     name = devname;
 
-    if (devices[be]->output.size() > 0)
+    if (be != (unsigned)file_be_pos)
     {
-        const char *ifname = devices[be]->output[idx]->name.c_str();
-        name += std::string(": ") + ifname;
+        if (devices[be]->output.size() > 0)
+        {
+            const char *ifname = devices[be]->output[idx]->name.c_str();
+            name += std::string(": ") + ifname;
+        }
+    }
+    else {
+       name += ": " + std::string(tmpDir()) + "/.aax.wav";
     }
 
     cfg = aaxDriverOpenByName(name.c_str(), AAX_MODE_WRITE_STEREO);
