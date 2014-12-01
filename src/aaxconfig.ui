@@ -100,7 +100,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -311,7 +311,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;For lowest latencies set this option to 2 (default).&lt;/p&gt;&lt;p&gt;Some devices require a higer number of playback periods for higher refresh rates which decreases latency.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;For lowest latencies set this option to 1 or 2 (default).&lt;/p&gt;&lt;p&gt;Some devices require more playback-periods for smooth playback but this will increase the latency.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <item>
       <property name="text">
@@ -593,7 +593,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Line-in Setup</string>
+      <string>Line-in Setup:</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_periods_2">
@@ -649,7 +649,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;For lowest latencies set this option to 2 (default).&lt;/p&gt;&lt;p&gt;Some devices require a higer number of playback periods for higher refresh rates which decreases latency.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;For lowest latencies set this option to 1 or 2 (default).&lt;/p&gt;&lt;p&gt;Some devices require more capture-periods for smooth recording but this will increase the latency.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <item>
       <property name="text">

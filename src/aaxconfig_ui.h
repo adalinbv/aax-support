@@ -223,7 +223,7 @@ public:
 
         retranslateUi(Configuration);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(Configuration);
@@ -281,7 +281,7 @@ public:
          << QApplication::translate("Configuration", "4", 0, QApplication::UnicodeUTF8)
         );
 #ifndef QT_NO_TOOLTIP
-        OutputPeriods->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>For lowest latencies set this option to 2 (default).</p><p>Some devices require a higer number of playback periods for higher refresh rates which decreases latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
+        OutputPeriods->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>For lowest latencies set this option to 1 or 2 (default).</p><p>Some devices require more playback-periods for smooth playback but this will increase the latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
         label_speakers->setText(QApplication::translate("Configuration", "No. Speakers:", 0, QApplication::UnicodeUTF8));
         label_setup->setText(QApplication::translate("Configuration", "Speaker Setup:", 0, QApplication::UnicodeUTF8));
@@ -322,7 +322,7 @@ public:
         InputRefreshRate->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>The refresh rate defines how often new data is retrieved from the device.</p><p>Higher values result in lower latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
         label_refresh_rate_2->setText(QApplication::translate("Configuration", "Refresh Rate (Hz):", 0, QApplication::UnicodeUTF8));
-        label_setup_2->setText(QApplication::translate("Configuration", "Line-in Setup", 0, QApplication::UnicodeUTF8));
+        label_setup_2->setText(QApplication::translate("Configuration", "Line-in Setup:", 0, QApplication::UnicodeUTF8));
         label_periods_2->setText(QApplication::translate("Configuration", "Buffer Periods:", 0, QApplication::UnicodeUTF8));
         LineInSetup->clear();
         LineInSetup->insertItems(0, QStringList()
@@ -339,7 +339,7 @@ public:
          << QApplication::translate("Configuration", "4", 0, QApplication::UnicodeUTF8)
         );
 #ifndef QT_NO_TOOLTIP
-        InputPeriods->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>For lowest latencies set this option to 2 (default).</p><p>Some devices require a higer number of playback periods for higher refresh rates which decreases latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
+        InputPeriods->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>For lowest latencies set this option to 1 or 2 (default).</p><p>Some devices require more capture-periods for smooth recording but this will increase the latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("Configuration", "Capture", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("Configuration", "Information", 0, QApplication::UnicodeUTF8));

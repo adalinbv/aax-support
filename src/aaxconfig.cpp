@@ -338,7 +338,7 @@ AeonWaveConfig::changeMixer(int val)
             }
         }
         else {
-            name += ": " + std::string(tmpDir()) + "/.aax.wav";
+            name += ": " + std::string(tmpDir()) + "/AeonWave.wav";
         }
 
         cfg = aaxDriverOpenByName(name.c_str(), AAX_MODE_WRITE_STEREO);
@@ -983,7 +983,7 @@ AeonWaveConfig::displayUiDevicesConfig()
         }
     }
     else {
-       name += ": " + std::string(tmpDir()) + "/.aax.wav";
+       name += ": " + std::string(tmpDir()) + "/AeonWave.wav";
     }
 
     cfg = aaxDriverOpenByName(name.c_str(), AAX_MODE_WRITE_STEREO);
