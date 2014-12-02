@@ -113,6 +113,7 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
 //  ui->InfoScrollArea->setWidget(ui->MixerInfo);
 //  ui->InfoScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    ui->tabWidget->setCurrentIndex(2);
     changeMixer(0);
 }
 
