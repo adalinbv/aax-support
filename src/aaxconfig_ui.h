@@ -67,6 +67,8 @@ public:
     QComboBox *Mixer;
     QLabel *graphicsView_logo;
     QLabel *MixerInfo;
+    QWidget *tab_4;
+    QLabel *FiltersEffects;
 
     void setupUi(QDialog *Configuration)
     {
@@ -202,6 +204,12 @@ public:
         MixerInfo->setObjectName(QString::fromUtf8("MixerInfo"));
         MixerInfo->setGeometry(QRect(10, 40, 491, 211));
         tabWidget->addTab(tab, QString());
+        tab_4 = new QWidget();
+        tab_4->setObjectName(QString::fromUtf8("tab_4"));
+        FiltersEffects = new QLabel(tab_4);
+        FiltersEffects->setObjectName(QString::fromUtf8("FiltersEffects"));
+        FiltersEffects->setGeometry(QRect(10, 10, 491, 241));
+        tabWidget->addTab(tab_4, QString());
         QWidget::setTabOrder(Device, ProductKey);
         QWidget::setTabOrder(ProductKey, tabWidget);
         QWidget::setTabOrder(tabWidget, OutputConnector);
@@ -343,6 +351,7 @@ public:
 #endif // QT_NO_TOOLTIP
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("Configuration", "Capture", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("Configuration", "Information", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("Configuration", "Filters and Effects", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

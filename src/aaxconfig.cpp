@@ -99,10 +99,20 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     font.setBold(false);
     font.setWeight(50);
     font.setLetterSpacing(QFont::PercentageSpacing, 95.0f);
+
     ui->MixerInfo->setFont(font);
     ui->MixerInfo->setLineWidth(1);
     ui->MixerInfo->setTextFormat(Qt::RichText);
     ui->MixerInfo->setAlignment(Qt::AlignLeft|Qt::AlignTop);
+
+    ui->FiltersEffects->setFont(font);
+    ui->FiltersEffects->setLineWidth(1);
+    ui->FiltersEffects->setTextFormat(Qt::RichText);
+    ui->FiltersEffects->setAlignment(Qt::AlignLeft|Qt::AlignTop);
+
+//  ui->InfoScrollArea->setWidget(ui->MixerInfo);
+//  ui->InfoScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
     changeMixer(0);
 }
 
@@ -121,9 +131,9 @@ static unsigned int _freq[MAX_FREQ] = {
 };
 
 void
-AeonWaveConfig::alert(std::string msg)
+AeonWaveConfig::alert(QString msg)
 {
-   QMessageBox::warning(0, "AeonWave-Config", QString(msg.c_str()));
+   QMessageBox::warning(0, "AeonWave-Config", msg);
 }
 
 void
@@ -410,8 +420,60 @@ AeonWaveConfig::changeMixer(int val)
             }
 
             desc += tr("</table>");
+
             ui->MixerInfo->setText(desc);
-            ui->MixerInfo->show();
+//          ui->MixerInfo->adjustSize();
+//          ui->MixerInfo->show();
+
+            if (aaxGetMajorVersion() >= 2 && aaxGetMinorVersion() >= 5)
+            {
+                desc = tr("<table width=\"100%\">");
+                desc += tr("<tr><td width=\"50%\">");
+                desc += tr("<font><b>Supported Filters:</b></font>");
+                desc += tr("</td><td width=\"50%\">");
+                desc += tr("<font><b>Supported Effects:</b></font>"); 
+                desc += tr("</td></tr>");
+
+                int max_flt = AAX_FILTER_MAX;
+                int max_eff = AAX_EFFECT_MAX;
+                for (int i=1; i<_MAX(max_flt, max_eff); i++)
+                {
+                    desc += tr("<tr>");
+                    if (i < max_flt)
+                    {
+                        s = aaxFilterGetNameByType(cfg, aaxFilterType(i));
+                        if (aaxIsFilterSupported(cfg, s)) {
+                            desc += tr("<td><img src=\":/checked.png\">");
+                            desc += tr("<font>&nbsp;%1</font>").arg(s);
+                            desc += tr("</td>");
+                        } else {
+                            desc += tr("<td><img src=\":/unchecked.png\">");
+                            desc += tr("<font color=\"LightSlateGray\">&nbsp;%1</font>").arg(s);
+                            desc += tr("</td>");
+                        }
+                    }
+
+                    if (i < max_eff)
+                    {
+                        s = aaxEffectGetNameByType(cfg, aaxEffectType(i));
+                        if (aaxIsEffectSupported(cfg, s)) {
+                            desc += tr("<td><img src=\":/checked.png\">");
+                            desc += tr("<font>&nbsp;%1</font>").arg(s);
+                            desc += tr("</td>");
+                        } else {
+                            desc += tr("<td><img src=\":/unchecked.png\">");
+                            desc += tr("<font color=\"LightSlateGray\">&nbsp;%1</font>").arg(s);
+                            desc += tr("</td>");
+                        }
+                    }
+                    desc += tr("</tr>");
+                }
+                desc += tr("</table>");
+            }
+            else {
+               desc = tr("Unsupported by this version of AeonWave");
+            }
+            ui->FiltersEffects->setText(desc);
 
             aaxDriverClose(cfg);
             aaxDriverDestroy(cfg);
@@ -449,8 +511,8 @@ AeonWaveConfig::getSystemResources()
 {
     if (aaxGetMajorVersion() < 2 || aaxGetMinorVersion() < 5)
     {
-        alert("WARNING:\n"
-              "This software only works with AeonWave 2.5.0 or later.\n");
+        alert(tr("WARNING:\n"
+                 "This software only works with AeonWave 2.5.0 or later."));
         exit(-1);
     }
 
@@ -724,8 +786,8 @@ AeonWaveConfig::readConfigSettings(void* xid)
 
         float v = (float)xmlNodeGetDouble(xcid, "version");
         if (v < 0.0f || v > 2.9f) {
-         alert("WARNING:\n"
-               "Incompattible configuration file version, skipping.\n");
+         alert(tr("WARNING:\n"
+                  "Incompattible configuration file version, skipping."));
         }
         else if (v < 2.0f) {
            readOldConfigSettings(xcid);
@@ -908,6 +970,7 @@ AeonWaveConfig::displayUiDevicesConfig()
     const char *devname;
     std::string name;
     aaxConfig cfg;
+    bool found;
     int idx;
 
     /* Input connectors */
@@ -948,6 +1011,12 @@ AeonWaveConfig::displayUiDevicesConfig()
 
        aaxDriverClose(cfg);
        aaxDriverDestroy(cfg);
+       found = true;
+    }
+    else
+    {
+        found = false;
+        alert(tr("Input device unavailable or busy"));
     }
 
     /* Output connectors */
@@ -1014,6 +1083,9 @@ AeonWaveConfig::displayUiDevicesConfig()
 
        aaxDriverClose(cfg);
        aaxDriverDestroy(cfg);
+    }
+    else if (found) {
+        alert(tr("Output device unavailable or busy"));
     }
 }
 
@@ -1098,7 +1170,11 @@ AeonWaveConfig::writeConfigFile()
 
         if (file.fail() || file.bad())
         {
-            alert("Error writing to file: "+from_path+"\n\r"+strerror(errno));
+            QString msg = tr("Error writing to file: ");
+            msg += from_path.c_str();
+            msg += "\n\r";
+            msg += tr(strerror(errno));
+            alert(msg);
             file.close();
             return;
         }
@@ -1330,7 +1406,11 @@ AeonWaveConfig::writeOldConfigFile()
 
         if (file.fail() || file.bad())
         {
-            alert("Error writing to file: "+from_path+"\n\r"+strerror(errno));
+            QString msg = tr("Error writing to file: ");
+            msg += from_path.c_str();
+            msg += "\n\r";
+            msg += tr(strerror(errno));
+            alert(msg);
             file.close();
             return;
         }

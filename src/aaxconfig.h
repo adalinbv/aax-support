@@ -137,9 +137,16 @@ private:
     void displayUiConfig();
     void displayUiDevicesConfig();
     void itemsGrayOut(QComboBox*, unsigned int, unsigned int);
-    void alert(std::string);
+    void alert(QString);
 
     unsigned int FreqToIndex(unsigned int freq);
+
+    inline void alert(const char *msg) {
+       alert(QString(msg));
+    }
+    inline void alert(std::string msg) {
+       alert(QString(msg.c_str()));
+    }
 };
 
 extern AeonWaveConfig *_mw;

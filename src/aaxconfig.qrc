@@ -1,6 +1,8 @@
 <!DOCTYPE RCC><RCC version="1.0">
   <qresource>
     <file alias="logo.png">../admin/aaxconfig.png</file>
+    <file alias="checked.png">../admin/checked.png</file>
+    <file alias="unchecked.png">../admin/unchecked.png</file>
     <file alias="quad.png">../admin/quad.png</file>
     <file alias="stereo.png">../admin/stereo.png</file>
     <file alias="surround2_4.png">../admin/surround2_4.png</file>
