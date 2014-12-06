@@ -68,8 +68,8 @@ ELSE(WIN32)
 
   # DEBIAN
   SET(CPACK_DEBIAN_PACKAGE_REPLACES "aaxconfig")
-  SET(CPACK_DEBIAN_PACKAGE_SECTION "Sound")
-  SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.1), libaax2-bin (>= 2.2), libqt4-core (>= 4.6.2), libqt4-gui (>= 4.6.2)")
+  SET(CPACK_DEBIAN_PACKAGE_SECTION "administration utilities")
+  SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.1), libaax2-bin (>= 2.2), libqt4-core (>= 4.6.2), libqt4-gui (>= 4.7.0)")
 
   # RPM
   SET(CPACK_RPM_PACKAGE_LICENSE "GPL v3")

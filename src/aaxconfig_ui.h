@@ -69,6 +69,7 @@ public:
     QLabel *MixerInfo;
     QWidget *tab_4;
     QLabel *FiltersEffects;
+    QLabel *label;
 
     void setupUi(QDialog *Configuration)
     {
@@ -79,7 +80,7 @@ public:
         Configuration->setMaximumSize(QSize(530, 400));
         ProductKey = new aaxConfigLineEdit(Configuration);
         ProductKey->setObjectName(QString::fromUtf8("ProductKey"));
-        ProductKey->setGeometry(QRect(300, 35, 211, 21));
+        ProductKey->setGeometry(QRect(300, 33, 221, 21));
         label_product_key = new QLabel(Configuration);
         label_product_key->setObjectName(QString::fromUtf8("label_product_key"));
         label_product_key->setGeometry(QRect(300, 10, 91, 17));
@@ -210,6 +211,12 @@ public:
         FiltersEffects->setObjectName(QString::fromUtf8("FiltersEffects"));
         FiltersEffects->setGeometry(QRect(10, 10, 491, 241));
         tabWidget->addTab(tab_4, QString());
+        label = new QLabel(Configuration);
+        label->setObjectName(QString::fromUtf8("label"));
+        label->setGeometry(QRect(460, 10, 56, 20));
+        label->setLayoutDirection(Qt::RightToLeft);
+        label->setTextFormat(Qt::RichText);
+        label->setOpenExternalLinks(true);
         QWidget::setTabOrder(Device, ProductKey);
         QWidget::setTabOrder(ProductKey, tabWidget);
         QWidget::setTabOrder(tabWidget, OutputConnector);
@@ -231,7 +238,7 @@ public:
 
         retranslateUi(Configuration);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(Configuration);
@@ -241,7 +248,7 @@ public:
     {
         Configuration->setWindowTitle(QApplication::translate("Configuration", "AeonWave Configuration", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
-        ProductKey->setToolTip(QApplication::translate("Configuration", "product-key", 0, QApplication::UnicodeUTF8));
+        ProductKey->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>A valid prouduct key unlocks the advanced options of AeonWave and turns the software from the Lite mode to the HD mode.</p></body></html>", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
         label_product_key->setText(QApplication::translate("Configuration", "Product-Key:", 0, QApplication::UnicodeUTF8));
         label_backend->setText(QApplication::translate("Configuration", "Device:", 0, QApplication::UnicodeUTF8));
@@ -302,6 +309,9 @@ public:
          << QApplication::translate("Configuration", "320kbps", 0, QApplication::UnicodeUTF8)
         );
 #ifndef QT_NO_TOOLTIP
+        OutputBitrate->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>The bitrate defines the size and accuracy of compressed audio formats like mp3.</p></body></html>", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
         Shared->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Allow this device to be shared with other applications.</p><p>This will increase latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
         Shared->setText(QApplication::translate("Configuration", "Shared", 0, QApplication::UnicodeUTF8));
@@ -352,6 +362,10 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("Configuration", "Capture", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("Configuration", "Information", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("Configuration", "Filters and Effects", 0, QApplication::UnicodeUTF8));
+#ifndef QT_NO_TOOLTIP
+        label->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Click here to get a valid Product-Key (an internet connection is required)</p></body></html>", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+        label->setText(QApplication::translate("Configuration", "<html><head/><body><p><a href=\"http://www.adalin.com/index.html?frame1=product_aeonwave.html&amp;frame2=buy_aeonwaveHD.php\"><span style=\" text-decoration: underline; color:#0000ff;\">Acquire</span></a></p></body></html>", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };
