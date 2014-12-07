@@ -358,6 +358,10 @@ AeonWaveConfig::changeMixer(int val)
             unsigned int x, y, min, max;
             const char *s;
 
+            if (aaxIsValid(cfg, AAX_CONFIG_HD)) {
+               ui->label_acquire->setVisible(false);
+            }
+
             desc = tr("<tabel>");
             aaxMixerSetState(cfg, AAX_INITIALIZED);
 

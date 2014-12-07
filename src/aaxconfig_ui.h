@@ -69,7 +69,7 @@ public:
     QLabel *MixerInfo;
     QWidget *tab_4;
     QLabel *FiltersEffects;
-    QLabel *label;
+    QLabel *label_acquire;
 
     void setupUi(QDialog *Configuration)
     {
@@ -211,12 +211,12 @@ public:
         FiltersEffects->setObjectName(QString::fromUtf8("FiltersEffects"));
         FiltersEffects->setGeometry(QRect(10, 10, 491, 241));
         tabWidget->addTab(tab_4, QString());
-        label = new QLabel(Configuration);
-        label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(460, 10, 56, 20));
-        label->setLayoutDirection(Qt::RightToLeft);
-        label->setTextFormat(Qt::RichText);
-        label->setOpenExternalLinks(true);
+        label_acquire = new QLabel(Configuration);
+        label_acquire->setObjectName(QString::fromUtf8("label_acquire"));
+        label_acquire->setGeometry(QRect(460, 10, 56, 20));
+        label_acquire->setLayoutDirection(Qt::RightToLeft);
+        label_acquire->setTextFormat(Qt::RichText);
+        label_acquire->setOpenExternalLinks(true);
         QWidget::setTabOrder(Device, ProductKey);
         QWidget::setTabOrder(ProductKey, tabWidget);
         QWidget::setTabOrder(tabWidget, OutputConnector);
@@ -363,9 +363,9 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("Configuration", "Information", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("Configuration", "Filters and Effects", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
-        label->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Click here to get a valid Product-Key (an internet connection is required)</p></body></html>", 0, QApplication::UnicodeUTF8));
+        label_acquire->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Click here to get a valid Product-Key (an internet connection is required)</p></body></html>", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
-        label->setText(QApplication::translate("Configuration", "<html><head/><body><p><a href=\"http://www.adalin.com/index.html?frame1=product_aeonwave.html&amp;frame2=buy_aeonwaveHD.php\"><span style=\" text-decoration: underline; color:#0000ff;\">Acquire</span></a></p></body></html>", 0, QApplication::UnicodeUTF8));
+        label_acquire->setText(QApplication::translate("Configuration", "<html><head/><body><p><a href=\"http://www.adalin.com/index.html?frame1=product_aeonwave.html&amp;frame2=buy_aeonwaveHD.php\"><span style=\" text-decoration: underline; color:#0000ff;\">Acquire</span></a></p></body></html>", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };
