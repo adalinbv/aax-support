@@ -365,7 +365,7 @@ public:
 #ifndef QT_NO_TOOLTIP
         label_acquire->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Click here to get a valid Product-Key (an internet connection is required)</p></body></html>", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
-        label_acquire->setText(QApplication::translate("Configuration", "<html><head/><body><p><a href=\"http://www.adalin.com/index.html?frame1=product_aeonwave.html&amp;frame2=buy_aeonwaveHD.php\"><span style=\" text-decoration: underline; color:#0000ff;\">Acquire</span></a></p></body></html>", 0, QApplication::UnicodeUTF8));
+        label_acquire->setText(QApplication::translate("Configuration", "<html><head/><body><p><a href=\"http://www.adalin.com/buy_aeonwaveHD.html\"><span style=\" text-decoration: underline; color:#0000ff;\">Acquire</span></a></p></body></html>", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };
