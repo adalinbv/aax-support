@@ -31,6 +31,15 @@
 # include <sddl.h>
 # include <stdio.h>
 
+#ifdef __MINGW32_VERSION
+/* mingw-w32api v3.1 does not yet include sddl.h, so define needed parts here
+ */
+BOOL WINAPI ConvertStringSecurityDescriptorToSecurityDescriptorA(LPCSTR, DWORD, PSECURITY_DESCRIPTOR *, PULONG);
+# define ConvertStringSecurityDescriptorToSecurityDescriptor \
+         ConvertStringSecurityDescriptorToSecurityDescriptorA
+# define SDDL_REVISION_1	1
+#endif
+
 # define SYSTEM_DIR		getenv("PROGRAMFILES")
 # define AAX_DIR		"\\AAX\\"
 
@@ -41,7 +50,7 @@
 # define USER_DIR		getenv("USERPROFILE")
 # define TEMP_DIR		getenv("TEMP")
 
-static int createDACL(void*);
+static int createDACL(SECURITY_ATTRIBUTES*);
 
 #else	/* !WIN32 */
 # include <sys/types.h>
@@ -399,7 +408,8 @@ createDACL(SECURITY_ATTRIBUTES * pSA)
     }
  
     return ConvertStringSecurityDescriptorToSecurityDescriptor(
-                             szSD, SDDL_REVISION_1,
-                             &(pSA->lpSecurityDescriptor), nSize);
+                            szSD, SDDL_REVISION_1,
+                            (PSECURITY_DESCRIPTOR*)&(pSA->lpSecurityDescriptor),
+                            nSize);
 }
 #endif
