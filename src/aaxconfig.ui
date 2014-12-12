@@ -288,8 +288,8 @@
     <widget class="QCheckBox" name="Timer">
      <property name="geometry">
       <rect>
-       <x>110</x>
-       <y>40</y>
+       <x>160</x>
+       <y>225</y>
        <width>221</width>
        <height>22</height>
       </rect>
@@ -298,7 +298,7 @@
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enable the system timer for pushing data to the audio device.&lt;/p&gt;&lt;p&gt;This will save power consumption but is less reliable for lower latencies. Therefore this option is only used for refresh rates below 75Hz.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="text">
-      <string>Timer Driven (Experimental)</string>
+      <string>Timer Driven (experimental)</string>
      </property>
     </widget>
     <widget class="QComboBox" name="OutputPeriods">
@@ -404,8 +404,8 @@
     <widget class="QCheckBox" name="Shared">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>40</y>
+       <x>20</x>
+       <y>225</y>
        <width>97</width>
        <height>22</height>
       </rect>
@@ -447,7 +447,7 @@
      <property name="geometry">
       <rect>
        <x>310</x>
-       <y>60</y>
+       <y>50</y>
        <width>180</width>
        <height>180</height>
       </rect>
@@ -460,6 +460,22 @@
      </property>
      <property name="lineWidth">
       <number>1</number>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="SetDefault">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>40</y>
+       <width>171</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Allow this device to be shared with other applications.&lt;/p&gt;&lt;p&gt;This will increase latency.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Set as default output</string>
      </property>
     </widget>
    </widget>

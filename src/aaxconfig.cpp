@@ -41,6 +41,7 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     general_sample_freq(48000),
     general_setup(AAX_MODE_WRITE_STEREO),
     file_be_pos(-1),
+    default_device(UINT_MAX),
     current_device(0)
 {
     getSystemResources();   
@@ -85,6 +86,7 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     connect(ui->InputPeriods, SIGNAL(currentIndexChanged(int)), this, SLOT(changeNoInputPeriods(int)));
     connect(ui->Timer, SIGNAL(clicked(bool)), this, SLOT(changeTimerDriven(bool)));
     connect(ui->Shared, SIGNAL(clicked(bool)), this, SLOT(changeShared(bool)));
+    connect(ui->SetDefault, SIGNAL(clicked(bool)), this, SLOT(changeSetDefault(bool)));
 
     connect(ui->ProductKey, SIGNAL(textEdited(QString)), this, SLOT(changeProductKey(QString)));
 
@@ -169,6 +171,28 @@ AeonWaveConfig::changeShared(bool val)
 {
     unsigned dev = devices[current_device]->current_output_connector;
     devices[current_device]->output[dev]->shared = val;
+}
+
+void
+AeonWaveConfig::changeSetDefault(bool val)
+{
+    if (val)
+    {
+       unsigned dev = devices[current_device]->current_output_connector;
+       devices[current_device]->default_output_connector = dev;
+       default_device = current_device;
+
+       general_sample_freq = devices[current_device]->output[dev]->sample_freq;
+       general_setup = aaxRenderMode(devices[current_device]->output[dev]->setup);
+    }
+    else
+    {
+       devices[current_device]->default_output_connector = 0;
+       default_device = UINT_MAX;
+
+       general_sample_freq = 44100;
+       general_setup = AAX_MODE_WRITE_STEREO;
+    }
 }
 
 void
@@ -303,6 +327,15 @@ AeonWaveConfig::changeOutputConnector(int val)
         int dev = _MINMAX(val, 0, max_output);
 
         devices[be]->current_output_connector = dev;
+
+        if (current_device == default_device &&
+            devices[be]->current_output_connector ==
+            devices[be]->default_output_connector)
+        {
+           ui->SetDefault->setChecked(true);
+        } else {
+           ui->SetDefault->setChecked(false);
+        }
 
         ui->Timer->setChecked(devices[be]->output[dev]->timed);
         ui->Shared->setChecked(devices[be]->output[dev]->shared);
@@ -547,6 +580,7 @@ AeonWaveConfig::getSystemResources()
 
                     r = aaxDriverGetDeviceNameByPos(cfg, dev, mode);
                     device = new device_t;
+                    device->default_output_connector = 0;
                     device->current_output_connector = 0;
                     device->current_input_connector = 0;
                     device->name = d + " on " + r;
@@ -596,6 +630,7 @@ AeonWaveConfig::getSystemResources()
                     if (q == devices.size())
                     {
                         device = new device_t;
+                        device->default_output_connector = 0;
                         device->current_output_connector = 0;
                         device->current_input_connector = 0;
                         device->name = devname;
@@ -664,6 +699,36 @@ AeonWaveConfig::readConfigFiles()
 }
 
 void
+AeonWaveConfig::setDefaultDevice(char *name)
+{
+    char *connector = strstr(name, ": ");
+    if (connector)
+    {
+        *connector = 0;
+        connector += strlen(": ");
+    }
+
+    unsigned be = 0;
+    for (be=0; be<devices.size(); be++)
+    {
+        if (!strcasecmp(devices[be]->name.c_str(), name))
+        {
+            default_device = be;
+            for (unsigned dev=0; dev<devices[be]->output.size(); dev++)
+            {
+                const char *devname = devices[be]->output[dev]->name.c_str();
+                if (!strcasecmp(devname, connector))
+                {
+                   devices[be]->default_output_connector = dev;
+                   break;
+                }
+            }
+            break;
+        }
+    }
+}
+
+void
 AeonWaveConfig::readOldConfigSettings(void* xcid)
 {
     if (xcid)
@@ -700,6 +765,7 @@ AeonWaveConfig::readOldConfigSettings(void* xcid)
                         size_t found = devices[be]->output[dev]->name.find(renderer);
                         if (found != std::string::npos)
                         {
+                            devices[be]->default_output_connector = 0;
                             devices[be]->current_output_connector = 0;
                             readConnectorOutSettings(output, be, dev);
                             break;
@@ -760,12 +826,16 @@ AeonWaveConfig::readConfigSettings(void* xid)
     void *xcid = xmlNodeGet(xid, "/configuration");
     if (xcid)
     {
+        char *default_device = NULL;
+
         char *str = xmlNodeGetString(xcid, "product-key");
         if (str) product_key = str;
 
         void *xoid = xmlNodeGet(xcid, "output");
         if (xoid)
         {
+            default_device = xmlNodeGetString(xoid, "device");
+
             int i = xmlNodeGetInt(xoid, "frequency-hz");
             if (i) general_sample_freq = i;
 
@@ -800,6 +870,9 @@ AeonWaveConfig::readConfigSettings(void* xid)
         else {
             readNewConfigSettings(xcid);
         }
+
+        setDefaultDevice(default_device);
+        xmlFree(default_device);
         xmlFree(xcid);
     }
 }
@@ -852,6 +925,7 @@ AeonWaveConfig::readNewConfigSettings(void* xcid)
                             found = devices[be]->output[dev]->name.find(ifs);
                             if (found != std::string::npos)
                             {
+                                devices[be]->default_output_connector = 0;
                                 devices[be]->current_output_connector = 0;
                                 readConnectorOutSettings(xiid, be, dev);
                                 break;
@@ -1192,6 +1266,17 @@ AeonWaveConfig::writeConfigFile()
         file << "</product-key>" << std::endl;
 
         file << " <output>" << std::endl;
+
+        if (default_device != UINT_MAX)
+        {
+           unsigned dev = devices[current_device]->default_output_connector;
+           file << "  <device>";
+           file << devices[current_device]->name;
+           file << ": ";
+           file << devices[current_device]->output[dev]->name;
+           file << "</device>" << std::endl;
+        }
+
         file << "  <frequency-hz>"<< general_sample_freq;
         file << "</frequency-hz>" << std::endl;
 

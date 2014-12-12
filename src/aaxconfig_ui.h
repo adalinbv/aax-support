@@ -52,6 +52,7 @@ public:
     QLabel *label_refresh_rate;
     QSpinBox *RefreshRate;
     QLabel *graphicsView;
+    QCheckBox *SetDefault;
     QWidget *tab_3;
     QComboBox *InputConnector;
     QComboBox *InputSampleFreq;
@@ -123,7 +124,7 @@ public:
         SpeakerSetup->setGeometry(QRect(20, 140, 121, 27));
         Timer = new QCheckBox(tab_2);
         Timer->setObjectName(QString::fromUtf8("Timer"));
-        Timer->setGeometry(QRect(110, 40, 221, 22));
+        Timer->setGeometry(QRect(160, 225, 221, 22));
         OutputPeriods = new QComboBox(tab_2);
         OutputPeriods->setObjectName(QString::fromUtf8("OutputPeriods"));
         OutputPeriods->setGeometry(QRect(20, 190, 121, 27));
@@ -139,7 +140,7 @@ public:
         OutputBitrate->setGeometry(QRect(160, 190, 121, 27));
         Shared = new QCheckBox(tab_2);
         Shared->setObjectName(QString::fromUtf8("Shared"));
-        Shared->setGeometry(QRect(10, 40, 97, 22));
+        Shared->setGeometry(QRect(20, 225, 97, 22));
         label_refresh_rate = new QLabel(tab_2);
         label_refresh_rate->setObjectName(QString::fromUtf8("label_refresh_rate"));
         label_refresh_rate->setGeometry(QRect(160, 70, 121, 17));
@@ -148,10 +149,13 @@ public:
         RefreshRate->setGeometry(QRect(160, 90, 121, 27));
         graphicsView = new QLabel(tab_2);
         graphicsView->setObjectName(QString::fromUtf8("graphicsView"));
-        graphicsView->setGeometry(QRect(310, 60, 180, 180));
+        graphicsView->setGeometry(QRect(310, 50, 180, 180));
         graphicsView->setFrameShape(QFrame::NoFrame);
         graphicsView->setFrameShadow(QFrame::Sunken);
         graphicsView->setLineWidth(1);
+        SetDefault = new QCheckBox(tab_2);
+        SetDefault->setObjectName(QString::fromUtf8("SetDefault"));
+        SetDefault->setGeometry(QRect(20, 40, 171, 22));
         tabWidget->addTab(tab_2, QString());
         tab_3 = new QWidget();
         tab_3->setObjectName(QString::fromUtf8("tab_3"));
@@ -287,7 +291,7 @@ public:
 #ifndef QT_NO_TOOLTIP
         Timer->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Enable the system timer for pushing data to the audio device.</p><p>This will save power consumption but is less reliable for lower latencies. Therefore this option is only used for refresh rates below 75Hz.</p></body></html>", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
-        Timer->setText(QApplication::translate("Configuration", "Timer Driven (Experimental)", 0, QApplication::UnicodeUTF8));
+        Timer->setText(QApplication::translate("Configuration", "Timer Driven (experimental)", 0, QApplication::UnicodeUTF8));
         OutputPeriods->clear();
         OutputPeriods->insertItems(0, QStringList()
          << QApplication::translate("Configuration", "1", 0, QApplication::UnicodeUTF8)
@@ -319,6 +323,10 @@ public:
 #ifndef QT_NO_TOOLTIP
         RefreshRate->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>The refresh rate defines how often new data is retrieved from the device.</p><p>Higher values result in lower latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        SetDefault->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Allow this device to be shared with other applications.</p><p>This will increase latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+        SetDefault->setText(QApplication::translate("Configuration", "Set as default output", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("Configuration", "Playback", 0, QApplication::UnicodeUTF8));
         InputSampleFreq->clear();
         InputSampleFreq->insertItems(0, QStringList()

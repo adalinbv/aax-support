@@ -46,8 +46,9 @@ public:
     Ui_Configuration *ui;
 
 private slots:
-    void changeTimerDriven(bool);
     void changeShared(bool);
+    void changeSetDefault(bool);
+    void changeTimerDriven(bool);
     void changeRefreshRate(int val);
     void changeInputRefreshRate(int val);
     void changeSpeakerSetup(int val);
@@ -109,6 +110,7 @@ private:
     {
         std::string name;
 
+        unsigned int default_output_connector;
         unsigned int current_output_connector;
         std::vector<connector_t*> output;
 
@@ -123,6 +125,7 @@ private:
     enum aaxRenderMode general_setup;
 
     int file_be_pos;
+    unsigned int default_device;
     unsigned int current_device;
     std::vector<device_t*> devices;
 
@@ -133,6 +136,7 @@ private:
     void readConnectorOutSettings(void*, unsigned, unsigned);
     void readConnectorInSettings(void*, unsigned, unsigned);
     void readConfigSettings(void*);
+    void setDefaultDevice(char*);
 
     void displayUiConfig();
     void displayUiDevicesConfig();
