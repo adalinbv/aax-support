@@ -100,7 +100,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -708,6 +708,22 @@
      </property>
      <property name="lineWidth">
       <number>1</number>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="InputSetDefault">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>40</y>
+       <width>171</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Allow this device to be shared with other applications.&lt;/p&gt;&lt;p&gt;This will increase latency.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Set as default intput</string>
      </property>
     </widget>
    </widget>

@@ -48,6 +48,7 @@ public:
 private slots:
     void changeShared(bool);
     void changeSetDefault(bool);
+    void changeInputSetDefault(bool);
     void changeTimerDriven(bool);
     void changeRefreshRate(int val);
     void changeInputRefreshRate(int val);
@@ -114,6 +115,7 @@ private:
         unsigned int current_output_connector;
         std::vector<connector_t*> output;
 
+        unsigned int default_input_connector;
         unsigned int current_input_connector;
         std::vector<connector_t*> input;
            
@@ -127,6 +129,7 @@ private:
     int file_be_pos;
     unsigned int default_device;
     unsigned int current_device;
+    unsigned int default_input_device;
     std::vector<device_t*> devices;
 
     void getSystemResources();
@@ -136,7 +139,7 @@ private:
     void readConnectorOutSettings(void*, unsigned, unsigned);
     void readConnectorInSettings(void*, unsigned, unsigned);
     void readConfigSettings(void*);
-    void setDefaultDevice(char*);
+    void setDefaultDevice(char*, char *input = NULL);
 
     void displayUiConfig();
     void displayUiDevicesConfig();

@@ -64,6 +64,7 @@ public:
     QComboBox *LineInSetup;
     QComboBox *InputPeriods;
     QLabel *graphicsViewInput;
+    QCheckBox *InputSetDefault;
     QWidget *tab;
     QComboBox *Mixer;
     QLabel *graphicsView_logo;
@@ -192,6 +193,9 @@ public:
         graphicsViewInput->setFrameShape(QFrame::NoFrame);
         graphicsViewInput->setFrameShadow(QFrame::Sunken);
         graphicsViewInput->setLineWidth(1);
+        InputSetDefault = new QCheckBox(tab_3);
+        InputSetDefault->setObjectName(QString::fromUtf8("InputSetDefault"));
+        InputSetDefault->setGeometry(QRect(20, 40, 171, 22));
         tabWidget->addTab(tab_3, QString());
         tab = new QWidget();
         tab->setObjectName(QString::fromUtf8("tab"));
@@ -242,7 +246,7 @@ public:
 
         retranslateUi(Configuration);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(Configuration);
@@ -367,6 +371,10 @@ public:
 #ifndef QT_NO_TOOLTIP
         InputPeriods->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>For lowest latencies set this option to 1 or 2 (default).</p><p>Some devices require more capture-periods for smooth recording but this will increase the latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        InputSetDefault->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Allow this device to be shared with other applications.</p><p>This will increase latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+        InputSetDefault->setText(QApplication::translate("Configuration", "Set as default intput", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("Configuration", "Capture", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("Configuration", "Information", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("Configuration", "Filters and Effects", 0, QApplication::UnicodeUTF8));
