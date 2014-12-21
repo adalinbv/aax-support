@@ -811,31 +811,34 @@ AeonWaveConfig::setDefaultDevice(char *name, char *input)
         }
     }
 
-    char *connector = strstr(name, ": ");
-    if (connector)
+    if (name)
     {
-        *connector = 0;
-        connector += strlen(": ");
-    }
+       char *connector = strstr(name, ": ");
+       if (connector)
+       {
+           *connector = 0;
+           connector += strlen(": ");
+       }
 
-    for (unsigned be=0; be<devices.size(); be++)
-    {
-        if (!strcasecmp(devices[be]->name.c_str(), name))
-        {
-            default_device = be;
-            if (connector)
-            {
-                for (unsigned dev=0; dev<devices[be]->output.size(); dev++)
-                {
-                    const char *out = devices[be]->output[dev]->name.c_str();
-                    if (!strcasecmp(out, connector))
-                    {
-                       devices[be]->default_output_connector = dev;
-                       break;
-                    }
-                }
+       for (unsigned be=0; be<devices.size(); be++)
+       {
+           if (!strcasecmp(devices[be]->name.c_str(), name))
+           {
+               default_device = be;
+               if (connector)
+               {
+                   for (unsigned dev=0; dev<devices[be]->output.size(); dev++)
+                   {
+                       const char *out = devices[be]->output[dev]->name.c_str();
+                       if (!strcasecmp(out, connector))
+                       {
+                          devices[be]->default_output_connector = dev;
+                          break;
+                       }
+                   }
+               }
+               break;
             }
-            break;
         }
     }
 }
