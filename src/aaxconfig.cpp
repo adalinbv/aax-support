@@ -432,63 +432,108 @@ AeonWaveConfig::changeMixer(int val)
             aaxMixerSetState(cfg, AAX_INITIALIZED);
 
             s = aaxDriverGetSetup(cfg, AAX_DRIVER_STRING);
-            desc += tr("<tr><td>Driver:</td><td>%1</td></tr>").arg(s);
+            desc += tr("<tr><td>Driver:</td>");
+            desc += tr("<td colspan=\"3\">%1</td></tr>").arg(s);
 
             s = aaxDriverGetSetup(cfg, AAX_RENDERER_STRING);
-            desc += tr("<tr><td>Renderer:</td><td>%1</td></tr>").arg(s);
+            desc += tr("<tr><td>Renderer:</td>");
+            desc += tr("<td colspan=\"3\">%1</td></tr>").arg(s);
 
             x = aaxGetMajorVersion();
             y = aaxGetMinorVersion();
             s = aaxGetVersionString(cfg);
-            desc += tr("<tr><td>Version:</td><td>%1 (%2.%3)</td></tr>").arg(s).arg(x).arg(y);
+            desc += tr("<tr><td width=\"25%\">Version:</td>");
+            desc += tr("<td width=\"75%\" colspan=\"3\">%1 (%2.%3)</td></tr>").arg(s).arg(x).arg(y);
 
             s = aaxDriverGetSetup(cfg, AAX_VENDOR_STRING);
-            desc += tr("<tr><td>Vendor:</td><td>%1</td></tr>").arg(s);
+            desc += tr("<tr><td>Vendor:</td>");
+            desc += tr("<td colspan=\"3\">%1</td></tr>").arg(s);
 
             min = aaxMixerGetSetup(cfg, AAX_TRACKS_MIN);
             max = aaxMixerGetSetup(cfg, AAX_TRACKS_MAX);
-            desc += tr("<tr><td>Supported tacks:</td><td>%1 - %2 tracks</td></tr>").arg(min).arg(max);
+            desc += tr("<tr><td>Supported tacks:</td>");
+            desc += tr("<td>%1 - %2 tracks</td>").arg(min).arg(max);
+            desc += tr("<td width=\"25%\">&nbsp;</td>");
+            x = aaxMixerGetSetup(cfg, AAX_TIMER_MODE);
+            desc += tr("<td width=\"25%\">");
+            if (x) {
+               desc += tr("<img src=\":/checked.png\">");
+            } else {
+               desc += tr("<img src=\":/unchecked.png\">");
+            }
+            desc += tr(" timed mode</td></tr>");
+            
 
             min = aaxMixerGetSetup(cfg, AAX_FREQUENCY_MIN);
             max = aaxMixerGetSetup(cfg, AAX_FREQUENCY_MAX);
-            desc += tr("<tr><td>Frequency range:</td><td>%1 - %2 kHz</td></tr>").arg(min/1000.0f).arg(max/1000.0f);
+            desc += tr("<tr><td>Frequency range:</td>");
+            desc += tr("<td>%1 - %2 kHz</td>").arg(min/1000.0f).arg(max/1000.0f);
+            desc += tr("<td></td>");
+            x = aaxMixerGetSetup(cfg, AAX_SHARED_MODE);
+            if (x) {
+               desc += tr("<td><img src=\":/checked.png\">");
+            } else {
+               desc += tr("<td><img src=\":/unchecked.png\">");
+            }
+            desc += tr(" shared mode</td></tr>");
 
             x = aaxMixerGetSetup(cfg, AAX_FREQUENCY);
-            desc += tr("<tr><td>Mixer frequency:</td><td>%1 Hz</td></tr>").arg(x);
+            desc += tr("<tr><td>Mixer frequency:</td>");
+            desc += tr("<td>%1 Hz</td>").arg(x);
+            desc += tr("<td></td>");
+            x = aaxMixerGetSetup(cfg, AAX_BATCHED_MODE);
+            if (x) {
+               desc += tr("<td><img src=\":/checked.png\">");
+            } else {
+               desc += tr("<td><img src=\":/unchecked.png\">");
+            }
+            desc += tr(" batched mode</td></tr>");
 
             x = aaxMixerGetSetup(cfg, AAX_REFRESHRATE);
-            if (x) {
-               desc += tr("<tr><td>Mixer refresh rate:</td><td>%1 Hz</td></tr>").arg(x);
+            if (x)
+            {
+               desc += tr("<tr><td>Mixer refresh rate:</td>");
+               desc += tr("<td>%1 Hz</td>").arg(x);
             }
 
             x = aaxMixerGetSetup(cfg, AAX_LATENCY);
-            if (x) {
-               desc += tr("<tr><td>Mixer latency:</td><td>%1 ms</td></tr>").arg(x/1000.0f, 5, 'f', 2);
+            if (x)
+            {
+               desc += tr("<tr><td>Mixer latency:</td>");
+               desc += tr("<td>%1 ms</td>").arg(x/1000.0f, 5, 'f', 2);
             }
+            desc += tr("<td></td>");
+            desc += tr("<td></td></tr>");
 
             x = aaxMixerGetSetup(cfg, AAX_MONO_EMITTERS);
             desc += tr("<tr><td>Max. mono emitters:</td>");
             if (x == UINT_MAX) {
-               desc += tr("<td>infinite</td></tr>");
+               desc += tr("<td>infinite</td>");
             } else {
-               desc += tr("<td>%1</td></tr>").arg(x);
+               desc += tr("<td>%1</td>").arg(x);
             }
+            desc += tr("<td></td>");
+            desc += tr("<td></td></tr>");
 
             y = aaxMixerGetSetup(cfg, AAX_STEREO_EMITTERS);
             desc += tr("<tr><td>Max. stereo emitters:</td>");
             if (y == UINT_MAX/2) {
-               desc += tr("<td>infinite</td></tr>");
+               desc += tr("<td>infinite</td>");
             } else {
-               desc += tr("<td>%1</td></tr>").arg(y);
+               desc += tr("<td>%1</td>").arg(y);
             }
+            desc += tr("<td></td>");
+            desc += tr("<td></td></tr>");
 
             desc += tr("<tr><td>Max. audio-frames:</td>");
             x = aaxMixerGetSetup(cfg, AAX_AUDIO_FRAMES);
             if (x == UINT_MAX) {
-               desc += tr("<td>infinite</td></tr>");
+               desc += tr("<td>infinite</td>");
             } else {
-               desc += tr("<td>%1</td></tr>").arg(x);
+               desc += tr("<td>%1</td>").arg(x);
             }
+            desc += tr("<td></td>");
+            desc += tr("<td></td></tr>");
 
             desc += tr("</table>");
 

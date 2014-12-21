@@ -37,6 +37,9 @@
    <property name="toolTip">
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A valid prouduct key unlocks the advanced options of AeonWave and turns the software from the Lite mode to the HD mode.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
+   <property name="maxLength">
+    <number>32</number>
+   </property>
   </widget>
   <widget class="QLabel" name="label_product_key">
    <property name="geometry">
