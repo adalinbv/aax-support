@@ -44,13 +44,14 @@ SET(CMAKE_MODULE_PATH "${aaxconfig_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}
 
 INCLUDE(CPack_Modules)
 INCLUDE(CPack_Defaults)
+INCLUDE(CheckLibraryExists)
+#INCLUDE(CheckIncludeFile)
+#INCLUDE(CheckIncludeFiles)
 
 FIND_PACKAGE(Qt4 REQUIRED QtCore QtGui)
 INCLUDE( ${QT_USE_FILE} )
 
 IF(WIN32)
-  SET (QT_USE_QTMAIN TRUE)
-
   # Used to create Start Menu shortcuts <EXEC> <LABEL>
   SET(CPACK_PACKAGE_EXECUTABLES "${PACKAGE}" "${PACKAGE_NAME}")
   SET(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/admin\\\\aaxconfig.png")
@@ -69,7 +70,7 @@ ELSE(WIN32)
   # DEBIAN
   SET(CPACK_DEBIAN_PACKAGE_REPLACES "aaxconfig")
   SET(CPACK_DEBIAN_PACKAGE_SECTION "administration utilities")
-  SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.1), libaax2-bin (>= 2.2), libqt4-core (>= 4.6.2), libqt4-gui (>= 4.7.0)")
+  SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.1), libaax2-bin (>= 2.5), libqt4-core (>= 4.6.2), libqt4-gui (>= 4.7.0)")
 
   # RPM
   SET(CPACK_RPM_PACKAGE_LICENSE "GPL v3")
@@ -82,10 +83,6 @@ ENDIF(WIN32)
 SET(CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${AAXCONFIG_VERSION}" CACHE INTERNAL "tarball basename")
 
 
-
-# Required libraries
-FIND_PACKAGE(AAX COMPONENTS aax REQUIRED)
-FIND_PACKAGE(XML COMPONENTS xml REQUIRED)
 
 ADD_DEFINITIONS(-DHAVE_CONFIG_H=1)
 IF(WERROR)
@@ -166,53 +163,12 @@ ELSE(MSVC)
         FORCE)
 ENDIF(MSVC)
 
-INCLUDE( ${QT_USE_FILE} )
-
-SET( SOURCES src/main.cpp src/aaxconfig.cpp src/api.c )
-SET( HEADERS src/aaxconfig_ui.h src/api.h src/types.h )
-SET( PREPROCESS_HEADERS src/aaxconfig.h src/widgets.h )
-SET( GUI src/aaxconfig.ui )
-SET( RCS src/aaxconfig.qrc )
-
-QT4_ADD_RESOURCES(RC_SRCS ${RCS})
-QT4_WRAP_UI( GUI_HDRS ${GUI} )
-QT4_WRAP_CPP( MOC_HEADERS ${PREPROCESS_HEADERS} )
-
-INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} ${AAX_INCLUDE_DIR} ${XML_INCLUDE_DIR} )
-
-ADD_EXECUTABLE(aaxconfig ${SOURCES} ${MOC_HEADERS} ${RC_SRCS} ${GUI_HEADERS} )
-
-TARGET_LINK_LIBRARIES( aaxconfig ${QT_LIBRARIES} ${XML_LIBRARY} ${AAX_LIBRARY})
-
-INSTALL(TARGETS aaxconfig
-        RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT Applications
-)
-
-IF(WIN32)
-  # Include Qt libraries
-  CMP_QT_LIBRARIES_INSTALL_RULES("QtCore;QtGui" "bin")
-  INSTALL_CUSTOM_LIB(${AAX_LIBRARY} "bin")
-ENDIF(WIN32)
-
-IF(APPLE)
-  SET(PLATFORM_SPECIFIC "aaxconfig.icns")
-  SET_SOURCE_FILES_PROPERTIES(
-      "aaxconfig.icns"
-      PROPERTIES
-      MACOSX_PACKAGE_LOCATION Resources
-  )
-  SET(GUI_TYPE MACOSX_BUNDLE)
-  SET(MACOSX_BUNDLE_ICON_FILE MacIcon.icns)
-ENDIF()
-
-IF(UNIX AND NOT APPLE)
-  INSTALL(FILES admin/${PACKAGE}.desktop DESTINATION share/applications
-          COMPONENT Applications)
-  INSTALL(FILES admin/${PACKAGE}.png DESTINATION share/pixmaps
-          COMPONENT Applications)
-ENDIF(UNIX AND NOT APPLE)
+INCLUDE_DIRECTORIES("${aaxconfig_SOURCE_DIR}")
 
 INCLUDE(CPack)
+
+ADD_SUBDIRECTORY(aaxconfig)
+ADD_SUBDIRECTORY(aaxplayer)
 
 #-----------------------------------------------------------------------------
 ### uninstall target
