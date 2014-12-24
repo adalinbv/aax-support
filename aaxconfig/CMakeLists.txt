@@ -44,9 +44,9 @@ IF(WIN32)
 
   # Used to create Start Menu shortcuts <EXEC> <LABEL>
   SET(CPACK_PACKAGE_EXECUTABLES "${PACKAGE}" "${PACKAGE_NAME}")
-  SET(CPACK_PACKAGE_ICON "${aaxconfig_SOURCE_DIR}/admin\\\\aaxconfig.png")
+  SET(CPACK_PACKAGE_ICON "${aaxconfig_SOURCE_DIR}/admin\\\\aaxconfig.xpm")
   SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\aaxconfig.exe")
-# SET(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}\\\\admin\aaxconfig.png")
+# SET(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}\\\\admin\aaxconfig.xpm")
 
 ELSE(WIN32)
   # Used to create Start Menu shortcuts <EXEC> <LABEL>
@@ -66,9 +66,11 @@ IF(APPLE)
 ENDIF()
 
 IF(UNIX AND NOT APPLE)
-  INSTALL(FILES ${aaxconfig_SOURCE_DIR}/admin/${PACKAGE}.desktop DESTINATION share/applications
+  INSTALL(FILES ${aaxconfig_SOURCE_DIR}/admin/${PACKAGE}.desktop
+          DESTINATION share/applications
           COMPONENT Applications)
-  INSTALL(FILES ${aaxconfig_SOURCE_DIR}/admin/${PACKAGE}.png DESTINATION share/pixmaps
+  INSTALL(FILES ${aaxconfig_SOURCE_DIR}/admin/${PACKAGE}.xpm
+          DESTINATION share/pixmaps
           COMPONENT Applications)
 ENDIF(UNIX AND NOT APPLE)
 
