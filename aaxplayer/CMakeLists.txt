@@ -29,12 +29,43 @@ TARGET_LINK_LIBRARIES( aaxplayer ${QT_LIBRARIES} ${AAX_LIBRARY})
 
 INSTALL(TARGETS aaxplayer
         RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-        COMPONENT Desktop
+        COMPONENT Applications
 )
 
 IF(WIN32)
   # Include Qt libraries
   CMP_QT_LIBRARIES_INSTALL_RULES("QtCore;QtGui" "bin")
   INSTALL_CUSTOM_LIB(${AAX_LIBRARY} "bin")
+
+  # Used to create Start Menu shortcuts <EXEC> <LABEL>
+  SET(CPACK_PACKAGE_EXECUTABLES "aaxplayer" "AeonWave Audio Player")
+  SET(CPACK_PACKAGE_ICON "${aaxconfig_SOURCE_DIR}/admin\\\\aaxplayer.xpm")
+  SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\aaxplayer.exe")
+# SET(CPACK_PACKAGE_ICON "${aaxconfig_SOURCE_DIR}\\\\admin\aaxplayer.xpm")
+
+ELSE(WIN32)
+  # Used to create Start Menu shortcuts <EXEC> <LABEL>
+  SET(CPACK_PACKAGE_EXECUTABLES "aaxplayer;AeonWave Audio Player")
+  SET(CPACK_STRIP_FILES "bin/aaxplayer")
 ENDIF(WIN32)
+
+IF(APPLE)
+  SET(PLATFORM_SPECIFIC "aaxplayer.icns")
+  SET_SOURCE_FILES_PROPERTIES(
+      "aaxplayer.icns"
+      PROPERTIES
+      MACOSX_PACKAGE_LOCATION Resources
+  )
+  SET(GUI_TYPE MACOSX_BUNDLE)
+  SET(MACOSX_BUNDLE_ICON_FILE MacIcon.icns)
+ENDIF()
+
+IF(UNIX AND NOT APPLE)
+  INSTALL(FILES ${aaxconfig_SOURCE_DIR}/admin/aaxplayer.desktop
+          DESTINATION share/applications
+          COMPONENT Applications)
+  INSTALL(FILES ${aaxconfig_SOURCE_DIR}/admin/aaxplayer.xpm
+          DESTINATION share/pixmaps
+          COMPONENT Applications)
+ENDIF(UNIX AND NOT APPLE)
 

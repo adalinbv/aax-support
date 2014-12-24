@@ -41,6 +41,17 @@ IF(WIN32)
   # Include Qt libraries
   CMP_QT_LIBRARIES_INSTALL_RULES("QtCore;QtGui" "bin")
   INSTALL_CUSTOM_LIB(${AAX_LIBRARY} "bin")
+
+  # Used to create Start Menu shortcuts <EXEC> <LABEL>
+  SET(CPACK_PACKAGE_EXECUTABLES "${PACKAGE}" "${PACKAGE_NAME}")
+  SET(CPACK_PACKAGE_ICON "${aaxconfig_SOURCE_DIR}/admin\\\\aaxconfig.png")
+  SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\aaxconfig.exe")
+# SET(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}\\\\admin\aaxconfig.png")
+
+ELSE(WIN32)
+  # Used to create Start Menu shortcuts <EXEC> <LABEL>
+  SET(CPACK_PACKAGE_EXECUTABLES "${PACKAGE};${PACKAGE_NAME}")
+  SET(CPACK_STRIP_FILES "bin/${PACKAGE}")
 ENDIF(WIN32)
 
 IF(APPLE)

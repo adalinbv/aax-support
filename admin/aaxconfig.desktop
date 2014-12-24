@@ -1,9 +1,10 @@
 [Desktop Entry]
+Encoding=UTF-8
 Name=AeonWave Config
 Comment=AeonWave configuration applet
 Exec=aaxconfig
-Icon=/usr/share/icons/aaxconfig.png
-Type=Application
-Categories=AudioVideo;Audio;
+Icon=/usr/share/pixmaps/aaxconfig.xpm
+MimeType=text/plain
 Terminal=false
-Encoding=UTF-8
+Type=Application
+Categories=Settings;
