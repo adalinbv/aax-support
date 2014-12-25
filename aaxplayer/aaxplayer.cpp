@@ -252,6 +252,18 @@ AeonWavePlayer::startInput()
             QString total = QString("%1:%2:%3").arg(hour,2,'f',0,'0').arg(minutes,2,'f',0,'0').arg(seconds,2,'f',0,'0');
             ui->timeTotal->setText(total);
 
+            QString fname = aaxDriverGetSetup(indev, AAX_RENDERER_STRING);
+            size_t spos = fname.lastIndexOf('/');
+            size_t dpos = fname.lastIndexOf('.');
+            if (dpos) dpos -= (spos+1);
+            QString filename = infile.mid(spos+1, dpos);
+            std::string f = std::string(filename.toUtf8().constData());
+            if (!f.empty())
+            {
+                const char *title =f.c_str();
+                setWindowTitle(QApplication::translate("AudioPlayer", title, 0, QApplication::UnicodeUTF8));
+            }
+
             playing = true;
         }
     }
@@ -273,6 +285,7 @@ AeonWavePlayer::stopInput()
         aaxDriverDestroy(indev);
     }
 
+    setWindowTitle(QApplication::translate("AudioPlayer", "AeonWave Audio Player", 0, QApplication::UnicodeUTF8));
     ui->VUleft->setValue(0);
     ui->VUright->setValue(0);
     ui->timeTotal->setText("00:00:00");

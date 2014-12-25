@@ -175,7 +175,7 @@ public:
         actionHardware->setToolTip(QApplication::translate("AudioPlayer", "Hardware Configuration", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
         actionHardware->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+H", 0, QApplication::UnicodeUTF8));
-        menuFile->setTitle(QApplication::translate("AudioPlayer", "Setup", 0, QApplication::UnicodeUTF8));
+        menuFile->setTitle(QApplication::translate("AudioPlayer", "File", 0, QApplication::UnicodeUTF8));
         timeCurrent->setText(QApplication::translate("AudioPlayer", "00:00:00", 0, QApplication::UnicodeUTF8));
         timeRemaining->setText(QApplication::translate("AudioPlayer", "00:00:00", 0, QApplication::UnicodeUTF8));
         timeTotal->setText(QApplication::translate("AudioPlayer", "00:00:00", 0, QApplication::UnicodeUTF8));

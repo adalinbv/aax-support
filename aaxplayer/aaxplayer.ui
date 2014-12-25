@@ -36,7 +36,7 @@
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>Setup</string>
+     <string>File</string>
     </property>
     <addaction name="actionOpen"/>
     <addaction name="actionHardware"/>
