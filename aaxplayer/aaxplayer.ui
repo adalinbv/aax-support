@@ -36,23 +36,13 @@
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>Setup</string>
     </property>
     <addaction name="actionOpen"/>
     <addaction name="actionHardware"/>
     <addaction name="actionExit"/>
    </widget>
    <addaction name="menuFile"/>
-  </widget>
-  <widget class="QStatusBar" name="statusbar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>3</width>
-     <height>22</height>
-    </rect>
-   </property>
   </widget>
   <widget class="QPushButton" name="stopPlay">
    <property name="geometry">
@@ -334,7 +324,7 @@
   </widget>
   <action name="actionOpen">
    <property name="text">
-    <string>Open</string>
+    <string>File Open</string>
    </property>
    <property name="toolTip">
     <string>Open Input File</string>
@@ -356,7 +346,7 @@
   </action>
   <action name="actionHardware">
    <property name="text">
-    <string>Setup</string>
+    <string>Configure</string>
    </property>
    <property name="toolTip">
     <string>Hardware Configuration</string>

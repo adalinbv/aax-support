@@ -21,7 +21,6 @@
 #include <QtGui/QMenuBar>
 #include <QtGui/QProgressBar>
 #include <QtGui/QPushButton>
-#include <QtGui/QStatusBar>
 
 QT_BEGIN_NAMESPACE
 
@@ -33,7 +32,6 @@ public:
     QAction *actionHardware;
     QMenuBar *menubar;
     QMenu *menuFile;
-    QStatusBar *statusbar;
     QPushButton *stopPlay;
     QLabel *timeCurrent;
     QLabel *timeRemaining;
@@ -66,9 +64,6 @@ public:
         menubar->setGeometry(QRect(0, 0, 400, 24));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
-        statusbar = new QStatusBar(AudioPlayer);
-        statusbar->setObjectName(QString::fromUtf8("statusbar"));
-        statusbar->setGeometry(QRect(0, 0, 3, 22));
         stopPlay = new QPushButton(AudioPlayer);
         stopPlay->setObjectName(QString::fromUtf8("stopPlay"));
         stopPlay->setGeometry(QRect(125, 80, 51, 25));
@@ -165,7 +160,7 @@ public:
     void retranslateUi(QDialog *AudioPlayer)
     {
         AudioPlayer->setWindowTitle(QApplication::translate("AudioPlayer", "AeonWave Audio Player", 0, QApplication::UnicodeUTF8));
-        actionOpen->setText(QApplication::translate("AudioPlayer", "Open", 0, QApplication::UnicodeUTF8));
+        actionOpen->setText(QApplication::translate("AudioPlayer", "File Open", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
         actionOpen->setToolTip(QApplication::translate("AudioPlayer", "Open Input File", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
@@ -175,12 +170,12 @@ public:
         actionExit->setToolTip(QApplication::translate("AudioPlayer", "Close the application", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
         actionExit->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+X", 0, QApplication::UnicodeUTF8));
-        actionHardware->setText(QApplication::translate("AudioPlayer", "Setup", 0, QApplication::UnicodeUTF8));
+        actionHardware->setText(QApplication::translate("AudioPlayer", "Configure", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
         actionHardware->setToolTip(QApplication::translate("AudioPlayer", "Hardware Configuration", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
         actionHardware->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+H", 0, QApplication::UnicodeUTF8));
-        menuFile->setTitle(QApplication::translate("AudioPlayer", "File", 0, QApplication::UnicodeUTF8));
+        menuFile->setTitle(QApplication::translate("AudioPlayer", "Setup", 0, QApplication::UnicodeUTF8));
         timeCurrent->setText(QApplication::translate("AudioPlayer", "00:00:00", 0, QApplication::UnicodeUTF8));
         timeRemaining->setText(QApplication::translate("AudioPlayer", "00:00:00", 0, QApplication::UnicodeUTF8));
         timeTotal->setText(QApplication::translate("AudioPlayer", "00:00:00", 0, QApplication::UnicodeUTF8));

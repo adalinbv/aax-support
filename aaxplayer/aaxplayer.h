@@ -20,10 +20,14 @@
 #ifndef AAXPLAYER_H
 #define AAXPLAYER_H
 
-#include <aax/aax.h>
-
 #include <QtGui/QDialog>
 #include <QTimer>
+
+#include <aax/aax.h>
+
+#include "setup.h"
+
+#define _MINMAX(a,b,c)  (((a)>(c)) ? (c) : (((a)<(b)) ? (b) : (a)))
 
 class Ui_AudioPlayer;
 
@@ -36,33 +40,41 @@ public:
     ~AeonWavePlayer();
 
     Ui_AudioPlayer *ui;
+    Setup *setup;
+
+    /* device list */
+    QString odevname_str;
+    struct device_t odevices;
 
     aaxConfig outdev;
     aaxConfig indev;
     bool agc_enabled;
     bool playing;
+    bool paused;
 
     aaxConfig file;
     int bitrate;
     bool recording;
     float in_freq;
 
-    aaxConfig openInputDevice();
-    aaxConfig openOutputDevice();
-    void closeDevices(bool keep = false);
+    void openOutputDevice();
+    void getSystemResources(device_t&, enum aaxRenderMode);
     void freeDevices();
 
 private:
     QTimer timer;
+    QString infile;
     QString outfiles_path;
     QString infiles_path;
     size_t max_samples;
 
     void alert(QString msg);
+    void stopRecord();
 
 private slots:
-    void togglePlay();
-    void toggleStop();
+    void setupHardware();
+    void stopInput();
+    void startInput();
     void togglePause();
     void toggleRecord();
     void volumeChanged(int);
