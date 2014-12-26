@@ -46,15 +46,18 @@ AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
     setup(NULL),
     outdev(NULL),
     indev(NULL),
-    agc_enabled(true),
-    playing(false),
-    paused(false),
     file(NULL),
     bitrate(-1),
     recording(false),
-    outfiles_path(""),
-    infiles_path(""),
-    max_samples(0)
+    in_freq(44100.0f),
+    agc_enabled(true),
+    autoplay(false),
+    infile(QString()),
+    outfiles_path(QString()),
+    infiles_path(QString()),
+    max_samples(0), 
+    playing(false),
+    paused(false)
 {
     ui = new Ui_AudioPlayer;
     ui->setupUi(this);
@@ -122,9 +125,13 @@ AeonWavePlayer::tick()
 {
    if (playing)
    {
-      if (aaxMixerGetState(indev) == AAX_PROCESSED) {
-         stopInput();
-      }
+       if (aaxMixerGetState(indev) == AAX_PROCESSED) {
+           stopInput();
+       }
+   }
+
+   if (!playing && autoplay && new_file) {
+       startInput();
    }
 
    if (playing)
@@ -215,7 +222,7 @@ AeonWavePlayer::openOutputDevice()
 void
 AeonWavePlayer::startInput()
 {
-    if (!playing)
+    if (!playing && !infile.isNull())
     {
         QString idevname_str = "AeonWave on Audio Files: "+infile;
         std::string d = std::string(idevname_str.toUtf8().constData());
@@ -225,18 +232,30 @@ AeonWavePlayer::startInput()
         if (indev)
         {
             /** set capturing Auto-Gain Control (AGC): 0dB */
-            aaxFilter filter = aaxMixerGetFilter(indev, AAX_VOLUME_FILTER);
-            if (filter)
+            if (agc_enabled)
             {
-                aaxFilterSetParam(filter,AAX_AGC_RESPONSE_RATE,AAX_LINEAR,1.5f);
-                aaxMixerSetFilter(indev, filter);
-                aaxFilterDestroy(filter);
+                aaxFilter filter = aaxMixerGetFilter(indev, AAX_VOLUME_FILTER);
+                if (filter)
+                {
+                    aaxFilterSetParam(filter, AAX_AGC_RESPONSE_RATE,
+                                              AAX_LINEAR, 1.5f);
+                    aaxMixerSetFilter(indev, filter);
+                    aaxFilterDestroy(filter);
+                }
             }
 
             _ATB(aaxMixerRegisterSensor(outdev, indev));
 
             /** must be called after aaxMixerRegisterSensor */
-            _ATB(aaxMixerSetState(indev, AAX_INITIALIZED));
+            int res = aaxMixerSetState(indev, AAX_INITIALIZED);
+            if (!res)
+            {
+                alert(tr("<br>File initialization error:</br>"
+                     "<br>The file may be empty or corrupt.</br>"));
+                infile = QString();
+                stopInput();
+                return;
+            }
             _ATB(aaxSensorSetState(indev, AAX_CAPTURING));
 
             in_freq = (float)aaxMixerGetSetup(indev, AAX_FREQUENCY);
@@ -257,14 +276,15 @@ AeonWavePlayer::startInput()
             size_t dpos = fname.lastIndexOf('.');
             if (dpos) dpos -= (spos+1);
             QString filename = infile.mid(spos+1, dpos);
-            std::string f = std::string(filename.toUtf8().constData());
-            if (!f.empty())
+            if (!filename.isEmpty() && !filename.isNull())
             {
+                std::string f = std::string(filename.toUtf8().constData());
                 const char *title =f.c_str();
                 setWindowTitle(QApplication::translate("AudioPlayer", title, 0, QApplication::UnicodeUTF8));
             }
 
             playing = true;
+            new_file = false;
         }
     }
     else if (paused)
@@ -371,6 +391,7 @@ AeonWavePlayer::loadFile()
         infile = fileName;
         size_t fpos = infile.lastIndexOf('/');
         infiles_path = infile.mid(0, fpos);
+        new_file = true;
     }
 }
 

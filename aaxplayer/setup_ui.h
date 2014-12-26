@@ -13,6 +13,7 @@
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
+#include <QtGui/QCheckBox>
 #include <QtGui/QComboBox>
 #include <QtGui/QDialog>
 #include <QtGui/QDialogButtonBox>
@@ -28,15 +29,16 @@ public:
     QComboBox *OutputDevice;
     QDialogButtonBox *cfgOk;
     QComboBox *OutputInterface;
-    QComboBox *RecordBitRate;
+    QCheckBox *enableAGC;
+    QCheckBox *enableAutoPlay;
 
     void setupUi(QDialog *Configuration)
     {
         if (Configuration->objectName().isEmpty())
             Configuration->setObjectName(QString::fromUtf8("Configuration"));
-        Configuration->resize(290, 175);
-        Configuration->setMinimumSize(QSize(290, 175));
-        Configuration->setMaximumSize(QSize(290, 175));
+        Configuration->resize(290, 200);
+        Configuration->setMinimumSize(QSize(290, 200));
+        Configuration->setMaximumSize(QSize(290, 200));
         label_input_device = new QLabel(Configuration);
         label_input_device->setObjectName(QString::fromUtf8("label_input_device"));
         label_input_device->setGeometry(QRect(20, 10, 111, 20));
@@ -48,7 +50,7 @@ public:
         OutputDevice->setSizeAdjustPolicy(QComboBox::AdjustToContents);
         cfgOk = new QDialogButtonBox(Configuration);
         cfgOk->setObjectName(QString::fromUtf8("cfgOk"));
-        cfgOk->setGeometry(QRect(90, 130, 181, 27));
+        cfgOk->setGeometry(QRect(90, 160, 181, 27));
         cfgOk->setMinimumSize(QSize(80, 22));
         cfgOk->setFocusPolicy(Qt::NoFocus);
         cfgOk->setStyleSheet(QString::fromUtf8("min-width: 80px;\n"
@@ -61,13 +63,16 @@ public:
         OutputInterface->setMinimumSize(QSize(250, 27));
         OutputInterface->setMaximumSize(QSize(250, 27));
         OutputInterface->setSizeAdjustPolicy(QComboBox::AdjustToContents);
-        RecordBitRate = new QComboBox(Configuration);
-        RecordBitRate->setObjectName(QString::fromUtf8("RecordBitRate"));
-        RecordBitRate->setGeometry(QRect(20, 90, 100, 27));
-        RecordBitRate->setMinimumSize(QSize(100, 27));
-        RecordBitRate->setMaximumSize(QSize(100, 27));
-        RecordBitRate->setSizeAdjustPolicy(QComboBox::AdjustToContents);
-        QWidget::setTabOrder(OutputDevice, cfgOk);
+        enableAGC = new QCheckBox(Configuration);
+        enableAGC->setObjectName(QString::fromUtf8("enableAGC"));
+        enableAGC->setGeometry(QRect(20, 110, 251, 22));
+        enableAGC->setChecked(true);
+        enableAutoPlay = new QCheckBox(Configuration);
+        enableAutoPlay->setObjectName(QString::fromUtf8("enableAutoPlay"));
+        enableAutoPlay->setGeometry(QRect(20, 90, 251, 22));
+        QWidget::setTabOrder(OutputDevice, OutputInterface);
+        QWidget::setTabOrder(OutputInterface, enableAutoPlay);
+        QWidget::setTabOrder(enableAutoPlay, enableAGC);
 
         retranslateUi(Configuration);
         QObject::connect(cfgOk, SIGNAL(accepted()), Configuration, SLOT(accept()));
@@ -80,14 +85,14 @@ public:
     {
         Configuration->setWindowTitle(QApplication::translate("Configuration", "Hardware Configuration", 0, QApplication::UnicodeUTF8));
         label_input_device->setText(QApplication::translate("Configuration", "Output Device:", 0, QApplication::UnicodeUTF8));
-        RecordBitRate->clear();
-        RecordBitRate->insertItems(0, QStringList()
-         << QApplication::translate("Configuration", "64 kbps", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "128 kbps", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "192 kbps", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "256 kbps", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "320 kbps", 0, QApplication::UnicodeUTF8)
-        );
+#ifndef QT_NO_TOOLTIP
+        enableAGC->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>AGC (Auto Gain Control) automatically adjusts the input gain to 0dB.</p><p>As a result all files will sound about equally loud.</p></body></html>", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+        enableAGC->setText(QApplication::translate("Configuration", "Enable AGC", 0, QApplication::UnicodeUTF8));
+#ifndef QT_NO_TOOLTIP
+        enableAutoPlay->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Auto Play will start the newly selected file from the file selection dialog as soon as the input device is ready (finished playing the previous track).</p></body></html>", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+        enableAutoPlay->setText(QApplication::translate("Configuration", "Enable Auto Play", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

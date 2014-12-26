@@ -48,14 +48,13 @@ public:
 
     aaxConfig outdev;
     aaxConfig indev;
-    bool agc_enabled;
-    bool playing;
-    bool paused;
 
     aaxConfig file;
     int bitrate;
     bool recording;
     float in_freq;
+    bool agc_enabled;
+    bool autoplay;
 
     void openOutputDevice();
     void getSystemResources(device_t&, enum aaxRenderMode);
@@ -66,7 +65,11 @@ private:
     QString infile;
     QString outfiles_path;
     QString infiles_path;
+
     size_t max_samples;
+    bool playing;
+    bool paused;
+    bool new_file;
 
     void alert(QString msg);
     void stopRecord();

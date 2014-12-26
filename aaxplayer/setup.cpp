@@ -33,6 +33,8 @@ Setup::Setup(QWidget *parent)
     _cfg->setupUi(this);
 
     QObject::connect(_cfg->OutputDevice, SIGNAL(currentIndexChanged(int)), this, SLOT(changeOutputDevice(int)));
+    QObject::connect(_cfg->enableAGC, SIGNAL(clicked(bool)), this, SLOT(changeAGC(bool)));
+    QObject::connect(_cfg->enableAutoPlay, SIGNAL(clicked(bool)), this, SLOT(changeAutoPlay(bool)));
 
     show();
 }
@@ -115,8 +117,6 @@ Setup::displayUiConfig()
     }
     _cfg->OutputDevice->setCurrentIndex(_mw->odevices.current);
 
-    /* Bitrate */
-    _cfg->RecordBitRate->setVisible(false);
     displayUiDevicesConfig();
 }
 
@@ -152,3 +152,15 @@ Setup::changeOutputDevice(int value)
     displayUiDevicesConfig();
 }
 
+void
+Setup::changeAGC(bool val)
+{
+    _mw->agc_enabled = _cfg->enableAGC->isChecked();
+}
+
+
+void
+Setup::changeAutoPlay(bool val)
+{
+    _mw->autoplay = _cfg->enableAutoPlay->isChecked();
+}

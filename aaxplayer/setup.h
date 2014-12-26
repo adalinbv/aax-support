@@ -78,6 +78,8 @@ private slots:
     void accept();
     void reject();
 
+    void changeAGC(bool);
+    void changeAutoPlay(bool);
     void changeOutputDevice(int val);
 };
 
