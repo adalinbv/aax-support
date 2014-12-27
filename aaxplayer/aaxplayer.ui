@@ -25,6 +25,9 @@
   <property name="windowTitle">
    <string>AeonWave Audio Player</string>
   </property>
+  <property name="toolTip">
+   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Audio Player&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+  </property>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -42,7 +45,15 @@
     <addaction name="actionHardware"/>
     <addaction name="actionExit"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionLicense"/>
+    <addaction name="actionAbout"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QPushButton" name="stopPlay">
    <property name="geometry">
@@ -55,6 +66,9 @@
    </property>
    <property name="focusPolicy">
     <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Stop&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
   <widget class="QLabel" name="timeCurrent">
@@ -73,6 +87,9 @@
      <weight>75</weight>
      <bold>true</bold>
     </font>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Playing Time&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="text">
     <string>00:00:00</string>
@@ -97,6 +114,9 @@
      <weight>75</weight>
      <bold>true</bold>
     </font>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Time Remaining&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="text">
     <string>00:00:00</string>
@@ -138,6 +158,9 @@
    <property name="focusPolicy">
     <enum>Qt::NoFocus</enum>
    </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Play&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
   </widget>
   <widget class="QLabel" name="timeTotal">
    <property name="geometry">
@@ -155,6 +178,9 @@
      <weight>75</weight>
      <bold>true</bold>
     </font>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Total Time&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="layoutDirection">
     <enum>Qt::LeftToRight</enum>
@@ -178,6 +204,9 @@
    <property name="focusPolicy">
     <enum>Qt::NoFocus</enum>
    </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Pause&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
   </widget>
   <widget class="QProgressBar" name="VUleft">
    <property name="geometry">
@@ -194,6 +223,9 @@
      <weight>75</weight>
      <bold>true</bold>
     </font>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;br&gt;Left channel&lt;/br&gt;&lt;br&gt;VU meter&lt;/br&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="value">
     <number>0</number>
@@ -220,6 +252,9 @@
      <weight>75</weight>
      <bold>true</bold>
     </font>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;br&gt;Right channel&lt;/br&gt;&lt;br&gt;VU meter&lt;/br&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="value">
     <number>0</number>
@@ -324,13 +359,13 @@
   </widget>
   <action name="actionOpen">
    <property name="text">
-    <string>File Open</string>
+    <string>Select File</string>
    </property>
    <property name="toolTip">
-    <string>Open Input File</string>
+    <string>Select an Input File</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+O</string>
+    <string>Ctrl+F</string>
    </property>
   </action>
   <action name="actionExit">
@@ -353,6 +388,22 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+H</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="actionLicense">
+   <property name="text">
+    <string>Copyright License</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
    </property>
   </action>
  </widget>

@@ -33,11 +33,15 @@ SET(VERSION AAXCONFIG_VERSION)
 # split version string into components, note CMAKE_MATCH_0 is the entire regexp match
 STRING(REGEX MATCH "([0-9]+)\\.([0-9]+)\\.([0-9]+)" CPACK_PACKAGE_VERSION ${AAXCONFIG_VERSION})
 
+SET(AAXCONFIG_MAJOR_VERSION ${CMAKE_MATCH_1})
+SET(AAXCONFIG_MINOR_VERSION ${CMAKE_MATCH_2})
+SET(AAXCONFIG_MICRO_VERSION ${CMAKE_MATCH_3})
+
 SET(CPACK_PACKAGE_VERSION_MAJOR ${CMAKE_MATCH_1})
 SET(CPACK_PACKAGE_VERSION_MINOR ${CMAKE_MATCH_2})
 SET(CPACK_PACKAGE_VERSION_PATCH ${CMAKE_MATCH_3})
 
-SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "AeonWave 4D audio library configuration applet")
+SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Graphical support utilities for AeonWave")
 
 # We have some custom .cmake scripts not in the official distribution.
 SET(CMAKE_MODULE_PATH "${aaxconfig_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
@@ -47,6 +51,10 @@ INCLUDE(CPack_Defaults)
 INCLUDE(CheckLibraryExists)
 #INCLUDE(CheckIncludeFile)
 #INCLUDE(CheckIncludeFiles)
+
+# Required libraries
+FIND_PACKAGE(AAX COMPONENTS aax REQUIRED)
+#FIND_PACKAGE(XML COMPONENTS xml REQUIRED)
 
 FIND_PACKAGE(Qt4 REQUIRED QtCore QtGui)
 INCLUDE( ${QT_USE_FILE} )
@@ -152,7 +160,14 @@ ELSE(MSVC)
         FORCE)
 ENDIF(MSVC)
 
-INCLUDE_DIRECTORIES("${aaxconfig_SOURCE_DIR}")
+INCLUDE_DIRECTORIES("${aaxconfig_SOURCE_DIR}"
+    base
+    "${CMAKE_CURRENT_BINARY_DIR}/include"
+)
+
+CONFIGURE_FILE(
+    "${CMAKE_CURRENT_SOURCE_DIR}/base/cmake_config.h.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/include/config.h")
 
 INCLUDE(CPack)
 

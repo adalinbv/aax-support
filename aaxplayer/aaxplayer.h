@@ -51,12 +51,12 @@ public:
 
     aaxConfig file;
     int bitrate;
-    bool recording;
     float in_freq;
     bool agc_enabled;
     bool autoplay;
 
-    void openOutputDevice();
+    void stopOutput();
+    void startOutput();
     void getSystemResources(device_t&, enum aaxRenderMode);
     void freeDevices();
 
@@ -72,18 +72,19 @@ private:
     bool new_file;
 
     void alert(QString msg);
-    void stopRecord();
 
 private slots:
     void setupHardware();
+    void viewAbout();
+    void viewLicense();
+    void loadFile();
+//  void saveTo();
+    void exit();
+
     void stopInput();
     void startInput();
     void togglePause();
-    void toggleRecord();
     void volumeChanged(int);
-    void loadFile();
-    void saveTo();
-    void exit();
 
 protected slots:
     void tick();

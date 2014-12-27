@@ -3,3 +3,10 @@ AeonWave Configuration applet
  AeonWave configuration file. It is possible to select the default output
  device, the default output frequency and the frequency and speaker setup
  for every output device indevidually.
+
+AeonWave Audio Player applet
+ Software to let you play audio files using the automatic audio streaming
+ capabilities of AeonWave. It is possible to select the next audio track
+ from the file menu while the current track is still playing. Audio tracks
+ are all played at the same volume level when Auto Gain Control (AGC) is
+ selected.

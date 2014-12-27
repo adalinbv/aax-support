@@ -17,12 +17,17 @@
  *  along with AeonWave-Config.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <math.h>
 #include <assert.h>
 
 #include <QMessageBox>
 #include <QFileDialog>
 
+#include "base/copyright.h"
 #include <base/types.h>
 #include "aaxplayer_ui.h"
 #include "aaxplayer.h"
@@ -48,7 +53,6 @@ AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
     indev(NULL),
     file(NULL),
     bitrate(-1),
-    recording(false),
     in_freq(44100.0f),
     agc_enabled(true),
     autoplay(false),
@@ -83,18 +87,18 @@ AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
     ui->stopPlay->setIconSize(StopPixMap.rect().size());
 
     getSystemResources(odevices, AAX_MODE_WRITE_STEREO);
-    openOutputDevice();
+    startOutput();
 
     QObject::connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(exit()));
     QObject::connect(ui->actionHardware, SIGNAL(triggered()), this, SLOT(setupHardware()));
+    QObject::connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(viewAbout()));
+    QObject::connect(ui->actionLicense, SIGNAL(triggered()), this, SLOT(viewLicense()));
 
     QObject::connect(ui->startPlay, SIGNAL(released()), this,  SLOT(startInput()));
     QObject::connect(ui->pausePlay, SIGNAL(released()), this,  SLOT(togglePause()));
     QObject::connect(ui->stopPlay, SIGNAL(released()), this,  SLOT(stopInput()));
     QObject::connect(ui->volume, SIGNAL(valueChanged(int)), this, SLOT(volumeChanged(int)));
     QObject::connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(loadFile()));
-//  QObject::connect(ui->startRecord, SIGNAL(released()), this,  SLOT(toggleRecord()));
-//  QObject::connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveTo()));
 
     QObject::connect(&timer, SIGNAL(timeout()), SLOT(tick()));
     timer.setSingleShot(false);
@@ -105,13 +109,8 @@ AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
 
 AeonWavePlayer::~AeonWavePlayer()
 {
-    stopRecord();
     stopInput();
-
-    aaxMixerSetState(outdev, AAX_STOPPED);
-    aaxDriverClose(outdev);
-    aaxDriverDestroy(outdev);
-    outdev = NULL;
+    stopOutput();
 
     if (setup) delete setup;
 
@@ -190,7 +189,7 @@ AeonWavePlayer::exit()
 
 
 void
-AeonWavePlayer::openOutputDevice()
+AeonWavePlayer::startOutput()
 {
     std::string d = std::string(odevname_str.toUtf8().constData());
     const char *dev = d.empty() ? NULL : d.c_str();
@@ -217,6 +216,16 @@ AeonWavePlayer::openOutputDevice()
             outdev = NULL;
         }
     }
+}
+
+void
+AeonWavePlayer::stopOutput()
+{
+    aaxMixerSetState(outdev, AAX_STOPPED);
+    aaxDriverClose(outdev);
+    aaxDriverDestroy(outdev);
+    outdev = NULL;
+
 }
 
 void
@@ -279,8 +288,13 @@ AeonWavePlayer::startInput()
             if (!filename.isEmpty() && !filename.isNull())
             {
                 std::string f = std::string(filename.toUtf8().constData());
-                const char *title =f.c_str();
+                const char *title = f.c_str();
                 setWindowTitle(QApplication::translate("AudioPlayer", title, 0, QApplication::UnicodeUTF8));
+
+                filename = QString("<html><head/><body><p>%1</p></body></html>").arg(filename);
+                f = std::string(filename.toUtf8().constData());
+                title = f.c_str();
+                setToolTip(QApplication::translate("AudioPlayer", title, 0, QApplication::UnicodeUTF8));
             }
 
             playing = true;
@@ -306,6 +320,7 @@ AeonWavePlayer::stopInput()
     }
 
     setWindowTitle(QApplication::translate("AudioPlayer", "AeonWave Audio Player", 0, QApplication::UnicodeUTF8));
+    setToolTip(QApplication::translate("AudioPlayer", "Audio Player", 0, QApplication::UnicodeUTF8));
     ui->VUleft->setValue(0);
     ui->VUright->setValue(0);
     ui->timeTotal->setText("00:00:00");
@@ -315,45 +330,12 @@ AeonWavePlayer::stopInput()
 }
 
 void
-AeonWavePlayer::stopRecord()
-{
-    if (recording)
-    {
-        recording = false;
-        aaxMixerSetState(file, AAX_STOPPED);
-        aaxMixerDeregisterSensor(file, outdev);
-        aaxDriverClose(file);
-        aaxDriverDestroy(file);
-    }
-}
-
-
-void
 AeonWavePlayer::togglePause()
 {
     if (!paused)
     {
         _ATB(aaxSensorSetState(indev, AAX_SUSPENDED));
         paused = true;
-    }
-}
-
-void
-AeonWavePlayer::toggleRecord()
-{
-    if (recording) {
-        stopRecord();
-    }
-    else
-    {
-        if (!file) {
-            saveTo();
-        }
-        if (file)
-        {
-            aaxMixerSetState(file, AAX_CAPTURING);
-            recording = true;
-        }
     }
 }
 
@@ -395,6 +377,7 @@ AeonWavePlayer::loadFile()
     }
 }
 
+#if 0
 void
 AeonWavePlayer::saveTo()
 {
@@ -435,6 +418,7 @@ AeonWavePlayer::saveTo()
         }
     }
 }
+#endif
 
 void
 AeonWavePlayer::alert(QString msg)
@@ -487,7 +471,7 @@ AeonWavePlayer::getSystemResources(device_t &type, enum aaxRenderMode mode)
                 }
                 type.backend.append(backend);
             }
-            aaxDriverDestroy(cfg);;
+            aaxDriverDestroy(cfg);
         }
     }
 }
@@ -495,15 +479,14 @@ AeonWavePlayer::getSystemResources(device_t &type, enum aaxRenderMode mode)
 void
 AeonWavePlayer::freeDevices()
 {
-    stopRecord();
-    stopInput();
+    togglePause();
+    aaxMixerDeregisterSensor(outdev, indev);
 
-    aaxMixerSetState(outdev, AAX_STOPPED);
-    aaxDriverClose(outdev);
-    aaxDriverDestroy(outdev);
-    outdev = NULL;
+    stopOutput();
+    startOutput();
 
-    openOutputDevice();
+    _ATB(aaxMixerRegisterSensor(outdev, indev));
+    startInput();
 }
 
 void
@@ -511,4 +494,45 @@ AeonWavePlayer::setupHardware()
 {
     if (!setup) setup = new Setup;
     setup->show();
+}
+
+void
+AeonWavePlayer::viewAbout()
+{
+    alert(tr("<h2>AeonWave Audio Player version %1.%2</h2>"
+             "<h5>using %3</h5>"
+             "<h4>(C) Copyright 2014,2015 by Adalin B.V.</h4><br>"
+             "<b><i>AeonWave Audio Player is a streaming audio player.</i></b>"
+             "<p><br>This software lets you play audio files using the "
+             "automatic audio streaming capabilities of AeonWave. It is "
+             "possible to select the next audio track from the file menu "
+             "while the current track is still playing. Audio tracks are "
+             "all played at the same volume level when Auto Gain Control "
+             "(AGC) is selected.<p>"
+             "<sub>This softare makes use of: AeonWave 2.5+, Qt 4.7+</sub>"
+            ).arg(AAXCONFIG_MAJOR_VERSION).arg(AAXCONFIG_MINOR_VERSION).arg(aaxGetVersionString(outdev)));
+}
+
+void
+AeonWavePlayer::viewLicense()
+{
+    QString text(QObject::trUtf8((const char*)&___COPYING));
+    QMessageBox license;
+
+    license.setWindowTitle(tr("License and Copyright"));
+//  license.setTextFormat(Qt::RichText);
+    license.setDetailedText(text);
+    license.setIcon(QMessageBox::Information);
+    license.setText(tr("<h5>(C) Copyright 2014-2015 by Adalin B.V.</h5>"
+           "This program is free software: you can redistribute it and/or "
+           "modify it under the terms of the GNU General Public License as "
+           "published by the Free Software Foundation, either version 3 of "
+           "the License, or (at your option) any later version.</p>"
+           "<p>This program is distributed in the hope that it will be useful, "
+           "but WITHOUT ANY WARRANTY; without even the implied warranty of "
+           "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
+           "GNU General Public License for more details.</p>"
+           ));
+    license.adjustSize();
+    license.exec();
 }
