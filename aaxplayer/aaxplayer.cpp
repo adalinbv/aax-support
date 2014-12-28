@@ -27,8 +27,9 @@
 #include <QMessageBox>
 #include <QFileDialog>
 
-#include "base/copyright.h"
-#include <base/types.h>
+#include <copyright.h>
+#include <types.h>
+
 #include "aaxplayer_ui.h"
 #include "aaxplayer.h"
 #include "setup.h"
@@ -56,9 +57,12 @@ AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
     in_freq(44100.0f),
     agc_enabled(true),
     autoplay(false),
-    infile(QString()),
-    outfiles_path(QString()),
-    infiles_path(QString()),
+//  indir(QStringList()),
+    indir_pos(0),
+//  infile(QString()),
+//  outfiles_path(QString()),
+//  infiles_path(QString()),
+    wildcards("*.wav"),
     max_samples(0), 
     playing(false),
     paused(false)
@@ -87,10 +91,14 @@ AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
     ui->stopPlay->setIconSize(StopPixMap.rect().size());
 
     getSystemResources(odevices, AAX_MODE_WRITE_STEREO);
+    setWildcards();
     startOutput();
 
-    QObject::connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(exit()));
+    QObject::connect(ui->actionOpenDir, SIGNAL(triggered()), this, SLOT(loadDirectory()));
+    QObject::connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(loadFile()));
     QObject::connect(ui->actionHardware, SIGNAL(triggered()), this, SLOT(setupHardware()));
+    QObject::connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(exit()));
+
     QObject::connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(viewAbout()));
     QObject::connect(ui->actionLicense, SIGNAL(triggered()), this, SLOT(viewLicense()));
 
@@ -98,7 +106,6 @@ AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
     QObject::connect(ui->pausePlay, SIGNAL(released()), this,  SLOT(togglePause()));
     QObject::connect(ui->stopPlay, SIGNAL(released()), this,  SLOT(stopInput()));
     QObject::connect(ui->volume, SIGNAL(valueChanged(int)), this, SLOT(volumeChanged(int)));
-    QObject::connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(loadFile()));
 
     QObject::connect(&timer, SIGNAL(timeout()), SLOT(tick()));
     timer.setSingleShot(false);
@@ -231,8 +238,17 @@ AeonWavePlayer::stopOutput()
 void
 AeonWavePlayer::startInput()
 {
-    if (!playing && !infile.isNull())
+    if (!playing && (!infile.isNull() || !indir.isEmpty()))
     {
+        if (infile.isNull())
+        {
+            infile = indir.at(indir_pos++);
+            if (indir_pos >= indir.size()) {
+                indir_pos = 0;
+            }
+        }
+
+
         QString idevname_str = "AeonWave on Audio Files: "+infile;
         std::string d = std::string(idevname_str.toUtf8().constData());
         const char *dev = d.empty() ? NULL : d.c_str();
@@ -260,7 +276,8 @@ AeonWavePlayer::startInput()
             if (!res)
             {
                 alert(tr("<br>File initialization error:</br>"
-                     "<br>The file may be empty or corrupt.</br>"));
+                         "<p><i><b>%1</b></i></p>"
+                        ).arg(aaxGetErrorString(aaxGetErrorNo())));
                 infile = QString();
                 stopInput();
                 return;
@@ -349,11 +366,10 @@ AeonWavePlayer::volumeChanged(int val)
 }
 
 void
-AeonWavePlayer::loadFile()
+AeonWavePlayer::setWildcards()
 {
-    QString filter = "*.wav";
     aaxConfig cfgi;
- 
+
     cfgi = aaxDriverGetByName("AeonWave on Audio Files", AAX_MODE_READ);
     if (cfgi)
     {
@@ -361,13 +377,17 @@ AeonWavePlayer::loadFile()
 
         d = aaxDriverGetDeviceNameByPos(cfgi, 0, AAX_MODE_WRITE_STEREO);
         f = aaxDriverGetInterfaceNameByPos(cfgi, d, 0, AAX_MODE_WRITE_STEREO);
-        filter = f;
+        wildcards = f;
         aaxDriverDestroy(cfgi);
     }
+}
 
+void
+AeonWavePlayer::loadFile()
+{
     QString fileName = QFileDialog::getOpenFileName(this,
                                     tr("Open Audio Input File"),
-                                    infiles_path, filter);
+                                    infiles_path, wildcards);
     if (!fileName.isNull())
     {
         infile = fileName;
@@ -377,23 +397,51 @@ AeonWavePlayer::loadFile()
     }
 }
 
+void
+AeonWavePlayer::loadDirectory()
+{
+    QString dir = QFileDialog::getExistingDirectory(this,
+                               tr("Open Audio Directory"),
+                               infiles_path);
+    if (!dir.isNull())
+    {
+        QStringList filters = wildcards.split(' ');
+        CSimpleGlob glob(SG_GLOB_ONLYFILE);
+
+        for (int n=0; n<filters.size(); n++)
+        {
+            std::string d = std::string(dir.toUtf8().constData());
+            std::string p = std::string(filters[n].toUtf8().constData());
+
+            std::string pattern = d+"/"+p;
+            glob.Add(pattern.c_str());
+
+            pattern = d+"/*/"+p;
+            glob.Add(pattern.c_str());
+
+            pattern = d+"/*/*/"+p;
+            glob.Add(pattern.c_str());
+
+            // Three levels deep shoud be enough
+        }
+
+        indir_pos = 0;
+        indir.clear();
+        for (int n=0; n<glob.FileCount(); n++)
+        {
+            indir.append(glob.File(n));
+        }
+        
+        infiles_path = dir;
+        new_file = true;
+    }
+}
+
 #if 0
 void
 AeonWavePlayer::saveTo()
 {
-    QString filter = "*.wav";
     aaxConfig cfgo;
-
-    cfgo = aaxDriverGetByName("AeonWave on Audio Files", AAX_MODE_READ);
-    if (cfgo)
-    {
-        const char *d, *f;
-
-        d = aaxDriverGetDeviceNameByPos(cfgo, 0, AAX_MODE_WRITE_STEREO);
-        f = aaxDriverGetInterfaceNameByPos(cfgo, d, 0, AAX_MODE_WRITE_STEREO);
-        filter = f;
-        aaxDriverDestroy(cfgo);
-    }
 
     QString fileName = QFileDialog::getSaveFileName(this,
                                           tr("Open Audio Output File"),

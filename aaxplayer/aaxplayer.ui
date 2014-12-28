@@ -41,6 +41,7 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionOpenDir"/>
     <addaction name="actionOpen"/>
     <addaction name="actionHardware"/>
     <addaction name="actionExit"/>
@@ -404,6 +405,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionOpenDir">
+   <property name="text">
+    <string>Open Directory</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
    </property>
   </action>
  </widget>

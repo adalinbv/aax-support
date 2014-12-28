@@ -21,8 +21,10 @@
 #define AAXPLAYER_H
 
 #include <QtGui/QDialog>
+#include <QStringList>
 #include <QTimer>
 
+#include <SimpleGlob.h>
 #include <aax/aax.h>
 
 #include "setup.h"
@@ -57,14 +59,20 @@ public:
 
     void stopOutput();
     void startOutput();
+    void setWildcards();
     void getSystemResources(device_t&, enum aaxRenderMode);
     void freeDevices();
 
 private:
     QTimer timer;
-    QString infile;
+
+    QStringList indir;		// all files from a subdir
+    int indir_pos;
+
+    QString infile;		// or just one fingle file
     QString outfiles_path;
     QString infiles_path;
+    QString wildcards;
 
     size_t max_samples;
     bool playing;
@@ -78,6 +86,7 @@ private slots:
     void viewAbout();
     void viewLicense();
     void loadFile();
+    void loadDirectory();
 //  void saveTo();
     void exit();
 

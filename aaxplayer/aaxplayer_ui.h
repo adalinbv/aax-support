@@ -32,6 +32,7 @@ public:
     QAction *actionHardware;
     QAction *actionAbout;
     QAction *actionLicense;
+    QAction *actionOpenDir;
     QMenuBar *menubar;
     QMenu *menuFile;
     QMenu *menuHelp;
@@ -66,6 +67,8 @@ public:
         actionAbout->setObjectName(QString::fromUtf8("actionAbout"));
         actionLicense = new QAction(AudioPlayer);
         actionLicense->setObjectName(QString::fromUtf8("actionLicense"));
+        actionOpenDir = new QAction(AudioPlayer);
+        actionOpenDir->setObjectName(QString::fromUtf8("actionOpenDir"));
         menubar = new QMenuBar(AudioPlayer);
         menubar->setObjectName(QString::fromUtf8("menubar"));
         menubar->setGeometry(QRect(0, 0, 400, 24));
@@ -158,6 +161,7 @@ public:
 
         menubar->addAction(menuFile->menuAction());
         menubar->addAction(menuHelp->menuAction());
+        menuFile->addAction(actionOpenDir);
         menuFile->addAction(actionOpen);
         menuFile->addAction(actionHardware);
         menuFile->addAction(actionExit);
@@ -194,6 +198,8 @@ public:
         actionAbout->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+A", 0, QApplication::UnicodeUTF8));
         actionLicense->setText(QApplication::translate("AudioPlayer", "Copyright License", 0, QApplication::UnicodeUTF8));
         actionLicense->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+C", 0, QApplication::UnicodeUTF8));
+        actionOpenDir->setText(QApplication::translate("AudioPlayer", "Open Directory", 0, QApplication::UnicodeUTF8));
+        actionOpenDir->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+D", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("AudioPlayer", "File", 0, QApplication::UnicodeUTF8));
         menuHelp->setTitle(QApplication::translate("AudioPlayer", "Help", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP

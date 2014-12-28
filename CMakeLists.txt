@@ -161,12 +161,12 @@ ELSE(MSVC)
 ENDIF(MSVC)
 
 INCLUDE_DIRECTORIES("${aaxconfig_SOURCE_DIR}"
-    base
+   ${aaxconfig_SOURCE_DIR}/include 
     "${CMAKE_CURRENT_BINARY_DIR}/include"
 )
 
 CONFIGURE_FILE(
-    "${CMAKE_CURRENT_SOURCE_DIR}/base/cmake_config.h.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/cmake_config.h.in"
     "${CMAKE_CURRENT_BINARY_DIR}/include/config.h")
 
 INCLUDE(CPack)
