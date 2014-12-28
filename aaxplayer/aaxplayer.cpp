@@ -240,14 +240,14 @@ AeonWavePlayer::startInput()
 {
     if (!playing && (!infile.isNull() || !indir.isEmpty()))
     {
-        if (infile.isNull())
+        if (!indir.isEmpty())
         {
+            infile.clear();
             infile = indir.at(indir_pos++);
             if (indir_pos >= indir.size()) {
                 indir_pos = 0;
             }
         }
-
 
         QString idevname_str = "AeonWave on Audio Files: "+infile;
         std::string d = std::string(idevname_str.toUtf8().constData());
@@ -315,7 +315,9 @@ AeonWavePlayer::startInput()
             }
 
             playing = true;
-            new_file = false;
+            if (indir.isEmpty()) {
+                new_file = false;
+            }
         }
     }
     else if (paused)
@@ -433,6 +435,7 @@ AeonWavePlayer::loadDirectory()
         }
         
         infiles_path = dir;
+        autoplay = true;
         new_file = true;
     }
 }
