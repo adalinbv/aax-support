@@ -277,10 +277,13 @@ AeonWavePlayer::startInput()
             if (!res)
             {
                 alert(tr("<br>File initialization error:</br>"
-                         "<p><i><b>%1</b></i></p>"
-                        ).arg(aaxGetErrorString(aaxGetErrorNo())));
+                         "<br>%1</br>"
+                         "<p><i><b>%2</b></i></p>"
+                        ).arg(infile).arg(aaxGetErrorString(aaxGetErrorNo())));
                 infile = QString();
+                int n = indir_pos;
                 stopInput();
+                indir_pos = n;
                 return;
             }
             _ATB(aaxSensorSetState(indev, AAX_CAPTURING));
@@ -330,10 +333,10 @@ AeonWavePlayer::startInput()
     }
     else if (playing && !indir.isEmpty())
     {
-        int i = indir_pos;
+        int n = indir_pos;
         stopInput();
         new_file = true;
-        indir_pos = i;
+        indir_pos = n;
     }
 }
 
@@ -407,6 +410,8 @@ AeonWavePlayer::loadFile()
         infile = fileName;
         size_t fpos = infile.lastIndexOf('/');
         infiles_path = infile.mid(0, fpos);
+        indir.clear();
+        indir_pos = 0;
         new_file = true;
     }
 }
@@ -452,10 +457,10 @@ AeonWavePlayer::loadDirectory()
         int size = list.size();
         while (size)
         {
-            int pos = rand()%size+1;
+            int pos = rand() % size;
             indir.append(list.at(pos));
             list.removeAt(pos);
-            size--;
+            size = list.size();
         }
         
         infiles_path = dir;
