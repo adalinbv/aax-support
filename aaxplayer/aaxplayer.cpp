@@ -22,6 +22,7 @@
 #endif
 
 #include <math.h>
+#include <stdlib.h>
 #include <assert.h>
 
 #include <QMessageBox>
@@ -317,6 +318,8 @@ AeonWavePlayer::startInput()
             playing = true;
             if (indir.isEmpty()) {
                 new_file = false;
+            } else {
+               autoplay = true;
             }
         }
     }
@@ -324,6 +327,13 @@ AeonWavePlayer::startInput()
     {
         _ATB(aaxSensorSetState(indev, AAX_CAPTURING));
         paused = false;
+    }
+    else if (playing && !indir.isEmpty())
+    {
+        int i = indir_pos;
+        stopInput();
+        new_file = true;
+        indir_pos = i;
     }
 }
 
@@ -343,6 +353,8 @@ AeonWavePlayer::stopInput()
     ui->VUleft->setValue(0);
     ui->VUright->setValue(0);
     ui->timeTotal->setText("00:00:00");
+    new_file = false;
+    indir_pos = 0;
     max_samples = 0;
     playing = false;
     paused = false;
@@ -429,13 +441,24 @@ AeonWavePlayer::loadDirectory()
 
         indir_pos = 0;
         indir.clear();
+        QStringList list;
         for (int n=0; n<glob.FileCount(); n++)
         {
-            indir.append(glob.File(n));
+            list.append(glob.File(n));
+        }
+
+        // randomize the list
+        srand(time(NULL));
+        int size = list.size();
+        while (size)
+        {
+            int pos = rand()%size+1;
+            indir.append(list.at(pos));
+            list.removeAt(pos);
+            size--;
         }
         
         infiles_path = dir;
-        autoplay = true;
         new_file = true;
     }
 }
