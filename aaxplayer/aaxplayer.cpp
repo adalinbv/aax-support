@@ -207,8 +207,10 @@ AeonWavePlayer::startOutput()
         _TEST(aaxFilterDestroy(flt));
 
         int res = aaxMixerSetState(outdev, AAX_INITIALIZED);
-        if (res) {
+        if (res)
+        {
             _TEST(aaxMixerSetState(outdev, AAX_PLAYING));
+            odevname_str = aaxDriverGetSetup(outdev, AAX_RENDERER_STRING);
         }
         else
         {
@@ -272,8 +274,7 @@ AeonWavePlayer::startInput()
             int res = aaxMixerSetState(indev, AAX_INITIALIZED);
             if (!res)
             {
-                alert(tr("<br>File initialization error:</br>"
-                         "<br>%1</br>"
+                alert(tr("<br>File initialization error:</br><br>%1</br>"
                          "<p><i><b>%2</b></i></p>"
                         ).arg(infile).arg(aaxGetErrorString(aaxGetErrorNo())));
                 infile = QString();
@@ -296,20 +297,25 @@ AeonWavePlayer::startInput()
             ui->timeTotal->setText(total);
 
             QString fname = aaxDriverGetSetup(indev, AAX_RENDERER_STRING);
-            size_t spos = fname.lastIndexOf('/');
-            size_t dpos = fname.lastIndexOf('.');
-            if (dpos) dpos -= (spos+1);
-            QString filename = infile.mid(spos+1, dpos);
-            if (!filename.isEmpty() && !filename.isNull())
+            int spos = fname.lastIndexOf('/');
+            if (spos >= 0)
             {
-                std::string f = std::string(filename.toUtf8().constData());
-                const char *title = f.c_str();
-                setWindowTitle(QApplication::translate("AudioPlayer", title, 0, QApplication::UnicodeUTF8));
+                int dpos = fname.lastIndexOf('.');
+                if (dpos >= 0) dpos -= (spos+1);
+                QString filename = fname.mid(spos+1, dpos);
+                if (!filename.isEmpty() && !filename.isNull())
+                {
+                    std::string f = std::string(filename.toUtf8().constData());
+                    const char *title = f.c_str();
+                    setWindowTitle(QApplication::translate("AudioPlayer", title,
+                                                 0, QApplication::UnicodeUTF8));
 
-                filename = QString("<html><head/><body><p>%1</p></body></html>").arg(filename);
-                f = std::string(filename.toUtf8().constData());
-                title = f.c_str();
-                setToolTip(QApplication::translate("AudioPlayer", title, 0, QApplication::UnicodeUTF8));
+                    filename = QString("<html><head/><body><p>%1</p></body></html>").arg(filename);
+                    f = std::string(filename.toUtf8().constData());
+                    title = f.c_str();
+                    setToolTip(QApplication::translate("AudioPlayer", title, 0,
+                                                    QApplication::UnicodeUTF8));
+                }
             }
 
             playing = true;
