@@ -38,14 +38,14 @@
 #undef NDEBUG
 
 #ifndef NDEBUG
-# define _ATB(a)                \
+# define _TEST(a)                \
 do {                            \
    int r=(a);                   \
    if (r!=AAX_TRUE) printf("Error at line %i: %s\n",__LINE__,aaxGetErrorString(aaxGetErrorNo())); \
    assert(r==AAX_TRUE); \
 } while(0);
 #else
-# define _ATB(a)                a
+# define _TEST(a)                a
 #endif
 
 AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
@@ -58,11 +58,7 @@ AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
     in_freq(44100.0f),
     agc_enabled(true),
     autoplay(false),
-//  indir(QStringList()),
     indir_pos(0),
-//  infile(QString()),
-//  outfiles_path(QString()),
-//  infiles_path(QString()),
     wildcards("*.wav"),
     max_samples(0), 
     playing(false),
@@ -137,7 +133,7 @@ AeonWavePlayer::tick()
        }
    }
 
-   if (!playing && autoplay && new_file) {
+   if (!playing && (autoplay || new_file)) {
        startInput();
    }
 
@@ -208,19 +204,19 @@ AeonWavePlayer::startOutput()
         aaxFilter flt = aaxMixerGetFilter(outdev, AAX_VOLUME_FILTER);
         float vol = _MIN(aaxFilterGetParam(flt, AAX_GAIN, AAX_LINEAR), 1.0f);
         ui->volume->setValue(rintf(vol*100));
-        aaxFilterDestroy(flt);
+        _TEST(aaxFilterDestroy(flt));
 
         int res = aaxMixerSetState(outdev, AAX_INITIALIZED);
         if (res) {
-            aaxMixerSetState(outdev, AAX_PLAYING);
+            _TEST(aaxMixerSetState(outdev, AAX_PLAYING));
         }
         else
         {
             alert(tr("<br>Unable to initialize the output device:</br>"
                      "<p><i><b>%1</b></i></p>"
                   ).arg(aaxGetErrorString(aaxGetErrorNo())));
-            _ATB(aaxDriverClose(outdev));
-            _ATB(aaxDriverDestroy(outdev));
+            _TEST(aaxDriverClose(outdev));
+            _TEST(aaxDriverDestroy(outdev));
             outdev = NULL;
         }
     }
@@ -229,9 +225,9 @@ AeonWavePlayer::startOutput()
 void
 AeonWavePlayer::stopOutput()
 {
-    aaxMixerSetState(outdev, AAX_STOPPED);
-    aaxDriverClose(outdev);
-    aaxDriverDestroy(outdev);
+    _TEST(aaxMixerSetState(outdev, AAX_STOPPED));
+    _TEST(aaxDriverClose(outdev));
+    _TEST(aaxDriverDestroy(outdev));
     outdev = NULL;
 
 }
@@ -265,12 +261,12 @@ AeonWavePlayer::startInput()
                 {
                     aaxFilterSetParam(filter, AAX_AGC_RESPONSE_RATE,
                                               AAX_LINEAR, 1.5f);
-                    aaxMixerSetFilter(indev, filter);
-                    aaxFilterDestroy(filter);
+                    _TEST(aaxMixerSetFilter(indev, filter));
+                    _TEST(aaxFilterDestroy(filter));
                 }
             }
 
-            _ATB(aaxMixerRegisterSensor(outdev, indev));
+            _TEST(aaxMixerRegisterSensor(outdev, indev));
 
             /** must be called after aaxMixerRegisterSensor */
             int res = aaxMixerSetState(indev, AAX_INITIALIZED);
@@ -281,12 +277,10 @@ AeonWavePlayer::startInput()
                          "<p><i><b>%2</b></i></p>"
                         ).arg(infile).arg(aaxGetErrorString(aaxGetErrorNo())));
                 infile = QString();
-                int n = indir_pos;
                 stopInput();
-                indir_pos = n;
                 return;
             }
-            _ATB(aaxSensorSetState(indev, AAX_CAPTURING));
+            _TEST(aaxSensorSetState(indev, AAX_CAPTURING));
 
             in_freq = (float)aaxMixerGetSetup(indev, AAX_FREQUENCY);
             max_samples = (float)aaxMixerGetSetup(indev, AAX_SAMPLES_MAX);
@@ -328,15 +322,11 @@ AeonWavePlayer::startInput()
     }
     else if (paused)
     {
-        _ATB(aaxSensorSetState(indev, AAX_CAPTURING));
+        _TEST(aaxSensorSetState(indev, AAX_CAPTURING));
         paused = false;
     }
-    else if (playing && !indir.isEmpty())
-    {
-        int n = indir_pos;
+    else if (playing && !indir.isEmpty()) {
         stopInput();
-        new_file = true;
-        indir_pos = n;
     }
 }
 
@@ -345,10 +335,10 @@ AeonWavePlayer::stopInput()
 {
     if (playing)
     {
-        _ATB(aaxMixerSetState(indev, AAX_STOPPED));
-        _ATB(aaxMixerDeregisterSensor(outdev, indev));
-        aaxDriverClose(indev);
-        aaxDriverDestroy(indev);
+        _TEST(aaxMixerSetState(indev, AAX_STOPPED));
+        _TEST(aaxMixerDeregisterSensor(outdev, indev));
+        _TEST(aaxDriverClose(indev));
+        _TEST(aaxDriverDestroy(indev));
     }
 
     setWindowTitle(QApplication::translate("AudioPlayer", "AeonWave Audio Player", 0, QApplication::UnicodeUTF8));
@@ -357,7 +347,6 @@ AeonWavePlayer::stopInput()
     ui->VUright->setValue(0);
     ui->timeTotal->setText("00:00:00");
     new_file = false;
-    indir_pos = 0;
     max_samples = 0;
     playing = false;
     paused = false;
@@ -366,9 +355,9 @@ AeonWavePlayer::stopInput()
 void
 AeonWavePlayer::togglePause()
 {
-    if (!paused)
+    if (playing && !paused)
     {
-        _ATB(aaxSensorSetState(indev, AAX_SUSPENDED));
+        _TEST(aaxSensorSetState(indev, AAX_SUSPENDED));
         paused = true;
     }
 }
@@ -377,9 +366,9 @@ void
 AeonWavePlayer::volumeChanged(int val)
 {
     aaxFilter flt = aaxMixerGetFilter(outdev, AAX_VOLUME_FILTER);
-    aaxFilterSetParam(flt, AAX_GAIN, AAX_LINEAR, (float)val/100.0f);
-    aaxMixerSetFilter(outdev, flt);
-    aaxFilterDestroy(flt);
+    _TEST(aaxFilterSetParam(flt, AAX_GAIN, AAX_LINEAR, (float)val/100.0f));
+    _TEST(aaxMixerSetFilter(outdev, flt));
+    _TEST(aaxFilterDestroy(flt));
 }
 
 void
@@ -395,7 +384,7 @@ AeonWavePlayer::setWildcards()
         d = aaxDriverGetDeviceNameByPos(cfgi, 0, AAX_MODE_WRITE_STEREO);
         f = aaxDriverGetInterfaceNameByPos(cfgi, d, 0, AAX_MODE_WRITE_STEREO);
         wildcards = f;
-        aaxDriverDestroy(cfgi);
+        _TEST(aaxDriverDestroy(cfgi));
     }
 }
 
@@ -493,7 +482,7 @@ AeonWavePlayer::saveTo()
         file = aaxDriverOpenByName(dev, AAX_MODE_READ);
         if (file)
         {
-            aaxMixerSetState(file, AAX_INITIALIZED);
+            _TEST(aaxMixerSetState(file, AAX_INITIALIZED));
         }
     }
 }
@@ -550,7 +539,7 @@ AeonWavePlayer::getSystemResources(device_t &type, enum aaxRenderMode mode)
                 }
                 type.backend.append(backend);
             }
-            aaxDriverDestroy(cfg);
+            _TEST(aaxDriverDestroy(cfg));
         }
     }
 }
@@ -559,13 +548,18 @@ void
 AeonWavePlayer::freeDevices()
 {
     togglePause();
-    aaxMixerDeregisterSensor(outdev, indev);
+    if (playing) {
+        _TEST(aaxMixerDeregisterSensor(outdev, indev));
+    }
 
     stopOutput();
     startOutput();
 
-    _ATB(aaxMixerRegisterSensor(outdev, indev));
-    startInput();
+    if (playing)
+    {
+        _TEST(aaxMixerRegisterSensor(outdev, indev));
+        startInput();
+    }
 }
 
 void
