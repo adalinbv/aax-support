@@ -1,8 +1,9 @@
-* Tue Nov 27 2014 - tech@adalin.org
-- Completely updated Graphical User Interface
+* Mon Dec 29 2014 - tech@adalin.org
+- Added a graphical audio streaming player
+- Completely updated Graphical User Interface for AeonWave Config
 - Make use of the new capabilities interface of AeonWave:
-- limit the supported number of tracks and periods
-- limit the sample frequency range
+- Limit the supported number of tracks and periods
+- Limit the sample frequency range
 
 * Fri May 23 2014 - tech@adalin.org
 - Support configuration file version 2.0

@@ -6,6 +6,8 @@ IF(HAVE_LIBM)
   SET(EXTRA_LIBS m ${EXTRA_LIBS})
 ENDIF(HAVE_LIBM)
 
+FIND_PACKAGE(AAX COMPONENTS aax REQUIRED)
+
 FIND_PACKAGE(Qt4 REQUIRED QtCore QtGui)
 INCLUDE( ${QT_USE_FILE} )
 
@@ -17,7 +19,7 @@ SET( SOURCES main.cpp aaxplayer.cpp setup.cpp )
 SET( PREPROCESS_HEADERS aaxplayer.h setup.h )
 SET( HEADERS aaxplayer_ui.h setup_ui.h )
 SET( GUI aaxplayer.ui setup.ui )
-SET( RCS ${aaxconfig_SOURCE_DIR}/admin/aaxplayer.qrc )
+SET( RCS ${CMAKE_SOURCE_DIR}/admin/aaxplayer.qrc )
 
 QT4_ADD_RESOURCES(RC_SRCS ${RCS})
 QT4_WRAP_UI( GUI_HDRS ${GUI} )
@@ -39,9 +41,9 @@ IF(WIN32)
 
   # Used to create Start Menu shortcuts <EXEC> <LABEL>
   SET(CPACK_PACKAGE_EXECUTABLES "aaxplayer" "AeonWave Audio Player")
-  SET(CPACK_PACKAGE_ICON "${aaxconfig_SOURCE_DIR}/admin\\\\aaxplayer.xpm")
+  SET(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/admin\\\\aaxplayer.xpm")
   SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\aaxplayer.exe")
-# SET(CPACK_PACKAGE_ICON "${aaxconfig_SOURCE_DIR}\\\\admin\aaxplayer.xpm")
+# SET(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}\\\\admin\aaxplayer.xpm")
 
 ELSE(WIN32)
   # Used to create Start Menu shortcuts <EXEC> <LABEL>
@@ -61,10 +63,10 @@ IF(APPLE)
 ENDIF()
 
 IF(UNIX AND NOT APPLE)
-  INSTALL(FILES ${aaxconfig_SOURCE_DIR}/admin/aaxplayer.desktop
+  INSTALL(FILES ${CMAKE_SOURCE_DIR}/admin/aaxplayer.desktop
           DESTINATION share/applications
           COMPONENT Applications)
-  INSTALL(FILES ${aaxconfig_SOURCE_DIR}/admin/aaxplayer.xpm
+  INSTALL(FILES ${CMAKE_SOURCE_DIR}/admin/aaxplayer.xpm
           DESTINATION share/pixmaps
           COMPONENT Applications)
 ENDIF(UNIX AND NOT APPLE)

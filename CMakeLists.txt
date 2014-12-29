@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 2.8.3)
 SET( cmake_verbose_makefile TRUE)
 
-PROJECT(aaxconfig)
-SET(PACKAGE_NAME "AeonWave-Config")
-SET(PACKAGE "aaxconfig")
+PROJECT(aaxsupport)
+SET(PACKAGE_NAME "AeonWave-Support")
+SET(PACKAGE "aaxsupport")
 
 OPTION(WERROR "Treat compile warnings as errors"   OFF)
 
@@ -44,20 +44,11 @@ SET(CPACK_PACKAGE_VERSION_PATCH ${CMAKE_MATCH_3})
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Graphical support utilities for AeonWave")
 
 # We have some custom .cmake scripts not in the official distribution.
-SET(CMAKE_MODULE_PATH "${aaxconfig_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
+SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
 
 INCLUDE(CPack_Modules)
 INCLUDE(CPack_Defaults)
 INCLUDE(CheckLibraryExists)
-#INCLUDE(CheckIncludeFile)
-#INCLUDE(CheckIncludeFiles)
-
-# Required libraries
-FIND_PACKAGE(AAX COMPONENTS aax REQUIRED)
-#FIND_PACKAGE(XML COMPONENTS xml REQUIRED)
-
-FIND_PACKAGE(Qt4 REQUIRED QtCore QtGui)
-INCLUDE( ${QT_USE_FILE} )
 
 IF(WIN32)
   SET(CPACK_NSIS_MODIFY_PATH "ON")
@@ -65,13 +56,13 @@ IF(WIN32)
 ELSE(WIN32)
 
   # DEBIAN
-  SET(CPACK_DEBIAN_PACKAGE_REPLACES "aaxconfig")
-  SET(CPACK_DEBIAN_PACKAGE_SECTION "administration utilities")
+  SET(CPACK_DEBIAN_PACKAGE_REPLACES "aaxconfig, aaxconfig-bin")
+  SET(CPACK_DEBIAN_PACKAGE_SECTION "support utilities")
   SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.1), libaax2-bin (>= 2.5), libqt4-core (>= 4.6.2), libqt4-gui (>= 4.7.0)")
 
   # RPM
   SET(CPACK_RPM_PACKAGE_LICENSE "GPL v3")
-  SET(CPACK_RPM_PACKAGE_OBSOLETES "aaxconfig")
+  SET(CPACK_RPM_PACKAGE_OBSOLETES "aaxconfig-bin")
   SET(CPACK_RPM_PACKAGE_GROUP "System Environment/Base")
   SET(CPACK_RPM_PACKAGE_REQUIRES "libaax2-bin >= 2.2")
 ENDIF(WIN32)
@@ -160,8 +151,8 @@ ELSE(MSVC)
         FORCE)
 ENDIF(MSVC)
 
-INCLUDE_DIRECTORIES("${aaxconfig_SOURCE_DIR}"
-   ${aaxconfig_SOURCE_DIR}/include 
+INCLUDE_DIRECTORIES("${CMAKE_SOURCE_DIR}"
+   ${CMAKE_SOURCE_DIR}/include 
     "${CMAKE_CURRENT_BINARY_DIR}/include"
 )
 
@@ -171,8 +162,8 @@ CONFIGURE_FILE(
 
 INCLUDE(CPack)
 
-ADD_SUBDIRECTORY(aaxconfig)
 ADD_SUBDIRECTORY(aaxplayer)
+ADD_SUBDIRECTORY(aaxconfig)
 
 #-----------------------------------------------------------------------------
 ### uninstall target
@@ -182,4 +173,4 @@ CONFIGURE_FILE(
   "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
   IMMEDIATE @ONLY)
 #ADD_CUSTOM_TARGET(uninstall
-#  "${CMAKE_COMMAND}" -P "${aaxconfig_BINARY_DIR}/cmake_uninstall.cmake")
+#  "${CMAKE_COMMAND}" -P "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake")

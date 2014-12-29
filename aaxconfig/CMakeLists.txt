@@ -20,13 +20,11 @@ SET( SOURCES main.cpp aaxconfig.cpp api.c )
 SET( PREPROCESS_HEADERS aaxconfig.h widgets.h )
 SET( HEADERS aaxconfig_ui.h api.h types.h )
 SET( GUI aaxconfig.ui )
-SET( RCS ${aaxconfig_SOURCE_DIR}/admin/aaxconfig.qrc )
+SET( RCS ${CMAKE_SOURCE_DIR}/admin/aaxconfig.qrc )
 
 QT4_ADD_RESOURCES(RC_SRCS ${RCS})
 QT4_WRAP_UI( GUI_HDRS ${GUI} )
 QT4_WRAP_CPP( MOC_HEADERS ${PREPROCESS_HEADERS} )
-
-INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} ${AAX_INCLUDE_DIR} ${XML_INCLUDE_DIR} )
 
 ADD_EXECUTABLE(aaxconfig ${SOURCES} ${MOC_HEADERS} ${RC_SRCS} ${GUI_HEADERS} )
 
@@ -43,15 +41,15 @@ IF(WIN32)
   INSTALL_CUSTOM_LIB(${AAX_LIBRARY} "bin")
 
   # Used to create Start Menu shortcuts <EXEC> <LABEL>
-  SET(CPACK_PACKAGE_EXECUTABLES "${PACKAGE}" "${PACKAGE_NAME}")
-  SET(CPACK_PACKAGE_ICON "${aaxconfig_SOURCE_DIR}/admin\\\\aaxconfig.xpm")
+  SET(CPACK_PACKAGE_EXECUTABLES "aaxconfig" "AeonWave Config")
+  SET(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/admin\\\\aaxconfig.xpm")
   SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\aaxconfig.exe")
 # SET(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}\\\\admin\aaxconfig.xpm")
 
 ELSE(WIN32)
   # Used to create Start Menu shortcuts <EXEC> <LABEL>
-  SET(CPACK_PACKAGE_EXECUTABLES "${PACKAGE};${PACKAGE_NAME}")
-  SET(CPACK_STRIP_FILES "bin/${PACKAGE}")
+  SET(CPACK_PACKAGE_EXECUTABLES "aaxconfig;AeonWave Config")
+  SET(CPACK_STRIP_FILES "bin/aaxconfig")
 ENDIF(WIN32)
 
 IF(APPLE)
@@ -66,10 +64,10 @@ IF(APPLE)
 ENDIF()
 
 IF(UNIX AND NOT APPLE)
-  INSTALL(FILES ${aaxconfig_SOURCE_DIR}/admin/${PACKAGE}.desktop
+  INSTALL(FILES ${CMAKE_SOURCE_DIR}/admin/aaxconfig.desktop
           DESTINATION share/applications
           COMPONENT Applications)
-  INSTALL(FILES ${aaxconfig_SOURCE_DIR}/admin/${PACKAGE}.xpm
+  INSTALL(FILES ${CMAKE_SOURCE_DIR}/admin/aaxconfig.xpm
           DESTINATION share/pixmaps
           COMPONENT Applications)
 ENDIF(UNIX AND NOT APPLE)
