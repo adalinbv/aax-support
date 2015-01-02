@@ -27,6 +27,7 @@
 
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QDir>
 
 #include <copyright.h>
 #include <types.h>
@@ -96,6 +97,7 @@ AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
     QObject::connect(ui->actionHardware, SIGNAL(triggered()), this, SLOT(setupHardware()));
     QObject::connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(exit()));
 
+    QObject::connect(ui->actionInfo, SIGNAL(triggered()), this, SLOT(showSongInfo()));
     QObject::connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(viewAbout()));
     QObject::connect(ui->actionLicense, SIGNAL(triggered()), this, SLOT(viewLicense()));
 
@@ -296,8 +298,8 @@ AeonWavePlayer::startInput()
             QString total = QString("%1:%2:%3").arg(hour,2,'f',0,'0').arg(minutes,2,'f',0,'0').arg(seconds,2,'f',0,'0');
             ui->timeTotal->setText(total);
 
-            QString title = aaxDriverGetSetup(indev, AAX_TITLE_STRING);
-            QString artist = aaxDriverGetSetup(indev, AAX_ARTIST_STRING);
+            QString title = aaxDriverGetSetup(indev, AAX_TRACK_TITLE_STRING);
+            QString artist = aaxDriverGetSetup(indev, AAX_MUSIC_ARTIST_STRING);
             if (!title.isEmpty() || !artist.isEmpty())
             {
                 if (title.isEmpty()) {
@@ -310,6 +312,7 @@ AeonWavePlayer::startInput()
             {
                 title = aaxDriverGetSetup(indev, AAX_RENDERER_STRING);
                 int spos = title.lastIndexOf('/');
+                if (!spos) spos = title.lastIndexOf(QDir::separator());
                 if (spos >= 0)
                 {
                     int dpos = title.lastIndexOf('.');
@@ -585,6 +588,44 @@ AeonWavePlayer::setupHardware()
 {
     if (!setup) setup = new Setup;
     setup->show();
+}
+
+void
+AeonWavePlayer::showSongInfo()
+{
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(tr("Song Information"));
+//  msgBox.setIcon(QMessageBox::Warning);
+    msgBox.setTextFormat(Qt::RichText);
+
+    const char *s;
+
+    QString msg = "<table width=\"300\"><tr rowspan=\"7\">";
+    msg += "<td></td></tr>";
+
+    s = aaxDriverGetSetup(indev, AAX_MUSIC_ARTIST_STRING);
+    msg += tr("<tr><td>Artist:</td><td>%1</td></tr>").arg(s ? s : "-");
+
+    s = aaxDriverGetSetup(indev, AAX_TRACK_TITLE_STRING);
+    msg += tr("<tr><td>Title:</td><td>%1</td></tr>").arg(s ? s : "-");
+
+    s = aaxDriverGetSetup(indev, AAX_ALBUM_NAME_STRING);
+    msg += tr("<tr><td>Album:</td><td>%1</td></tr>").arg(s ? s : "-");
+
+    s = aaxDriverGetSetup(indev, AAX_MUSIC_GENRE_STRING);
+    msg += tr("<tr><td>Genre:</td><td>%1</td></tr>").arg(s ? s : "-");
+
+    s = aaxDriverGetSetup(indev, AAX_RELEASE_DATE_STRING);
+    msg += tr("<tr><td>Release date:</td><td>%1</td></tr>").arg(s ? s : "-");
+
+    s = aaxDriverGetSetup(indev, AAX_TRACK_NUMBER_STRING);
+    msg += tr("<tr><td>Track number:&nbsp</td><td>%1</td></tr>").arg(s ? s : "-");
+
+    s = aaxDriverGetSetup(indev, AAX_SONG_COPYRIGHT_STRING);
+    msg += tr("<tr><td>Copyright:</td><td>%1</td></tr>").arg(s ? s : "-");
+    
+    msgBox.setText(msg);
+    msgBox.exec();
 }
 
 void

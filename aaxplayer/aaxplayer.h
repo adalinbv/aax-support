@@ -87,6 +87,7 @@ private slots:
     void viewLicense();
     void loadFile();
     void loadDirectory();
+    void showSongInfo();
 //  void saveTo();
     void exit();
 

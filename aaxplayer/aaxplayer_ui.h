@@ -33,9 +33,11 @@ public:
     QAction *actionAbout;
     QAction *actionLicense;
     QAction *actionOpenDir;
+    QAction *actionInfo;
     QMenuBar *menubar;
     QMenu *menuFile;
     QMenu *menuHelp;
+    QMenu *menuView;
     QPushButton *stopPlay;
     QLabel *timeCurrent;
     QLabel *timeRemaining;
@@ -69,13 +71,17 @@ public:
         actionLicense->setObjectName(QString::fromUtf8("actionLicense"));
         actionOpenDir = new QAction(AudioPlayer);
         actionOpenDir->setObjectName(QString::fromUtf8("actionOpenDir"));
+        actionInfo = new QAction(AudioPlayer);
+        actionInfo->setObjectName(QString::fromUtf8("actionInfo"));
         menubar = new QMenuBar(AudioPlayer);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 400, 24));
+        menubar->setGeometry(QRect(0, 0, 181, 25));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuHelp = new QMenu(menubar);
         menuHelp->setObjectName(QString::fromUtf8("menuHelp"));
+        menuView = new QMenu(menubar);
+        menuView->setObjectName(QString::fromUtf8("menuView"));
         stopPlay = new QPushButton(AudioPlayer);
         stopPlay->setObjectName(QString::fromUtf8("stopPlay"));
         stopPlay->setGeometry(QRect(125, 80, 51, 25));
@@ -160,6 +166,7 @@ public:
         QWidget::setTabOrder(pausePlay, stopPlay);
 
         menubar->addAction(menuFile->menuAction());
+        menubar->addAction(menuView->menuAction());
         menubar->addAction(menuHelp->menuAction());
         menuFile->addAction(actionOpenDir);
         menuFile->addAction(actionOpen);
@@ -167,6 +174,7 @@ public:
         menuFile->addAction(actionExit);
         menuHelp->addAction(actionLicense);
         menuHelp->addAction(actionAbout);
+        menuView->addAction(actionInfo);
 
         retranslateUi(AudioPlayer);
 
@@ -200,8 +208,11 @@ public:
         actionLicense->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+C", 0, QApplication::UnicodeUTF8));
         actionOpenDir->setText(QApplication::translate("AudioPlayer", "Open Directory", 0, QApplication::UnicodeUTF8));
         actionOpenDir->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+D", 0, QApplication::UnicodeUTF8));
+        actionInfo->setText(QApplication::translate("AudioPlayer", "Song Info", 0, QApplication::UnicodeUTF8));
+        actionInfo->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+I", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("AudioPlayer", "File", 0, QApplication::UnicodeUTF8));
         menuHelp->setTitle(QApplication::translate("AudioPlayer", "Help", 0, QApplication::UnicodeUTF8));
+        menuView->setTitle(QApplication::translate("AudioPlayer", "View", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
         stopPlay->setToolTip(QApplication::translate("AudioPlayer", "<html><head/><body><p>Stop</p></body></html>", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
