@@ -299,7 +299,7 @@ AeonWavePlayer::startInput()
             ui->timeTotal->setText(total);
 
             QString title = aaxDriverGetSetup(indev, AAX_TRACK_TITLE_STRING);
-            QString artist = aaxDriverGetSetup(indev, AAX_MUSIC_ARTIST_STRING);
+            QString artist = aaxDriverGetSetup(indev, AAX_MUSIC_PERFORMER_STRING);
             if (!title.isEmpty() || !artist.isEmpty())
             {
                 if (title.isEmpty()) {
@@ -600,17 +600,23 @@ AeonWavePlayer::showSongInfo()
 
     const char *s;
 
-    QString msg = "<table width=\"300\"><tr rowspan=\"7\">";
+    QString msg = "<table width=\"300\"><tr rowspan=\"9\">";
     msg += "<td></td></tr>";
 
-    s = aaxDriverGetSetup(indev, AAX_MUSIC_ARTIST_STRING);
-    msg += tr("<tr><td>Artist:</td><td>%1</td></tr>").arg(s ? s : "-");
+    s = aaxDriverGetSetup(indev, AAX_MUSIC_PERFORMER_STRING);
+    msg += tr("<tr><td>Performer:</td><td>%1</td></tr>").arg(s ? s : "-");
 
     s = aaxDriverGetSetup(indev, AAX_TRACK_TITLE_STRING);
     msg += tr("<tr><td>Title:</td><td>%1</td></tr>").arg(s ? s : "-");
 
     s = aaxDriverGetSetup(indev, AAX_ALBUM_NAME_STRING);
     msg += tr("<tr><td>Album:</td><td>%1</td></tr>").arg(s ? s : "-");
+
+    s = aaxDriverGetSetup(indev, AAX_SONG_COMPOSER_STRING);
+    msg += tr("<tr><td>Composer:</td><td>%1</td></tr>").arg(s ? s : "-");
+
+    s = aaxDriverGetSetup(indev, AAX_ORIGINAL_PERFORMER_STRING);
+    msg += tr("<tr><td>Original:</td><td>%1</td></tr>").arg(s ? s : "-");
 
     s = aaxDriverGetSetup(indev, AAX_MUSIC_GENRE_STRING);
     msg += tr("<tr><td>Genre:</td><td>%1</td></tr>").arg(s ? s : "-");
@@ -619,7 +625,7 @@ AeonWavePlayer::showSongInfo()
     msg += tr("<tr><td>Release date:</td><td>%1</td></tr>").arg(s ? s : "-");
 
     s = aaxDriverGetSetup(indev, AAX_TRACK_NUMBER_STRING);
-    msg += tr("<tr><td>Track number:&nbsp</td><td>%1</td></tr>").arg(s ? s : "-");
+    msg += tr("<tr><td>Track number:&nbsp;</td><td>%1</td></tr>").arg(s ? s : "-");
 
     s = aaxDriverGetSetup(indev, AAX_SONG_COPYRIGHT_STRING);
     msg += tr("<tr><td>Copyright:</td><td>%1</td></tr>").arg(s ? s : "-");
