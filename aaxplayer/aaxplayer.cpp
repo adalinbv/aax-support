@@ -1,20 +1,22 @@
 /*
- * Copyright (C) 2014 by Adalin B.V.
+ * Copyright (C) 2014-2015 by Erik Hofman
+ * Copyright (C) 2014-2015 by Adalin B.V.
  *
  * This file is part of AeonWave-AudioPlayer.
  *
- *  AeonWave-Config is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
+ *  AeonWave-AudioPlayer is free software: you can redistribute it and/or
+ *  modify it under the terms of the GNU General Public License as published
+ *  by the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  AeonWave-Config is distributed in the hope that it will be useful,
+ *  AeonWave-AudioPlayer is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with AeonWave-Config.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with AeonWave-AudioPlayer.
+ *  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #if HAVE_CONFIG_H
@@ -639,7 +641,7 @@ AeonWavePlayer::viewAbout()
 {
     alert(tr("<h2>AeonWave Audio Player version %1.%2</h2>"
              "<h5>using %3</h5>"
-             "<h4>(C) Copyright 2014,2015 by Adalin B.V.</h4><br>"
+             "<h4>(C) Copyright 2014-2015 by Adalin B.V.</h4><br>"
              "<b><i>AeonWave Audio Player is a streaming audio player.</i></b>"
              "<p><br>This software lets you play audio files using the "
              "automatic audio streaming capabilities of AeonWave. It is "
