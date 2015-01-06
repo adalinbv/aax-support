@@ -163,6 +163,7 @@ CONFIGURE_FILE(
 INCLUDE(CPack)
 
 ADD_SUBDIRECTORY(aaxplayer)
+ADD_SUBDIRECTORY(aaxrecorder)
 ADD_SUBDIRECTORY(aaxconfig)
 
 #-----------------------------------------------------------------------------
