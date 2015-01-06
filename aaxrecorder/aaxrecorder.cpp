@@ -347,17 +347,17 @@ AeonWaveRecorder::volumeChanged(int val)
 void
 AeonWaveRecorder::setWildcards()
 {
-    aaxConfig cfgi;
+    aaxConfig cfgo;
 
-    cfgi = aaxDriverGetByName("AeonWave on Audio Files", AAX_MODE_READ);
-    if (cfgi)
+    cfgo = aaxDriverGetByName("AeonWave on Audio Files",AAX_MODE_WRITE_STEREO);
+    if (cfgo)
     {
         const char *d, *f;
 
-        d = aaxDriverGetDeviceNameByPos(cfgi, 0, AAX_MODE_WRITE_STEREO);
-        f = aaxDriverGetInterfaceNameByPos(cfgi, d, 0, AAX_MODE_WRITE_STEREO);
+        d = aaxDriverGetDeviceNameByPos(cfgo, 0, AAX_MODE_WRITE_STEREO);
+        f = aaxDriverGetInterfaceNameByPos(cfgo, d, 0, AAX_MODE_WRITE_STEREO);
         wildcards = f;
-        _TEST(aaxDriverDestroy(cfgi));
+        _TEST(aaxDriverDestroy(cfgo));
     }
 }
 
