@@ -30,6 +30,7 @@
 #include <aax/aax.h>
 
 #include "setup.h"
+#include "record.h"
 
 #define _MINMAX(a,b,c)  (((a)>(c)) ? (c) : (((a)<(b)) ? (b) : (a)))
 
@@ -44,6 +45,7 @@ public:
     ~AeonWaveRecorder();
 
     Ui_AudioRecorder *ui;
+    Record *record;
     Setup *setup;
 
     /* device list */

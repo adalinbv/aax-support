@@ -36,6 +36,7 @@
 
 #include "aaxrecorder_ui.h"
 #include "aaxrecorder.h"
+#include "record_ui.h"
 #include "setup.h"
 
 #undef NDEBUG
@@ -53,6 +54,7 @@ do {                            \
 
 AeonWaveRecorder::AeonWaveRecorder(QWidget *parent) :
     QDialog(parent),
+    record(NULL),
     setup(NULL),
     outdev(NULL),
     indev(NULL),
@@ -116,6 +118,7 @@ AeonWaveRecorder::~AeonWaveRecorder()
     stopRecording();
     stopOutput();
 
+    if (record) delete record;
     if (setup) delete setup;
 
     delete ui;
@@ -304,6 +307,9 @@ AeonWaveRecorder::startRecording()
                    return;
                 }
                 _TEST(aaxMixerSetState(file, AAX_PLAYING));
+
+                if (!record) record = new Record;
+                record->show();
                 recording = true;
             }
         }
