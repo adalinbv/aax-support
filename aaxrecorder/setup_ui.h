@@ -73,7 +73,7 @@ public:
         InputDevice->setObjectName(QString::fromUtf8("InputDevice"));
         InputDevice->setGeometry(QRect(230, 30, 200, 27));
         InputDevice->setMinimumSize(QSize(200, 27));
-        InputDevice->setMaximumSize(QSize(250, 27));
+        InputDevice->setMaximumSize(QSize(200, 27));
         InputDevice->setSizeAdjustPolicy(QComboBox::AdjustToContents);
         InputInterface = new QComboBox(Configuration);
         InputInterface->setObjectName(QString::fromUtf8("InputInterface"));

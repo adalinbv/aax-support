@@ -119,7 +119,7 @@ public:
         pauseRecord->setFocusPolicy(Qt::NoFocus);
         VUleft = new QProgressBar(AudioRecorder);
         VUleft->setObjectName(QString::fromUtf8("VUleft"));
-        VUleft->setGeometry(QRect(10, 28, 14, 85));
+        VUleft->setGeometry(QRect(15, 28, 14, 85));
         QFont font1;
         font1.setPointSize(10);
         font1.setBold(true);
@@ -129,19 +129,19 @@ public:
         VUleft->setOrientation(Qt::Vertical);
         VUright = new QProgressBar(AudioRecorder);
         VUright->setObjectName(QString::fromUtf8("VUright"));
-        VUright->setGeometry(QRect(30, 28, 14, 85));
+        VUright->setGeometry(QRect(35, 28, 14, 85));
         VUright->setFont(font1);
         VUright->setValue(0);
         VUright->setOrientation(Qt::Vertical);
         volume = new QDial(AudioRecorder);
         volume->setObjectName(QString::fromUtf8("volume"));
-        volume->setGeometry(QRect(60, 33, 70, 80));
+        volume->setGeometry(QRect(62, 33, 70, 80));
         volume->setFocusPolicy(Qt::NoFocus);
         volume->setValue(80);
         volume->setNotchesVisible(true);
         labelVolumeMin = new QLabel(AudioRecorder);
         labelVolumeMin->setObjectName(QString::fromUtf8("labelVolumeMin"));
-        labelVolumeMin->setGeometry(QRect(45, 98, 31, 16));
+        labelVolumeMin->setGeometry(QRect(47, 98, 31, 16));
         QFont font2;
         font2.setFamily(QString::fromUtf8("Liberation Sans Narrow"));
         font2.setPointSize(9);
@@ -151,12 +151,12 @@ public:
         labelVolumeMin->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         labelVolumeMax = new QLabel(AudioRecorder);
         labelVolumeMax->setObjectName(QString::fromUtf8("labelVolumeMax"));
-        labelVolumeMax->setGeometry(QRect(115, 98, 31, 16));
+        labelVolumeMax->setGeometry(QRect(117, 98, 31, 16));
         labelVolumeMax->setFont(font2);
         labelVolumeMax->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
         labelVolume = new QLabel(AudioRecorder);
         labelVolume->setObjectName(QString::fromUtf8("labelVolume"));
-        labelVolume->setGeometry(QRect(60, 20, 70, 20));
+        labelVolume->setGeometry(QRect(62, 20, 70, 20));
         labelVolume->setFont(font);
         labelVolume->setAlignment(Qt::AlignCenter);
         QWidget::setTabOrder(startRecord, pauseRecord);
@@ -164,8 +164,6 @@ public:
 
         menubar->addAction(menuFile->menuAction());
         menubar->addAction(menuHelp->menuAction());
-        menuFile->addAction(actionOpenDir);
-        menuFile->addAction(actionOpen);
         menuFile->addAction(actionHardware);
         menuFile->addAction(actionExit);
         menuHelp->addAction(actionLicense);

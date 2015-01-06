@@ -153,7 +153,7 @@ min-height: 22px;</string>
    </property>
    <property name="maximumSize">
     <size>
-     <width>250</width>
+     <width>200</width>
      <height>27</height>
     </size>
    </property>
