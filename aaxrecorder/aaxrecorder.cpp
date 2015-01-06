@@ -272,11 +272,57 @@ AeonWaveRecorder::stopOutput()
 void
 AeonWaveRecorder::startRecording()
 {
+    if (!recording)
+    {
+        recording = false;
+        QString fileName = QFileDialog::getSaveFileName(this,
+                                   tr("Open Recording Output File"),
+                                   outfiles_path, wildcards);
+        if (!fileName.isNull())
+        {
+            QFileInfo f(fileName);
+
+            if (f.suffix().isEmpty()) {
+               fileName += ".wav";
+            }
+
+            QString filedev = "AeonWave on Audio Files: "+fileName;
+            file = aaxDriverOpenByName(filedev.toUtf8().constData(),
+                                       AAX_MODE_WRITE_STEREO);
+            if (file)
+            {
+                _TEST(aaxMixerRegisterSensor(outdev, file));
+                if (bitrate > 0) {
+                    _TEST(aaxMixerSetSetup(file, AAX_BITRATE, bitrate));
+                }
+                int res = aaxMixerSetState(file, AAX_INITIALIZED);
+                if (!res)
+                {
+                   alert(tr("<br>Unable to initialize the recording device:</br>"
+                            "<p><i><b>%1</b></i></p>"
+                         ).arg(aaxGetErrorString(aaxGetErrorNo())));
+                   return;
+                }
+                _TEST(aaxMixerSetState(file, AAX_PLAYING));
+                recording = true;
+            }
+        }
+        recording = true;
+    }
 }
 
 void
 AeonWaveRecorder::stopRecording()
 {
+    if (recording)
+    {
+        _TEST(aaxMixerSetState(file, AAX_STOPPED));
+        _TEST(aaxMixerDeregisterSensor(outdev, file));
+        aaxDriverClose(file);
+        aaxDriverDestroy(file);
+        recording = false;
+        file = NULL;
+    }
 }
 
 void
@@ -312,33 +358,6 @@ AeonWaveRecorder::setWildcards()
         f = aaxDriverGetInterfaceNameByPos(cfgi, d, 0, AAX_MODE_WRITE_STEREO);
         wildcards = f;
         _TEST(aaxDriverDestroy(cfgi));
-    }
-}
-
-void
-AeonWaveRecorder::saveTo()
-{
-    QString fileName = QFileDialog::getSaveFileName(this,
-                                          tr("Open Audio Output File"),
-                                          outfiles_path, wildcards);
-    if (!fileName.isNull())
-    {
-        QFileInfo f(fileName);
-
-        if (f.suffix().isEmpty()) {
-           fileName += ".wav";
-        }
-        outfiles_path = f.absolutePath();
-
-        QString odevname_str = "AeonWave on Audio Files: "+fileName;
-        std::string d = std::string(odevname_str.toUtf8().constData());
-        const char *dev = d.empty() ? NULL : d.c_str();
-
-        file = aaxDriverOpenByName(dev, AAX_MODE_READ);
-        if (file)
-        {
-            _TEST(aaxMixerSetState(file, AAX_INITIALIZED));
-        }
     }
 }
 

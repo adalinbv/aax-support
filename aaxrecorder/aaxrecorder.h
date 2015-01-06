@@ -83,7 +83,6 @@ private slots:
     void setupHardware();
     void viewAbout();
     void viewLicense();
-    void saveTo();
     void exit();
 
     void stopRecording();
