@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Record</class>
+ <class>Recording</class>
  <widget class="QDialog" name="Recording">
   <property name="geometry">
    <rect>
@@ -52,7 +52,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>If you want to define a time length restriction, set it below and the progress indicator will show how much time is left.</string>
+    <string>If you want to define a time length restriction, set it below and the progress indicator will show how much time is left. This is a soft limit.</string>
    </property>
    <property name="wordWrap">
     <bool>true</bool>

@@ -35,7 +35,7 @@ public:
     Record(QWidget *parent = 0);
     ~Record();
 
-    void show();
+    int exec();
 
 private:
     Ui_Record *_rec;

@@ -54,6 +54,7 @@ do {                            \
 
 AeonWaveRecorder::AeonWaveRecorder(QWidget *parent) :
     QDialog(parent),
+    time(24,59,59,59),
     record(NULL),
     setup(NULL),
     outdev(NULL),
@@ -216,20 +217,6 @@ AeonWaveRecorder::startOutput()
             indev = aaxDriverOpenByName(dev, AAX_MODE_READ);
             if (indev)
             {
-                if (agc_enabled)
-                {
-                    aaxFilter filter;
-
-                    filter = aaxMixerGetFilter(indev, AAX_VOLUME_FILTER);
-                    if (filter)
-                    {
-                        aaxFilterSetParam(filter, AAX_AGC_RESPONSE_RATE,
-                                                  AAX_LINEAR, 1.5f);
-                        _TEST(aaxMixerSetFilter(indev, filter));
-                        _TEST(aaxFilterDestroy(filter));
-                    }
-                }
-
                 _TEST(aaxMixerRegisterSensor(outdev, indev));
 
                 /** must be called after aaxMixerRegisterSensor */
@@ -241,8 +228,18 @@ AeonWaveRecorder::startOutput()
                             ).arg(aaxGetErrorString(aaxGetErrorNo())));
                     stopOutput();
                 }
-                else {
+                else
+                {
+                    aaxFilter flt = aaxMixerGetFilter(indev, AAX_VOLUME_FILTER);
+                    if (agc_enabled) {
+                       _TEST(aaxFilterSetParam(flt, AAX_AGC_RESPONSE_RATE,
+                                                    AAX_LINEAR, 1.5f));
+                    }
+                    _TEST(aaxMixerSetFilter(indev, flt));
+                    _TEST(aaxFilterDestroy(flt));
+
                     _TEST(aaxSensorSetState(indev, AAX_CAPTURING));
+                    in_freq = aaxMixerGetSetup(outdev, AAX_FREQUENCY);
                 }
             }
             else {
@@ -306,10 +303,21 @@ AeonWaveRecorder::startRecording()
                          ).arg(aaxGetErrorString(aaxGetErrorNo())));
                    return;
                 }
-                _TEST(aaxMixerSetState(file, AAX_PLAYING));
 
-                if (!record) record = new Record;
-                record->show();
+                 Record record(this);
+                 if (record.exec() == QDialog::Accepted)
+                 {
+                    int hour = time.hour();
+                    int minutes = time.minute();
+                    int seconds = time.second();
+
+                    QString current = QString("%1:%2:%3").arg(hour,2,'f',0,'0').arg(minutes,2,'f',0,'0').arg(seconds,2,'f',0,'0');
+                    ui->timeTotal->setText(current);
+
+                    max_samples = in_freq*(seconds + 60*minutes + 60*60*hour);
+                 }
+
+                _TEST(aaxMixerSetState(file, AAX_PLAYING));
                 recording = true;
             }
         }

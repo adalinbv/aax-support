@@ -32,7 +32,8 @@ Record::Record(QWidget *parent)
     _rec = new Ui_Record;
     _rec->setupUi(this);
 
-    show();
+    connect(_rec->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(_rec->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 Record::~Record()
@@ -40,15 +41,16 @@ Record::~Record()
     delete _rec;
 }
 
-void
-Record::show()
+int
+Record::exec()
 {
-    QDialog::show();
+    return QDialog::exec();
 }
 
 void
 Record::accept()
 {
+    _mw->time = _rec->timeEdit->time();
     QDialog::accept();
 }
 

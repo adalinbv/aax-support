@@ -25,6 +25,7 @@
 #include <QtGui/QDialog>
 #include <QStringList>
 #include <QTimer>
+#include <QTime>
 
 #include <SimpleGlob.h>
 #include <aax/aax.h>
@@ -45,6 +46,8 @@ public:
     ~AeonWaveRecorder();
 
     Ui_AudioRecorder *ui;
+
+    QTime time;
     Record *record;
     Setup *setup;
 

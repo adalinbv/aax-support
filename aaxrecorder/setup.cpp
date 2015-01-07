@@ -49,7 +49,6 @@ Setup::~Setup()
 void
 Setup::show()
 {
-    _mw->freeDevices();
     displayUiConfig();
     QDialog::show();
 }
@@ -97,6 +96,7 @@ Setup::accept()
         _mw->idevname_str = str;
     }
 
+    _mw->freeDevices();
     displayUiConfig();
     QDialog::accept();
 }
