@@ -194,10 +194,12 @@ AeonWaveRecorder::startOutput()
     outdev = aaxDriverOpenByName(dev, AAX_MODE_WRITE_STEREO);
     if (outdev)
     {
+#if 0
         aaxFilter flt = aaxMixerGetFilter(outdev, AAX_VOLUME_FILTER);
         float vol = _MIN(aaxFilterGetParam(flt, AAX_GAIN, AAX_LINEAR), 1.0f);
         ui->volume->setValue(rintf(vol*100));
         _TEST(aaxFilterDestroy(flt));
+#endif
 
         int res = aaxMixerSetState(outdev, AAX_INITIALIZED);
         if (!res)
@@ -231,6 +233,9 @@ AeonWaveRecorder::startOutput()
                 else
                 {
                     aaxFilter flt = aaxMixerGetFilter(indev, AAX_VOLUME_FILTER);
+
+                    float val = ui->volume->value()/100.0f;
+                    _TEST(aaxFilterSetParam(flt, AAX_GAIN, AAX_LINEAR, (float)val/100.0f));
                     if (agc_enabled) {
                        _TEST(aaxFilterSetParam(flt, AAX_AGC_RESPONSE_RATE,
                                                     AAX_LINEAR, 1.5f));
@@ -352,10 +357,13 @@ AeonWaveRecorder::togglePause()
 void
 AeonWaveRecorder::volumeChanged(int val)
 {
-    aaxFilter flt = aaxMixerGetFilter(indev, AAX_VOLUME_FILTER);
-    _TEST(aaxFilterSetParam(flt, AAX_GAIN, AAX_LINEAR, (float)val/100.0f));
-    _TEST(aaxMixerSetFilter(indev, flt));
-    _TEST(aaxFilterDestroy(flt));
+    if (indev)
+    {
+        aaxFilter flt = aaxMixerGetFilter(indev, AAX_VOLUME_FILTER);
+        _TEST(aaxFilterSetParam(flt, AAX_GAIN, AAX_LINEAR, (float)val/100.0f));
+        _TEST(aaxMixerSetFilter(indev, flt));
+        _TEST(aaxFilterDestroy(flt));
+    }
 }
 
 void
