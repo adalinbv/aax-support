@@ -31,7 +31,7 @@ TARGET_LINK_LIBRARIES( aaxrecorder ${QT_LIBRARIES} ${AAX_LIBRARY})
 
 INSTALL(TARGETS aaxrecorder
         RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-        COMPONENT Applications
+        COMPONENT Media
 )
 
 IF(WIN32)
@@ -65,9 +65,9 @@ ENDIF()
 IF(UNIX AND NOT APPLE)
   INSTALL(FILES ${CMAKE_SOURCE_DIR}/admin/aaxrecorder.desktop
           DESTINATION share/applications
-          COMPONENT Applications)
+          COMPONENT Media)
   INSTALL(FILES ${CMAKE_SOURCE_DIR}/admin/aaxrecorder.xpm
           DESTINATION share/pixmaps
-          COMPONENT Applications)
+          COMPONENT Media)
 ENDIF(UNIX AND NOT APPLE)
 

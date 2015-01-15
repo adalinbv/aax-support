@@ -32,7 +32,7 @@ TARGET_LINK_LIBRARIES( aaxconfig ${QT_LIBRARIES} ${XML_LIBRARY} ${AAX_LIBRARY})
 
 INSTALL(TARGETS aaxconfig
         RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-        COMPONENT Applications
+        COMPONENT Support
 )
 
 IF(WIN32)
@@ -66,9 +66,9 @@ ENDIF()
 IF(UNIX AND NOT APPLE)
   INSTALL(FILES ${CMAKE_SOURCE_DIR}/admin/aaxconfig.desktop
           DESTINATION share/applications
-          COMPONENT Applications)
+          COMPONENT Support)
   INSTALL(FILES ${CMAKE_SOURCE_DIR}/admin/aaxconfig.xpm
           DESTINATION share/pixmaps
-          COMPONENT Applications)
+          COMPONENT Support)
 ENDIF(UNIX AND NOT APPLE)
 
