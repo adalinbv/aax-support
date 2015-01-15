@@ -137,7 +137,7 @@ AeonWavePlayer::tick()
        }
    }
 
-   if (!playing && (autoplay || new_file)) {
+   if (!playing && (autoplay && new_file)) {
        startInput();
    }
 
@@ -348,8 +348,12 @@ AeonWavePlayer::startInput()
         _TEST(aaxSensorSetState(indev, AAX_CAPTURING));
         paused = false;
     }
-    else if (playing && !indir.isEmpty()) {
+    else if (playing && !indir.isEmpty())
+    {
         stopInput();
+        if (autoplay) {
+            startInput();
+        }
     }
 }
 
