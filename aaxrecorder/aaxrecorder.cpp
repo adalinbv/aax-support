@@ -145,16 +145,19 @@ AeonWaveRecorder::tick()
         QString current = QString("%1:%2:%3").arg(hour,2,'f',0,'0').arg(minutes,2,'f',0,'0').arg(seconds,2,'f',0,'0');
         ui->timeCurrent->setText(current);
 
-        seconds = ceilf((max_samples-pos)/in_freq);
-        hour = floorf(seconds/(60.0f*60.0f));
-        seconds -= hour*60.0f*60.0f;
-        minutes = floorf(seconds/60.0f);
-        seconds -= minutes*60.0f;
+        if (max_samples > 0)
+        {
+            seconds = ceilf((max_samples-pos)/in_freq);
+            hour = floorf(seconds/(60.0f*60.0f));
+            seconds -= hour*60.0f*60.0f;
+            minutes = floorf(seconds/60.0f);
+            seconds -= minutes*60.0f;
 
-        QString remain = QString("%1:%2:%3").arg(hour,2,'f',0,'0').arg(minutes,2,'f',0,'0').arg(seconds,2,'f',0,'0');
-        ui->timeRemaining->setText(remain);
+            QString remain = QString("%1:%2:%3").arg(hour,2,'f',0,'0').arg(minutes,2,'f',0,'0').arg(seconds,2,'f',0,'0');
+            ui->timeRemaining->setText(remain);
 
-        ui->pctRecording->setValue(100*pos/max_samples);
+            ui->pctRecording->setValue(100*pos/max_samples);
+        }
     }
 
     static const double MAX = 8388608;
@@ -219,6 +222,8 @@ AeonWaveRecorder::startOutput()
             indev = aaxDriverOpenByName(dev, AAX_MODE_READ);
             if (indev)
             {
+                idevname_str = aaxDriverGetSetup(indev, AAX_RENDERER_STRING);
+
                 _TEST(aaxMixerRegisterSensor(outdev, indev));
 
                 /** must be called after aaxMixerRegisterSensor */
@@ -235,7 +240,7 @@ AeonWaveRecorder::startOutput()
                     aaxFilter flt = aaxMixerGetFilter(indev, AAX_VOLUME_FILTER);
 
                     float val = ui->volume->value()/100.0f;
-                    _TEST(aaxFilterSetParam(flt, AAX_GAIN, AAX_LINEAR, (float)val/100.0f));
+                    _TEST(aaxFilterSetParam(flt, AAX_GAIN, AAX_LINEAR, val));
                     if (agc_enabled) {
                        _TEST(aaxFilterSetParam(flt, AAX_AGC_RESPONSE_RATE,
                                                     AAX_LINEAR, 1.5f));
