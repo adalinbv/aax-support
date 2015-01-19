@@ -22,8 +22,10 @@
 #ifndef AAXPLAYER_H
 #define AAXPLAYER_H
 
+#include <QtNetwork/QNetworkAccessManager>
 #include <QtGui/QDialog>
 #include <QStringList>
+#include <QTextStream>
 #include <QTimer>
 
 #include <SimpleGlob.h>
@@ -69,6 +71,7 @@ public:
 
 private:
     QTimer timer;
+    QNetworkAccessManager manager;
 
     QStringList indir;		// all files from a subdir
     int indir_pos;
@@ -83,6 +86,9 @@ private:
     bool new_file;
 
     void alert(QString msg);
+    void readM3U(QStringList &list, QString file, bool utf8 = false);
+    void readM3U(QStringList &list, QTextStream& data, bool utf8 = false);
+    void readPLS(QStringList &list, QString file, bool utf8 = false);
 
 private slots:
     void setupHardware();
@@ -91,8 +97,8 @@ private slots:
     void connectRemote();
     void loadFile();
     void loadDirectory();
+    void loadPlaylist();
     void showSongInfo();
-//  void saveTo();
     void exit();
 
     void stopInput();

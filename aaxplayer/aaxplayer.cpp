@@ -27,8 +27,12 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkReply>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QTextStream>
+#include <QEventLoop>
 #include <QDir>
 
 #include <copyright.h>
@@ -422,22 +426,50 @@ AeonWavePlayer::connectRemote()
 {
     Remote remote(this);
     remote.exec();
+
+    indir.clear();
+    indir_pos = 0;
+    if (infile.endsWith(".m3u", Qt::CaseInsensitive))
+    {
+        QUrl url = QUrl::fromUserInput(infile);
+        QNetworkReply *reply = manager.get(QNetworkRequest(url));
+
+        QObject::connect(reply, SIGNAL(readyRead()),this,SLOT(loadPlaylist()));
+    }
+    else if (infile.endsWith(".m3u8", Qt::CaseInsensitive))
+    {
+        readM3U(indir, infile, true);
+        new_file = true;
+        infile = QString();
+    }
 }
 
 void
 AeonWavePlayer::loadFile()
 {
+    QString filter = wildcards;
+    filter += ";;";
+    filter += "*.m3u *.m3u8";
     QString fileName = QFileDialog::getOpenFileName(this,
                                     tr("Open Audio Input File"),
-                                    infiles_path, wildcards);
+                                    infiles_path, filter);
     if (!fileName.isNull())
     {
-        infile = fileName;
-        size_t fpos = infile.lastIndexOf('/');
-        infiles_path = infile.mid(0, fpos);
         indir.clear();
         indir_pos = 0;
         new_file = true;
+
+        if (fileName.endsWith(".m3u", Qt::CaseInsensitive)) {
+            readM3U(indir, fileName);
+        } else if (fileName.endsWith(".m3u8", Qt::CaseInsensitive)) {
+            readM3U(indir, fileName, true);
+        }
+        else
+        {
+            infile = fileName;
+            size_t fpos = infile.lastIndexOf('/');
+            infiles_path = infile.mid(0, fpos);
+        }
     }
 }
 
@@ -474,7 +506,14 @@ AeonWavePlayer::loadDirectory()
         QStringList list;
         for (int n=0; n<glob.FileCount(); n++)
         {
-            list.append(glob.File(n));
+            QString file = glob.File(n);
+            if (file.endsWith(".m3u", Qt::CaseInsensitive)) {
+                readM3U(list, file);
+            } else if (file.endsWith(".m3u8", Qt::CaseInsensitive)) {
+                readM3U(list, file, true);
+            } else {
+                list.append(file);
+            }
         }
 
         // randomize the list
@@ -493,36 +532,17 @@ AeonWavePlayer::loadDirectory()
     }
 }
 
-#if 0
 void
-AeonWavePlayer::saveTo()
+AeonWavePlayer::loadPlaylist()
 {
-    aaxConfig cfgo;
+    QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
 
-    QString fileName = QFileDialog::getSaveFileName(this,
-                                          tr("Open Audio Output File"),
-                                          outfiles_path, filter);
-    if (!fileName.isNull())
-    {
-        QFileInfo f(fileName);
+    QTextStream tstream(reply);
+    readM3U(indir, tstream);
 
-        if (f.suffix().isEmpty()) {
-           fileName += ".wav";
-        }
-        outfiles_path = f.absolutePath();
-
-        QString odevname_str = "AeonWave on Audio Files: "+fileName;
-        std::string d = std::string(odevname_str.toUtf8().constData());
-        const char *dev = d.empty() ? NULL : d.c_str();
-
-        file = aaxDriverOpenByName(dev, AAX_MODE_READ);
-        if (file)
-        {
-            _TEST(aaxMixerSetState(file, AAX_INITIALIZED));
-        }
-    }
+    new_file = true;
+    infile = QString();
 }
-#endif
 
 void
 AeonWavePlayer::alert(QString msg)
@@ -535,7 +555,43 @@ AeonWavePlayer::alert(QString msg)
     {
         msgBox.setText(msg);
         msgBox.exec();
-   }
+    }
+}
+
+void
+AeonWavePlayer::readM3U(QStringList& list, QString fname, bool utf8)
+{
+    indir.clear();
+
+    QFile file(fname);
+    file.open(QIODevice::ReadOnly|QIODevice::Text);
+
+    QTextStream tstream(&file);
+    readM3U(list, tstream, utf8);
+}
+
+void
+AeonWavePlayer::readM3U(QStringList& list, QTextStream &tstream, bool utf8)
+{
+    if (utf8) {
+        tstream.setCodec("UTF-8");
+    }
+    while(!tstream.atEnd())
+    {
+        QString line = tstream.readLine();
+        if (line.at(0) != '#') {
+           list.append(line);
+{
+   std::string s = line.toUtf8().constData();
+printf(">> %s\n", s.c_str());
+}
+        }
+    }
+}
+
+void
+AeonWavePlayer::readPLS(QStringList& list, QString fname, bool utf8)
+{
 }
 
 void
