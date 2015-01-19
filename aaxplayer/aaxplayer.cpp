@@ -36,6 +36,7 @@
 
 #include "aaxplayer_ui.h"
 #include "aaxplayer.h"
+#include "remote_ui.h"
 #include "setup.h"
 
 #undef NDEBUG
@@ -94,6 +95,7 @@ AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
     setWildcards();
     startOutput();
 
+    QObject::connect(ui->actionConnect, SIGNAL(triggered()), this, SLOT(connectRemote()));
     QObject::connect(ui->actionOpenDir, SIGNAL(triggered()), this, SLOT(loadDirectory()));
     QObject::connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(loadFile()));
     QObject::connect(ui->actionHardware, SIGNAL(triggered()), this, SLOT(setupHardware()));
@@ -416,6 +418,13 @@ AeonWavePlayer::setWildcards()
 }
 
 void
+AeonWavePlayer::connectRemote()
+{
+    Remote remote(this);
+    remote.exec();
+}
+
+void
 AeonWavePlayer::loadFile()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
@@ -635,6 +644,9 @@ AeonWavePlayer::showSongInfo()
 
     s = aaxDriverGetSetup(indev, AAX_SONG_COPYRIGHT_STRING);
     msg += tr("<tr><td>Copyright:</td><td>%1</td></tr>").arg(s ? s : "-");
+
+    s = aaxDriverGetSetup(indev, AAX_WEBSITE_STRING);
+    msg += tr("<tr><td>Website:</td><td>%1</td></tr>").arg(s ? s : "-");
     
     msgBox.setText(msg);
     msgBox.exec();

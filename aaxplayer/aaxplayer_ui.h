@@ -34,6 +34,7 @@ public:
     QAction *actionLicense;
     QAction *actionOpenDir;
     QAction *actionInfo;
+    QAction *actionConnect;
     QMenuBar *menubar;
     QMenu *menuFile;
     QMenu *menuHelp;
@@ -73,6 +74,8 @@ public:
         actionOpenDir->setObjectName(QString::fromUtf8("actionOpenDir"));
         actionInfo = new QAction(AudioPlayer);
         actionInfo->setObjectName(QString::fromUtf8("actionInfo"));
+        actionConnect = new QAction(AudioPlayer);
+        actionConnect->setObjectName(QString::fromUtf8("actionConnect"));
         menubar = new QMenuBar(AudioPlayer);
         menubar->setObjectName(QString::fromUtf8("menubar"));
         menubar->setGeometry(QRect(0, 0, 181, 25));
@@ -168,6 +171,7 @@ public:
         menubar->addAction(menuFile->menuAction());
         menubar->addAction(menuView->menuAction());
         menubar->addAction(menuHelp->menuAction());
+        menuFile->addAction(actionConnect);
         menuFile->addAction(actionOpenDir);
         menuFile->addAction(actionOpen);
         menuFile->addAction(actionHardware);
@@ -210,6 +214,8 @@ public:
         actionOpenDir->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+D", 0, QApplication::UnicodeUTF8));
         actionInfo->setText(QApplication::translate("AudioPlayer", "Song Info", 0, QApplication::UnicodeUTF8));
         actionInfo->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+I", 0, QApplication::UnicodeUTF8));
+        actionConnect->setText(QApplication::translate("AudioPlayer", "Open Stream", 0, QApplication::UnicodeUTF8));
+        actionConnect->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+S", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("AudioPlayer", "File", 0, QApplication::UnicodeUTF8));
         menuHelp->setTitle(QApplication::translate("AudioPlayer", "Help", 0, QApplication::UnicodeUTF8));
         menuView->setTitle(QApplication::translate("AudioPlayer", "View", 0, QApplication::UnicodeUTF8));

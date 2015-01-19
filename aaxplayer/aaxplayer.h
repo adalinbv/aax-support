@@ -30,6 +30,7 @@
 #include <aax/aax.h>
 
 #include "setup.h"
+#include "remote.h"
 
 #define _MINMAX(a,b,c)  (((a)>(c)) ? (c) : (((a)<(b)) ? (b) : (a)))
 
@@ -47,6 +48,7 @@ public:
     Setup *setup;
 
     /* device list */
+    QString infile;		// single file or url
     QString odevname_str;
     struct device_t odevices;
 
@@ -71,7 +73,6 @@ private:
     QStringList indir;		// all files from a subdir
     int indir_pos;
 
-    QString infile;		// or just one fingle file
     QString outfiles_path;
     QString infiles_path;
     QString wildcards;
@@ -87,6 +88,7 @@ private slots:
     void setupHardware();
     void viewAbout();
     void viewLicense();
+    void connectRemote();
     void loadFile();
     void loadDirectory();
     void showSongInfo();

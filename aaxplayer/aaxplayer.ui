@@ -41,6 +41,7 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionConnect"/>
     <addaction name="actionOpenDir"/>
     <addaction name="actionOpen"/>
     <addaction name="actionHardware"/>
@@ -428,6 +429,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="actionConnect">
+   <property name="text">
+    <string>Open Stream</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
  </widget>
