@@ -39,7 +39,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Type the remote URL of the streaming server to connect to:</string>
+    <string>Type the URL of the remote streaming server to connect to. Only mp3 streams over http are supported.</string>
    </property>
    <property name="wordWrap">
     <bool>true</bool>

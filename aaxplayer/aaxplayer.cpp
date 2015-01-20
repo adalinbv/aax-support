@@ -162,16 +162,22 @@ AeonWavePlayer::tick()
        QString current = QString("%1:%2:%3").arg(hour,2,'f',0,'0').arg(minutes,2,'f',0,'0').arg(seconds,2,'f',0,'0');
        ui->timeCurrent->setText(current);
 
-       seconds = ceilf((max_samples-pos)/in_freq);
-       hour = floorf(seconds/(60.0f*60.0f));
-       seconds -= hour*60.0f*60.0f;
-       minutes = floorf(seconds/60.0f);
-       seconds -= minutes*60.0f;
+       if (max_samples == UINT_MAX) {
+          ui->timeRemaining->setText(current);
+       }
+       else
+       {
+           seconds = ceilf((max_samples-pos)/in_freq);
+           hour = floorf(seconds/(60.0f*60.0f));
+           seconds -= hour*60.0f*60.0f;
+           minutes = floorf(seconds/60.0f);
+           seconds -= minutes*60.0f;
 
-       QString remain = QString("%1:%2:%3").arg(hour,2,'f',0,'0').arg(minutes,2,'f',0,'0').arg(seconds,2,'f',0,'0');
-       ui->timeRemaining->setText(remain);
+           QString remain = QString("%1:%2:%3").arg(hour,2,'f',0,'0').arg(minutes,2,'f',0,'0').arg(seconds,2,'f',0,'0');
+           ui->timeRemaining->setText(remain);
 
-       ui->pctPlaying->setValue(100*pos/max_samples);
+           ui->pctPlaying->setValue(100*pos/max_samples);
+       }
 
        static const double MAX = 8388608;
        static const double MAXDIV = 1.0/MAX;
@@ -295,16 +301,22 @@ AeonWavePlayer::startInput()
 
             in_freq = (float)aaxMixerGetSetup(indev, AAX_FREQUENCY);
             max_samples = (float)aaxMixerGetSetup(indev, AAX_SAMPLES_MAX);
+            if (max_samples < UINT_MAX)
+            {
+                float hour, minutes, seconds;
+                seconds = max_samples/in_freq;
+                hour = floorf(seconds/(60.0f*60.0f));
+                seconds -= hour*60.0f*60.0f;
+                minutes = floorf(seconds/60.0f);
+                seconds -= minutes*60.0f;
 
-            float hour, minutes, seconds;
-            seconds = max_samples/in_freq;
-            hour = floorf(seconds/(60.0f*60.0f));
-            seconds -= hour*60.0f*60.0f;
-            minutes = floorf(seconds/60.0f);
-            seconds -= minutes*60.0f;
-
-            QString total = QString("%1:%2:%3").arg(hour,2,'f',0,'0').arg(minutes,2,'f',0,'0').arg(seconds,2,'f',0,'0');
-            ui->timeTotal->setText(total);
+                QString total = QString("%1:%2:%3").arg(hour,2,'f',0,'0').arg(minutes,2,'f',0,'0').arg(seconds,2,'f',0,'0');
+                ui->timeTotal->setText(total);
+            }
+            else {
+                ui->timeTotal->setText("00:00:00");
+            }
+            ui->pctPlaying->setValue(0);
 
             QString title = aaxDriverGetSetup(indev, AAX_TRACK_TITLE_STRING);
             QString artist = aaxDriverGetSetup(indev, AAX_MUSIC_PERFORMER_STRING);
@@ -444,8 +456,7 @@ void
 AeonWavePlayer::loadFile()
 {
     QString filter = wildcards;
-    filter += ";;";
-    filter += "*.m3u *.m3u8 *.pls";
+    filter.append(";;*.m3u *.m3u8 *.pls");
     QString fileName = QFileDialog::getOpenFileName(this,
                                     tr("Open Audio Input File"),
                                     infiles_path, filter);

@@ -54,7 +54,7 @@ public:
     void retranslateUi(QDialog *Connect)
     {
         Connect->setWindowTitle(QApplication::translate("Remote", "Remote Connect", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("Remote", "Type the remote URL of the streaming server to connect to:", 0, QApplication::UnicodeUTF8));
+        label->setText(QApplication::translate("Remote", "Type the URL of the remote streaming server to connect to. Only mp3 streams over http are supported.", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };
