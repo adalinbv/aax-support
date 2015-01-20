@@ -86,9 +86,10 @@ private:
     bool new_file;
 
     void alert(QString msg);
-    void readM3U(QStringList &list, QString file, bool utf8 = false);
+    bool setFileOrPlaylist(QStringList& list);
+    bool setFileOrPlaylist(QStringList& list, QTextStream& tstream);
     void readM3U(QStringList &list, QTextStream& data, bool utf8 = false);
-    void readPLS(QStringList &list, QString file, bool utf8 = false);
+    void readPLS(QStringList &list, QTextStream& data, bool utf8 = false);
 
 private slots:
     void setupHardware();

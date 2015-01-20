@@ -429,18 +429,14 @@ AeonWavePlayer::connectRemote()
 
     indir.clear();
     indir_pos = 0;
-    if (infile.endsWith(".m3u", Qt::CaseInsensitive))
+    if (infile.endsWith(".m3u", Qt::CaseInsensitive) ||
+        infile.endsWith(".m3u8", Qt::CaseInsensitive) ||
+        infile.endsWith(".pls", Qt::CaseInsensitive))
     {
         QUrl url = QUrl::fromUserInput(infile);
         QNetworkReply *reply = manager.get(QNetworkRequest(url));
 
         QObject::connect(reply, SIGNAL(readyRead()),this,SLOT(loadPlaylist()));
-    }
-    else if (infile.endsWith(".m3u8", Qt::CaseInsensitive))
-    {
-        readM3U(indir, infile, true);
-        new_file = true;
-        infile = QString();
     }
 }
 
@@ -449,7 +445,7 @@ AeonWavePlayer::loadFile()
 {
     QString filter = wildcards;
     filter += ";;";
-    filter += "*.m3u *.m3u8";
+    filter += "*.m3u *.m3u8 *.pls";
     QString fileName = QFileDialog::getOpenFileName(this,
                                     tr("Open Audio Input File"),
                                     infiles_path, filter);
@@ -458,15 +454,9 @@ AeonWavePlayer::loadFile()
         indir.clear();
         indir_pos = 0;
         new_file = true;
-
-        if (fileName.endsWith(".m3u", Qt::CaseInsensitive)) {
-            readM3U(indir, fileName);
-        } else if (fileName.endsWith(".m3u8", Qt::CaseInsensitive)) {
-            readM3U(indir, fileName, true);
-        }
-        else
+        infile = fileName;
+        if (setFileOrPlaylist(indir) == false)
         {
-            infile = fileName;
             size_t fpos = infile.lastIndexOf('/');
             infiles_path = infile.mid(0, fpos);
         }
@@ -506,13 +496,9 @@ AeonWavePlayer::loadDirectory()
         QStringList list;
         for (int n=0; n<glob.FileCount(); n++)
         {
-            QString file = glob.File(n);
-            if (file.endsWith(".m3u", Qt::CaseInsensitive)) {
-                readM3U(list, file);
-            } else if (file.endsWith(".m3u8", Qt::CaseInsensitive)) {
-                readM3U(list, file, true);
-            } else {
-                list.append(file);
+            infile = glob.File(n);
+            if (setFileOrPlaylist(list) == false) {
+                list.append(infile);
             }
         }
 
@@ -538,10 +524,57 @@ AeonWavePlayer::loadPlaylist()
     QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
 
     QTextStream tstream(reply);
-    readM3U(indir, tstream);
+    setFileOrPlaylist(indir, tstream);
+}
 
-    new_file = true;
-    infile = QString();
+bool
+AeonWavePlayer::setFileOrPlaylist(QStringList& list, QTextStream& tstream)
+{
+    bool rv = true;
+
+    if (infile.endsWith(".m3u", Qt::CaseInsensitive))
+    {
+        readM3U(list, tstream);
+        infile = QString();
+        new_file = true;
+    }
+    else if (infile.endsWith(".m3u8", Qt::CaseInsensitive))
+    {
+        readM3U(list, tstream, true);
+        infile = QString();
+        new_file = true;
+    }
+    else if (infile.endsWith(".pls", Qt::CaseInsensitive))
+    {
+        readPLS(list, tstream);
+        infile = QString();
+        new_file = true;
+    }
+    else {
+        rv = false;
+    }
+
+    return rv;
+}
+
+bool
+AeonWavePlayer::setFileOrPlaylist(QStringList& list)
+{
+    bool rv = false;
+
+    if (infile.endsWith(".m3u", Qt::CaseInsensitive) ||
+        infile.endsWith(".m3u8", Qt::CaseInsensitive) ||
+        infile.endsWith(".pls", Qt::CaseInsensitive))
+    {
+        QFile file(infile);
+
+        file.open(QIODevice::ReadOnly|QIODevice::Text);
+        QTextStream tstream(&file);
+        rv = setFileOrPlaylist(list, tstream);
+        file.close();
+    }
+
+    return rv;
 }
 
 void
@@ -559,18 +592,6 @@ AeonWavePlayer::alert(QString msg)
 }
 
 void
-AeonWavePlayer::readM3U(QStringList& list, QString fname, bool utf8)
-{
-    indir.clear();
-
-    QFile file(fname);
-    file.open(QIODevice::ReadOnly|QIODevice::Text);
-
-    QTextStream tstream(&file);
-    readM3U(list, tstream, utf8);
-}
-
-void
 AeonWavePlayer::readM3U(QStringList& list, QTextStream &tstream, bool utf8)
 {
     if (utf8) {
@@ -579,19 +600,39 @@ AeonWavePlayer::readM3U(QStringList& list, QTextStream &tstream, bool utf8)
     while(!tstream.atEnd())
     {
         QString line = tstream.readLine();
-        if (line.at(0) != '#') {
-           list.append(line);
-{
-   std::string s = line.toUtf8().constData();
-printf(">> %s\n", s.c_str());
-}
+        if (line.at(0) != '#')
+        {
+            infile = line;
+            if (setFileOrPlaylist(list) == false) {
+                list.append(line);
+            }
         }
     }
 }
 
 void
-AeonWavePlayer::readPLS(QStringList& list, QString fname, bool utf8)
+AeonWavePlayer::readPLS(QStringList& list, QTextStream &tstream, bool utf8)
 {
+    if (utf8) {
+        tstream.setCodec("UTF-8");
+    }
+    while(!tstream.atEnd())
+    {
+        QString line = tstream.readLine();
+        if (line.startsWith("File", Qt::CaseInsensitive))
+        {
+            QStringList flist;
+
+            flist = line.split(QRegExp("\\s?=\\s?"));
+            if (flist.size() == 2)
+            {
+                infile = flist[1];
+                if (setFileOrPlaylist(list) == false) {
+                    list.append(flist[1]);
+                }
+            }
+        }
+    }
 }
 
 void
