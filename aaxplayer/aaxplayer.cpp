@@ -301,7 +301,11 @@ AeonWavePlayer::startInput()
 
             in_freq = (float)aaxMixerGetSetup(indev, AAX_FREQUENCY);
             max_samples = (float)aaxMixerGetSetup(indev, AAX_SAMPLES_MAX);
-            if (max_samples < UINT_MAX)
+
+            if (max_samples == UINT_MAX) {
+                ui->timeTotal->setText("00:00:00");
+            }
+            else
             {
                 float hour, minutes, seconds;
                 seconds = max_samples/in_freq;
@@ -312,9 +316,6 @@ AeonWavePlayer::startInput()
 
                 QString total = QString("%1:%2:%3").arg(hour,2,'f',0,'0').arg(minutes,2,'f',0,'0').arg(seconds,2,'f',0,'0');
                 ui->timeTotal->setText(total);
-            }
-            else {
-                ui->timeTotal->setText("00:00:00");
             }
             ui->pctPlaying->setValue(0);
 
