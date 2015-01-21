@@ -162,7 +162,7 @@ AeonWavePlayer::tick()
        QString current = QString("%1:%2:%3").arg(hour,2,'f',0,'0').arg(minutes,2,'f',0,'0').arg(seconds,2,'f',0,'0');
        ui->timeCurrent->setText(current);
 
-       if (max_samples == UINT_MAX) {
+       if (!max_samples) {
           ui->timeRemaining->setText(current);
        }
        else
@@ -302,7 +302,7 @@ AeonWavePlayer::startInput()
             in_freq = (float)aaxMixerGetSetup(indev, AAX_FREQUENCY);
             max_samples = (float)aaxMixerGetSetup(indev, AAX_SAMPLES_MAX);
 
-            if (max_samples == UINT_MAX) {
+            if (!max_samples) {
                 ui->timeTotal->setText("00:00:00");
             }
             else
