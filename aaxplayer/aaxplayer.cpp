@@ -25,6 +25,7 @@
 
 #include <math.h>
 #include <stdlib.h>
+#include <time.h>	// time()
 #include <assert.h>
 
 #include <QtNetwork/QNetworkRequest>
@@ -775,7 +776,7 @@ AeonWavePlayer::viewAbout()
              "all played at the same volume level when Auto Gain Control "
              "(AGC) is selected.<p>"
              "<sub>This softare makes use of: AeonWave 2.5+, Qt 4.7+</sub>"
-            ).arg(AAXCONFIG_MAJOR_VERSION).arg(AAXCONFIG_MINOR_VERSION).arg(aaxGetVersionString(outdev)));
+            ).arg(AAXSUPPORT_MAJOR_VERSION).arg(AAXSUPPORT_MINOR_VERSION).arg(aaxGetVersionString(outdev)));
 }
 
 void
