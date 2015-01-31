@@ -84,6 +84,7 @@ enum SG_Error {
 // on Windows we want to use MBCS aware string functions and mimic the
 // Unix glob functionality. On Unix we just use glob.
 #ifdef _WIN32
+# include <windows.h>
 # include <mbstring.h>
 # define sg_strchr ::_mbschr
 # define sg_strrchr ::_mbsrchr

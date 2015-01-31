@@ -10,12 +10,15 @@
 #
 # Created by Erik Hofman.
 
+set(MYENV "PROGRAMFILES(X86)") 
+
 FIND_PATH(AAX_INCLUDE_DIR aax.h
   HINTS
   $ENV{AAXDIR}
   $ENV{ProgramFiles}/aax
   $ENV{ProgramFiles}/AeonWave
   $ENV{ProgramFiles}/Adalin/AeonWave
+  "$ENV{${MYENV}}/Adalin/AeonWave"
   PATH_SUFFIXES include
   PATHS
   ~/Library/Frameworks
@@ -32,6 +35,7 @@ FIND_LIBRARY(AAX_LIBRARY
   $ENV{ProgramFiles}/AAX
   $ENV{ProgramFiles}/AeonWave
   $ENV{ProgramFiles}/Adalin/AeonWave
+  "$ENV{${MYENV}}/Adalin/AeonWave"
   PATH_SUFFIXES bin lib lib/${CMAKE_LIBRARY_ARCHITECTURE} lib64 libs64 libs libs/Win32 libs/Win64
   PATHS
   ~/Library/Frameworks
