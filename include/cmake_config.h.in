@@ -1,3 +1,13 @@
+
+#if defined(WIN32)
+# ifndef NDEBUG
+#  pragma comment(linker, "/SUBSYSTEM:CONSOLE")
+# else
+#  pragma comment(linker, "/SUBSYSTEM:WINDOWS /NODEFAULTLIB:msvcrt.lib /entry:mainCRTStartup")
+#  define WIN32_LEAN_AND_MEAN
+# endif
+#endif
+
 /* versioning */
 #cmakedefine AAXSUPPORT_MAJOR_VERSION @AAXSUPPORT_MAJOR_VERSION@
 #cmakedefine AAXSUPPORT_MINOR_VERSION @AAXSUPPORT_MINOR_VERSION@
