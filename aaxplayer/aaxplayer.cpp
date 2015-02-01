@@ -65,7 +65,7 @@ AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
     file(NULL),
     bitrate(-1),
     in_freq(44100.0f),
-    agc_enabled(true),
+    agc_enabled(false),
     autoplay(false),
     indir_pos(0),
     wildcards("*.wav"),
