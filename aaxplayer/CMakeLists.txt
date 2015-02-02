@@ -36,11 +36,11 @@ INSTALL(TARGETS aaxplayer
 
 IF(WIN32)
   # Include Qt libraries
-  CMP_QT_LIBRARIES_INSTALL_RULES("QtCore;QtGui" "bin")
-  INSTALL_CUSTOM_LIB(${AAX_LIBRARY} "bin")
+  CMP_QT_LIBRARIES_INSTALL_RULES("QtCore;QtGui" "bin" "Media")
+  INSTALL_CUSTOM_LIB(${AAX_LIBRARY} "bin" "Media")
 
   # Used to create Start Menu shortcuts <EXEC> <LABEL>
-  SET(CPACK_PACKAGE_EXECUTABLES "aaxplayer" "AeonWave Audio Player")
+  SET(CPACK_PACKAGE_EXECUTABLES "aaxplayer;AeonWave Audio Player")
   SET(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/admin\\\\aaxplayer.xpm")
   SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\aaxplayer.exe")
 # SET(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}\\\\admin\aaxplayer.xpm")

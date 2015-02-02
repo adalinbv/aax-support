@@ -36,11 +36,11 @@ INSTALL(TARGETS aaxrecorder
 
 IF(WIN32)
   # Include Qt libraries
-  CMP_QT_LIBRARIES_INSTALL_RULES("QtCore;QtGui" "bin")
-  INSTALL_CUSTOM_LIB(${AAX_LIBRARY} "bin")
+  CMP_QT_LIBRARIES_INSTALL_RULES("QtCore;QtGui" "bin" "Media")
+  INSTALL_CUSTOM_LIB(${AAX_LIBRARY} "bin" "Media")
 
   # Used to create Start Menu shortcuts <EXEC> <LABEL>
-  SET(CPACK_PACKAGE_EXECUTABLES "aaxrecorder" "AeonWave Audio Recorder")
+  SET(CPACK_PACKAGE_EXECUTABLES "aaxrecorder;AeonWave Audio Recorder")
   SET(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/admin\\\\aaxrecorder.xpm")
   SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\aaxrecorder.exe")
 # SET(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}\\\\admin\aaxrecorder.xpm")
