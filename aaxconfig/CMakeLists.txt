@@ -38,7 +38,7 @@ INSTALL(TARGETS aaxconfig
 IF(WIN32)
   # Include Qt libraries
   CMP_QT_LIBRARIES_INSTALL_RULES("QtCore;QtGui" "bin" "Support")
-  INSTALL_CUSTOM_LIB(${AAX_LIBRARY} "bin" "Support")
+# INSTALL_CUSTOM_LIB(${AAX_LIBRARY} "bin" "Support")
 
   # Used to create Start Menu shortcuts <EXEC> <LABEL>
   SET(CPACK_PACKAGE_EXECUTABLES "aaxconfig;AeonWave Config")
