@@ -139,8 +139,11 @@ AeonWavePlayer::tick()
 {
    if (playing)
    {
-       if (aaxMixerGetState(indev) == AAX_PROCESSED) {
+       if (aaxMixerGetState(indev) == AAX_PROCESSED)
+       {
+           bool nf = new_file;
            stopInput();
+           new_file = nf;
        }
    }
 
@@ -370,7 +373,9 @@ AeonWavePlayer::startInput()
     }
     else if (playing && !indir.isEmpty())
     {
+        bool nf = new_file;
         stopInput();
+        new_file = nf;
         if (autoplay) {
             startInput();
         }
