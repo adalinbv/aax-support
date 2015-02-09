@@ -66,10 +66,11 @@ AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
     bitrate(-1),
     in_freq(44100.0f),
     agc_enabled(false),
-    autoplay(false),
+    autoplay(true),
     indir_pos(0),
     wildcards("*.wav"),
     max_samples(0), 
+    play_pressed(false),
     playing(false),
     paused(false)
 {
@@ -144,7 +145,7 @@ AeonWavePlayer::tick()
        }
    }
 
-   if (!playing && (autoplay && new_file)) {
+   if (!playing && play_pressed && (autoplay && !indir.isEmpty())) {
        startInput();
    }
 
@@ -244,6 +245,7 @@ AeonWavePlayer::startOutput()
 void
 AeonWavePlayer::stopOutput()
 {
+    play_pressed = false;
     _TEST(aaxMixerSetState(outdev, AAX_STOPPED));
     _TEST(aaxDriverClose(outdev));
     _TEST(aaxDriverDestroy(outdev));
@@ -254,6 +256,7 @@ AeonWavePlayer::stopOutput()
 void
 AeonWavePlayer::startInput()
 {
+    play_pressed = true;
     if (!playing && (!infile.isNull() || !indir.isEmpty()))
     {
         if (!indir.isEmpty())
@@ -356,11 +359,6 @@ AeonWavePlayer::startInput()
             }
 
             playing = true;
-            if (indir.isEmpty()) {
-                new_file = false;
-            } else {
-               autoplay = true;
-            }
         }
     }
     else if (paused)
@@ -368,7 +366,7 @@ AeonWavePlayer::startInput()
         _TEST(aaxSensorSetState(indev, AAX_CAPTURING));
         paused = false;
     }
-    else if (playing && !indir.isEmpty())
+    else if (playing && !indir.isEmpty())	// Next song is requested
     {
         stopInput();
         if (autoplay) {

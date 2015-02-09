@@ -81,6 +81,7 @@ private:
     QString wildcards;
 
     size_t max_samples;
+    bool play_pressed;
     bool playing;
     bool paused;
     bool new_file;

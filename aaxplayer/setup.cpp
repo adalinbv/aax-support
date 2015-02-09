@@ -119,6 +119,9 @@ Setup::displayUiConfig()
     _cfg->OutputDevice->setCurrentIndex(_mw->odevices.current);
 
     displayUiDevicesConfig();
+
+    _cfg->enableAGC->setChecked(_mw->agc_enabled);
+    _cfg->enableAutoPlay->setChecked(_mw->autoplay);
 }
 
 void
