@@ -70,6 +70,7 @@ public:
     void freeDevices();
 
 private:
+    float elapsed;
     QTimer timer;
     QNetworkAccessManager manager;
 

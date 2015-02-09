@@ -49,9 +49,9 @@
 #ifndef NDEBUG
 # define _TEST(a)                \
 do {                            \
-   int r=(a);                   \
-   if (r!=AAX_TRUE) printf("Error at line %i: %s\n",__LINE__,aaxGetErrorString(aaxGetErrorNo())); \
-   assert(r==AAX_TRUE); \
+    int r=(a);                    \
+    if (r!=AAX_TRUE) printf("Error at line %i: %s\n",__LINE__,aaxGetErrorString(aaxGetErrorNo())); \
+    assert(r==AAX_TRUE); \
 } while(0);
 #else
 # define _TEST(a)                a
@@ -67,6 +67,7 @@ AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
     in_freq(44100.0f),
     agc_enabled(false),
     autoplay(true),
+    elapsed(0.0f),
     indir_pos(0),
     wildcards("*.wav"),
     max_samples(0), 
@@ -138,69 +139,99 @@ AeonWavePlayer::~AeonWavePlayer()
 void
 AeonWavePlayer::tick()
 {
-   if (playing)
-   {
-       if (aaxMixerGetState(indev) == AAX_PROCESSED) {
-           stopInput();
-       }
-   }
+    elapsed += 0.1f;
 
-   if (!playing && play_pressed && (autoplay && !indir.isEmpty())) {
-       startInput();
-   }
+    if (playing)
+    {
+        if (aaxMixerGetState(indev) == AAX_PROCESSED) {
+            stopInput();
+        }
+    }
 
-   if (playing)
-   {
-       float hour, minutes, seconds, pos;
+    if (!playing && play_pressed && (autoplay && !indir.isEmpty())) {
+        startInput();
+    }
 
-       pos = (float)aaxSensorGetOffset(indev, AAX_SAMPLES);
+    if (playing)
+    {
+        float hour, minutes, seconds, pos;
 
-       seconds = floorf(pos/in_freq);
-       hour = floorf(seconds/(60.0f*60.0f));
-       seconds -= hour*60.0f*60.0f;
-       minutes = floorf(seconds/60.0f);
-       seconds -= minutes*60.0f;
+        pos = (float)aaxSensorGetOffset(indev, AAX_SAMPLES);
 
-       QString current = QString("%1:%2:%3").arg(hour,2,'f',0,'0').arg(minutes,2,'f',0,'0').arg(seconds,2,'f',0,'0');
-       ui->timeCurrent->setText(current);
+        seconds = floorf(pos/in_freq);
+        hour = floorf(seconds/(60.0f*60.0f));
+        seconds -= hour*60.0f*60.0f;
+        minutes = floorf(seconds/60.0f);
+        seconds -= minutes*60.0f;
 
-       if (!max_samples) {
-          ui->timeRemaining->setText(current);
-       }
-       else
-       {
-           seconds = ceilf((max_samples-pos)/in_freq);
-           hour = floorf(seconds/(60.0f*60.0f));
-           seconds -= hour*60.0f*60.0f;
-           minutes = floorf(seconds/60.0f);
-           seconds -= minutes*60.0f;
+        QString current = QString("%1:%2:%3").arg(hour,2,'f',0,'0').arg(minutes,2,'f',0,'0').arg(seconds,2,'f',0,'0');
+        ui->timeCurrent->setText(current);
 
-           QString remain = QString("%1:%2:%3").arg(hour,2,'f',0,'0').arg(minutes,2,'f',0,'0').arg(seconds,2,'f',0,'0');
-           ui->timeRemaining->setText(remain);
+        if (!max_samples) {
+            ui->timeRemaining->setText(current);
+        }
+        else
+        {
+            seconds = ceilf((max_samples-pos)/in_freq);
+            hour = floorf(seconds/(60.0f*60.0f));
+            seconds -= hour*60.0f*60.0f;
+            minutes = floorf(seconds/60.0f);
+            seconds -= minutes*60.0f;
 
-           ui->pctPlaying->setValue(100*pos/max_samples);
-       }
+            QString remain = QString("%1:%2:%3").arg(hour,2,'f',0,'0').arg(minutes,2,'f',0,'0').arg(seconds,2,'f',0,'0');
+            ui->timeRemaining->setText(remain);
 
-       static const double MAX = 8388608;
-       static const double MAXDIV = 1.0/MAX;
-       static const double REFERENCE = 256;
-       static const double MIN_DB = 10*log10(1.0/REFERENCE);
-       static const double MAX_DB = 0;
-       float dB, vu[2];
-       for (int track=0; track<2; track++)
-       {
-           enum aaxSetupType e1 = aaxSetupType(AAX_AVERAGE_VALUE+track);
-           int ival;
+            ui->pctPlaying->setValue(100*pos/max_samples);
+        }
 
-           ival = aaxMixerGetSetup(outdev, e1);
-           dB = (ival > 0) ? 10*log10(ival*MAXDIV) : -1000000.0;
-           vu[track] = _MINMAX(100*(dB-MIN_DB)/(MAX_DB-MIN_DB), 0, 99);
-       }
-       ui->VUleft->setValue(vu[0]);
-       ui->VUright->setValue(vu[1]);
+        static const double MAX = 8388608;
+        static const double MAXDIV = 1.0/MAX;
+        static const double REFERENCE = 256;
+        static const double MIN_DB = 10*log10(1.0/REFERENCE);
+        static const double MAX_DB = 0;
+        float dB, vu[2];
+        for (int track=0; track<2; track++)
+        {
+            enum aaxSetupType e1 = aaxSetupType(AAX_AVERAGE_VALUE+track);
+            int ival;
 
-       QApplication::processEvents();
-   }
+            ival = aaxMixerGetSetup(outdev, e1);
+            dB = (ival > 0) ? 10*log10(ival*MAXDIV) : -1000000.0;
+            vu[track] = _MINMAX(100*(dB-MIN_DB)/(MAX_DB-MIN_DB), 0, 99);
+        }
+        ui->VUleft->setValue(vu[0]);
+        ui->VUright->setValue(vu[1]);
+
+        QApplication::processEvents();
+    }
+
+    if (elapsed >= 3.0f)
+    {
+        elapsed -= 3.0f;
+
+        QString title = aaxDriverGetSetup(indev, AAX_TRACK_TITLE_STRING);
+        QString artist = aaxDriverGetSetup(indev, AAX_MUSIC_PERFORMER_STRING);
+        if (!title.isEmpty() || !artist.isEmpty())
+        {
+            if (title.isEmpty()) {
+                title = artist;
+            } else if (!title.isEmpty() && !artist.isEmpty()) {
+                title = artist + " - " + title;
+            }
+        }
+
+        if (!title.isEmpty() && !title.isNull())
+        {
+            std::string t = std::string(title.toUtf8().constData());
+            setWindowTitle(QApplication::translate("AudioPlayer", t.c_str(),
+                                        0, QApplication::UnicodeUTF8));
+
+            title = QString("<html><head/><body><p>%1</p></body></html>").arg(title);
+            t = std::string(title.toUtf8().constData());
+            setToolTip(QApplication::translate("AudioPlayer", t.c_str(), 0,
+                                            QApplication::UnicodeUTF8));
+        }
+    }
 }
 
 void
@@ -233,8 +264,8 @@ AeonWavePlayer::startOutput()
         else
         {
             alert(tr("<br>Unable to initialize the output device:</br>"
-                     "<p><i><b>%1</b></i></p>"
-                  ).arg(aaxGetErrorString(aaxGetErrorNo())));
+                        "<p><i><b>%1</b></i></p>"
+                    ).arg(aaxGetErrorString(aaxGetErrorNo())));
             _TEST(aaxDriverClose(outdev));
             _TEST(aaxDriverDestroy(outdev));
             outdev = NULL;
@@ -282,7 +313,7 @@ AeonWavePlayer::startInput()
                 if (filter)
                 {
                     aaxFilterSetParam(filter, AAX_AGC_RESPONSE_RATE,
-                                              AAX_LINEAR, 1.5f);
+                                                AAX_LINEAR, 1.5f);
                     _TEST(aaxMixerSetFilter(indev, filter));
                     _TEST(aaxFilterDestroy(filter));
                 }
@@ -295,7 +326,7 @@ AeonWavePlayer::startInput()
             if (!res)
             {
                 alert(tr("<br>File initialization error:</br><br>%1</br>"
-                         "<p><i><b>%2</b></i></p>"
+                            "<p><i><b>%2</b></i></p>"
                         ).arg(infile).arg(aaxGetErrorString(aaxGetErrorNo())));
                 infile = QString();
                 stopInput();
@@ -328,9 +359,9 @@ AeonWavePlayer::startInput()
             if (!title.isEmpty() || !artist.isEmpty())
             {
                 if (title.isEmpty()) {
-                   title = artist;
+                    title = artist;
                 } else if (!title.isEmpty() && !artist.isEmpty()) {
-                   title = artist + " - " + title;
+                    title = artist + " - " + title;
                 }
             }
             else
@@ -350,7 +381,7 @@ AeonWavePlayer::startInput()
             {
                 std::string t = std::string(title.toUtf8().constData());
                 setWindowTitle(QApplication::translate("AudioPlayer", t.c_str(),
-                                             0, QApplication::UnicodeUTF8));
+                                                0, QApplication::UnicodeUTF8));
 
                 title = QString("<html><head/><body><p>%1</p></body></html>").arg(title);
                 t = std::string(title.toUtf8().constData());
@@ -478,8 +509,8 @@ void
 AeonWavePlayer::loadDirectory()
 {
     QString dir = QFileDialog::getExistingDirectory(this,
-                               tr("Open Audio Directory"),
-                               infiles_path);
+                                tr("Open Audio Directory"),
+                                infiles_path);
     if (!dir.isNull())
     {
         QStringList filters = wildcards.split(' ');
@@ -764,16 +795,16 @@ void
 AeonWavePlayer::viewAbout()
 {
     alert(tr("<h2>AeonWave Audio Player version %1.%2</h2>"
-             "<h5>using %3</h5>"
-             "<h4>(C) Copyright 2014-2015 by Adalin B.V.</h4><br>"
-             "<b><i>AeonWave Audio Player is a streaming audio player.</i></b>"
-             "<p><br>This software lets you play audio files using the "
-             "automatic audio streaming capabilities of AeonWave. It is "
-             "possible to select the next audio track from the file menu "
-             "while the current track is still playing. Audio tracks are "
-             "all played at the same volume level when Auto Gain Control "
-             "(AGC) is selected.<p>"
-             "<sub>This softare makes use of: AeonWave 2.5+, Qt 4.7+</sub>"
+                "<h5>using %3</h5>"
+                "<h4>(C) Copyright 2014-2015 by Adalin B.V.</h4><br>"
+                "<b><i>AeonWave Audio Player is a streaming audio player.</i></b>"
+                "<p><br>This software lets you play audio files using the "
+                "automatic audio streaming capabilities of AeonWave. It is "
+                "possible to select the next audio track from the file menu "
+                "while the current track is still playing. Audio tracks are "
+                "all played at the same volume level when Auto Gain Control "
+                "(AGC) is selected.<p>"
+                "<sub>This softare makes use of: AeonWave 2.5+, Qt 4.7+</sub>"
             ).arg(AAXSUPPORT_MAJOR_VERSION).arg(AAXSUPPORT_MINOR_VERSION).arg(aaxGetVersionString(outdev)));
 }
 
@@ -788,15 +819,15 @@ AeonWavePlayer::viewLicense()
     license.setDetailedText(text);
     license.setIcon(QMessageBox::Information);
     license.setText(tr("<h5>(C) Copyright 2014-2015 by Adalin B.V.</h5>"
-           "This program is free software: you can redistribute it and/or "
-           "modify it under the terms of the GNU General Public License as "
-           "published by the Free Software Foundation, either version 3 of "
-           "the License, or (at your option) any later version.</p>"
-           "<p>This program is distributed in the hope that it will be useful, "
-           "but WITHOUT ANY WARRANTY; without even the implied warranty of "
-           "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
-           "GNU General Public License for more details.</p>"
-           ));
+            "This program is free software: you can redistribute it and/or "
+            "modify it under the terms of the GNU General Public License as "
+            "published by the Free Software Foundation, either version 3 of "
+            "the License, or (at your option) any later version.</p>"
+            "<p>This program is distributed in the hope that it will be useful,"
+            " but WITHOUT ANY WARRANTY; without even the implied warranty of "
+            "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
+            "GNU General Public License for more details.</p>"
+            ));
     license.adjustSize();
     license.exec();
 }
