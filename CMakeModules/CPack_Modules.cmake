@@ -11,7 +11,7 @@ SET(CPACK_COMPONENT_APPLICATIONS_DEPENDS Media)
 
 # Display name
 SET(CPACK_COMPONENT_APPLICATIONS_HIDDEN ON)
-SET(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "Applictaions")
+SET(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "Applications")
 
 # Component grouping
 IF(WIN32)
@@ -60,12 +60,14 @@ macro (CMP_QT_LIBRARIES_INSTALL_RULES QTLIBLIST destination comp)
         INSTALL(FILES ${QT_DLL_PATH_tmp}/${qtlib}${type}d4.dll 
                 DESTINATION "${destination}"
                 CONFIGURATIONS Debug
-                COMPONENT "${comp}")
+                COMPONENT "${comp}"
+               )
         message(STATUS "Generating Install Rule for Qt Release DLL Library ${QT_DLL_PATH_tmp}/${qtlib}4.dll")
         INSTALL(FILES ${QT_DLL_PATH_tmp}/${qtlib}4.dll 
                 DESTINATION "${destination}"
                 CONFIGURATIONS Release
-                COMPONENT "${comp}")  
+                COMPONENT "${comp}"
+               )
       ENDFOREACH(qtlib)
     endif(DEFINED QT_QMAKE_EXECUTABLE)
   endif()
@@ -81,8 +83,9 @@ macro (INSTALL_CUSTOM_LIB customlib destination comp)
     message(STATUS "Generating Install Rule for DLL Library ${LIBNAME}")
     INSTALL(FILES ${LIBNAME} 
              DESTINATION "${destination}"
-              CONFIGURATIONS Release
-              COMPONENT "${comp}")
+             CONFIGURATIONS Release
+             COMPONENT "${comp}"
+           )
   endif()
 endmacro()
 

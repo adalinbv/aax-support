@@ -7,23 +7,37 @@ SET(PACKAGE "aaxsupport")
 
 OPTION(WERROR "Treat compile warnings as errors"   OFF)
 
-#F(WIN32)
+IF(WIN32)
+  IF (EXISTS "C:/Windows/SysWOW64/msvcp100.dll")
+    SET(MSVC10_MSVCP100 "C:/Windows/SysWOW64/msvcp100.dll")
+  ELSEIF(EXISTS "C:/Windows/System32/msvcp100.dll")
+    SET(MSVC10_MSVCP100 "C:/Windows/System32/msvcp100.dll")
+  ENDIF()
+  IF (EXISTS "C:/Windows/SysWOW64/msvcr100.dll")
+    SET(MSVC10_MSVCR100 "C:/Windows/SysWOW64/msvcr100.dll")
+  ELSEIF(EXISTS "C:/Windows/System32/msvcr100.dll")
+    SET(MSVC10_MSVCR100 "C:/Windows/System32/msvcr100.dll")
+  ENDIF()
+
   # By default, do not warn when built on machines using only VS Express:
   # and define the library location ourselves.
-# IF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
-#   SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS ON)
-#   SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS
-#       "c:/Windows/System32/msvcr100.dll" 
-#       "c:/Windows/System32/msvcp100.dll")
-# ENDIF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
+  IF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
+    SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS ON)
+    SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS
+        "${MSVC10_MSVCR100}"
+        "${MSVC10_MSVCP100}")
+  MESSAGE("Installing: ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}")
+  ENDIF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
 
   # InstallRequiredSystemLibraries installs the runtime libraries without
   # specifying COMPONENT Runtime. We have to do it manually here:
-# SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP TRUE)
-# INSTALL(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin
-#         COMPONENT Applications)
-# INCLUDE(InstallRequiredSystemLibraries)
-#NDIF(WIN32)
+  SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP TRUE)
+  INSTALL(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin
+         COMPONENT Support)
+  INSTALL(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin
+         COMPONENT Media)
+  INCLUDE(InstallRequiredSystemLibraries)
+ENDIF(WIN32)
 
 # read 'version' file into a variable (stripping any newlines or spaces)
 FILE(READ version versionFile)
@@ -50,9 +64,16 @@ INCLUDE(CPack_Modules)
 INCLUDE(CPack_Defaults)
 INCLUDE(CheckLibraryExists)
 
+
+FIND_PACKAGE(Qt4 REQUIRED QtMain QtCore QtGui QtNetwork)
+INCLUDE( ${QT_USE_FILE} )
 IF(WIN32)
+  SET (QT_USE_QTMAIN TRUE)
   SET(CPACK_NSIS_MODIFY_PATH "ON")
   ADD_DEFINITIONS("-D_WIN32")
+  CMP_QT_LIBRARIES_INSTALL_RULES("QtCore;QtGui" "bin" "Support")
+  CMP_QT_LIBRARIES_INSTALL_RULES("QtCore;QtGui;QtNetwork" "bin" "Media")
+
 ELSE(WIN32)
 
   # DEBIAN
