@@ -1012,18 +1012,18 @@ AeonWaveConfig::readNewConfigSettings(void* xcid)
         {
             xmlNodeGetPos(xcid, xdid, "device", xdev);
 
+            char *backend = xmlAttributeGetString(xdid, "backend");
+            char *driver = xmlAttributeGetString(xdid, "name");
+
+            std::string device = backend + std::string(" on ") + driver;
+            xmlFree(driver);
+            xmlFree(backend);
+
             void *xiid = xmlMarkId(xdid);
             unsigned int con_num = xmlNodeGetNum(xiid, "connector");
             for (unsigned int con=0; con<con_num; con++)
             {
                 xmlNodeGetPos(xdid, xiid, "connector", con);
-
-                char *backend = xmlAttributeGetString(xdid, "backend");
-                char *driver = xmlAttributeGetString(xdid, "name");
-
-                std::string device = backend + std::string(" on ") + driver;
-                xmlFree(driver);
-                xmlFree(backend);
 
                 bool found = false;
                 unsigned be = 0;
