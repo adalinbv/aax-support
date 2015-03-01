@@ -27,6 +27,7 @@
 #include <QStringList>
 #include <QTextStream>
 #include <QTimer>
+#include <QMenu>
 
 #include <SimpleGlob.h>
 #include <aax/aax.h>
@@ -93,6 +94,10 @@ private:
     void readM3U(QStringList &list, QTextStream& data, bool utf8 = false);
     void readPLS(QStringList &list, QTextStream& data, bool utf8 = false);
 
+    void readBookmarks();
+    void writeBookmarks();
+    QMenu *bookmarks;
+
 private slots:
     void setupHardware();
     void viewAbout();
@@ -108,6 +113,8 @@ private slots:
     void startInput();
     void togglePause();
     void volumeChanged(int);
+
+    void loadBookmark();
 
 protected slots:
     void tick();

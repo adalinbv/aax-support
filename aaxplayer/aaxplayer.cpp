@@ -28,6 +28,8 @@
 #include <time.h>	// time()
 #include <assert.h>
 
+#include <xml.h>
+
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
 #include <QMessageBox>
@@ -43,6 +45,7 @@
 #include "aaxplayer.h"
 #include "remote_ui.h"
 #include "setup.h"
+#include "api.h"
 
 #undef NDEBUG
 
@@ -102,6 +105,10 @@ AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
     setWildcards();
     startOutput();
 
+    bookmarks = new QMenu(tr("Show Bookmarks"), ui->menuView);
+    ui->menuView->addAction(bookmarks->menuAction());
+    readBookmarks();
+
     QObject::connect(ui->actionConnect, SIGNAL(triggered()), this, SLOT(connectRemote()));
     QObject::connect(ui->actionOpenDir, SIGNAL(triggered()), this, SLOT(loadDirectory()));
     QObject::connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(loadFile()));
@@ -128,6 +135,9 @@ AeonWavePlayer::~AeonWavePlayer()
 {
     stopInput();
     stopOutput();
+
+    ui->menuView->clear();
+    delete bookmarks;
 
     if (setup) delete setup;
 
@@ -240,6 +250,75 @@ AeonWavePlayer::exit()
     qApp->exit();
 }
 
+void
+AeonWavePlayer::readBookmarks()
+{
+    std::string path = userConfigFile();
+    if (!path.empty())
+    {
+        void *xid = xmlOpen(path.c_str());
+        if (xid)
+        {
+            void *xbid = xmlNodeGet(xid, "/bookmarks");
+            if (xbid)
+            {
+                bookmarks->clear();
+
+                void *xuid = xmlMarkId(xbid);
+                unsigned num = xmlNodeGetNum(xuid, "url");
+                for (unsigned u=0; u<num; u++)
+                {
+                    xmlNodeGetPos(xbid, xuid, "url", u);
+
+                    char *name = xmlAttributeGetString(xuid, "name");
+                    char *genre = xmlAttributeGetString(xuid, "genre");
+                    char *url = xmlGetString(xuid);
+
+                    QString actname;
+                    if (name)
+                    {
+                        actname = name;
+                        if (genre)
+                        {
+                            actname += " (";
+                            actname += genre;
+                            actname += ")";
+                        }
+                    }
+                    else {
+                       actname = url;
+                    }
+
+                    QAction *action = new QAction(actname, bookmarks);
+                    action->setObjectName(url);
+                    QObject::connect(action, SIGNAL(triggered()),
+                                     this, SLOT(loadBookmark()));
+                    bookmarks->addAction(action);
+                }
+                xmlFree(xuid);
+                xmlFree(xbid);
+            }
+            xmlClose(xid);
+        }
+    }
+}
+
+void
+AeonWavePlayer::writeBookmarks()
+{
+}
+
+void
+AeonWavePlayer::loadBookmark()
+{
+   QObject *obj = sender();
+
+   infile = obj->objectName();
+   QUrl url(infile);
+   QNetworkReply *reply = manager.get(QNetworkRequest(url));
+
+   QObject::connect(reply, SIGNAL(readyRead()), this, SLOT(loadPlaylist()));
+}
 
 void
 AeonWavePlayer::startOutput()
@@ -479,7 +558,7 @@ AeonWavePlayer::connectRemote()
         QUrl url = QUrl::fromUserInput(infile);
         QNetworkReply *reply = manager.get(QNetworkRequest(url));
 
-        QObject::connect(reply, SIGNAL(readyRead()),this,SLOT(loadPlaylist()));
+        QObject::connect(reply, SIGNAL(readyRead()),this, SLOT(loadPlaylist()));
     }
 }
 

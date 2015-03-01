@@ -7,8 +7,9 @@ IF(HAVE_LIBM)
 ENDIF(HAVE_LIBM)
 
 FIND_PACKAGE(AAX COMPONENTS aax REQUIRED)
+FIND_PACKAGE(XML COMPONENTS xml REQUIRED)
 
-SET( SOURCES main.cpp aaxplayer.cpp remote.cpp setup.cpp )
+SET( SOURCES main.cpp aaxplayer.cpp remote.cpp setup.cpp api.c)
 SET( PREPROCESS_HEADERS aaxplayer.h remote.h setup.h )
 SET( HEADERS aaxplayer_ui.h remote_ui.h setup_ui.h )
 SET( GUI aaxplayer.ui remote.ui setup.ui )
@@ -21,7 +22,7 @@ QT4_WRAP_CPP( MOC_HEADERS ${PREPROCESS_HEADERS} )
 
 ADD_EXECUTABLE(aaxplayer ${SOURCES} ${MOC_HEADERS} ${RC_SRCS} ${GUI_HEADERS} ${WIN_RESOURCE_FILE} )
 
-TARGET_LINK_LIBRARIES( aaxplayer ${QT_LIBRARIES} ${AAX_LIBRARY})
+TARGET_LINK_LIBRARIES( aaxplayer ${QT_LIBRARIES} ${AAX_LIBRARY} ${XML_LIBRARY})
 
 INSTALL(TARGETS aaxplayer
         RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
