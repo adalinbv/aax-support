@@ -27,8 +27,12 @@
 #include <stdlib.h>
 #include <time.h>	// time()
 #include <assert.h>
+#include <errno.h>
 
 #include <xml.h>
+
+#include <iostream>
+#include <fstream>
 
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
@@ -105,9 +109,9 @@ AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
     setWildcards();
     startOutput();
 
-    bookmarks = new QMenu(tr("Show Bookmarks"), ui->menuView);
-    ui->menuView->addAction(bookmarks->menuAction());
-    readBookmarks();
+    favorites = new QMenu(tr("Show Favorite"), ui->menuView);
+    ui->menuView->addAction(favorites->menuAction());
+    readFavorite();
 
     QObject::connect(ui->actionConnect, SIGNAL(triggered()), this, SLOT(connectRemote()));
     QObject::connect(ui->actionOpenDir, SIGNAL(triggered()), this, SLOT(loadDirectory()));
@@ -116,6 +120,7 @@ AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
     QObject::connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(exit()));
 
     QObject::connect(ui->actionInfo, SIGNAL(triggered()), this, SLOT(showSongInfo()));
+    QObject::connect(ui->actionAddFavorite, SIGNAL(triggered()), this, SLOT(addFavorite()));
     QObject::connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(viewAbout()));
     QObject::connect(ui->actionLicense, SIGNAL(triggered()), this, SLOT(viewLicense()));
 
@@ -137,7 +142,7 @@ AeonWavePlayer::~AeonWavePlayer()
     stopOutput();
 
     ui->menuView->clear();
-    delete bookmarks;
+    delete favorites;
 
     if (setup) delete setup;
 
@@ -251,7 +256,7 @@ AeonWavePlayer::exit()
 }
 
 void
-AeonWavePlayer::readBookmarks()
+AeonWavePlayer::readFavorite()
 {
     std::string path = userConfigFile(CONFIG_FILE);
     if (!path.empty())
@@ -259,10 +264,10 @@ AeonWavePlayer::readBookmarks()
         void *xid = xmlOpen(path.c_str());
         if (xid)
         {
-            void *xbid = xmlNodeGet(xid, "/bookmarks");
+            void *xbid = xmlNodeGet(xid, "/favorites");
             if (xbid)
             {
-                bookmarks->clear();
+                favorites->clear();
 
                 void *xuid = xmlMarkId(xbid);
                 unsigned num = xmlNodeGetNum(xuid, "url");
@@ -289,11 +294,11 @@ AeonWavePlayer::readBookmarks()
                        actname = url;
                     }
 
-                    QAction *action = new QAction(actname, bookmarks);
+                    QAction *action = new QAction(actname, favorites);
                     action->setObjectName(url);
                     QObject::connect(action, SIGNAL(triggered()),
-                                     this, SLOT(loadBookmark()));
-                    bookmarks->addAction(action);
+                                     this, SLOT(loadFavorite()));
+                    favorites->addAction(action);
                 }
                 xmlFree(xuid);
                 xmlFree(xbid);
@@ -304,12 +309,7 @@ AeonWavePlayer::readBookmarks()
 }
 
 void
-AeonWavePlayer::writeBookmarks()
-{
-}
-
-void
-AeonWavePlayer::loadBookmark()
+AeonWavePlayer::loadFavorite()
 {
    QObject *obj = sender();
 
@@ -318,6 +318,108 @@ AeonWavePlayer::loadBookmark()
    QNetworkReply *reply = manager.get(QNetworkRequest(url));
 
    QObject::connect(reply, SIGNAL(readyRead()), this, SLOT(loadPlaylist()));
+}
+
+void
+AeonWavePlayer::writeFavorite()
+{
+    std::string from_path = userConfigFile(CONFIG_FILE);
+    if (!from_path.empty())
+    {
+        const char *username = getenv("SUDO_USER");
+        if (!username) username = getenv("USER");
+        if (username)
+        {
+            std::string to_path = from_path + std::string(".old");
+            std::rename(from_path.c_str(), to_path.c_str());
+        }
+
+        std::ofstream file;
+        file.open(from_path.c_str());
+
+        if (file.fail() || file.bad())
+        {
+            QString msg = tr("Error writing to file: ");
+            msg += from_path.c_str();
+            msg += "\n\r";
+            msg += tr(strerror(errno));
+            alert(msg);
+            file.close();
+            return;
+        }
+
+        file << "<?xml version=\"1.0\"?>" << std::endl << std::endl;
+        file << "<favorites>" << std::endl;
+
+        QList<QAction*> actionList = favorites->actions();
+        for (int i=0; i<actionList.size(); ++i)
+        {
+            QAction *action = actionList.at(i);
+            QString title = action->text();
+            QString url = action->objectName();
+
+            file << " <url";
+            if (!title.isEmpty())
+            {
+                int idx = title.indexOf(" (");
+                if (idx >= 0)
+                {
+                   QString name = title.left(idx);
+                   QString genre = title.mid(idx+2);
+
+                   genre.remove(genre.size()-1, 1);
+                   file << " name=\"" << name.toUtf8().constData() << "\"";
+                   file << " genre=\"" << genre.toUtf8().constData() << "\"";
+                }
+                else {
+                    file << "name=\"" << title.toUtf8().constData() << "\"";
+                }                 
+            }
+            file << ">"<< url.toUtf8().constData();
+            file << "</url>" << std::endl;
+        }
+
+        file << "</favorites>" << std::endl;
+        file.close();
+
+#ifndef _WIN32
+        int mode = strtol("0600", 0, 8);
+        chmod(from_path.c_str(), mode);
+#endif
+    }
+
+}
+
+void
+AeonWavePlayer::addFavorite()
+{
+    const char *name = aaxDriverGetSetup(indev, AAX_SONG_COMPOSER_STRING); 
+    const char *genre = aaxDriverGetSetup(indev, AAX_MUSIC_GENRE_STRING);
+
+    std::string file = infile.toUtf8().constData();
+    const char *url = file.c_str();
+
+    QString actname;
+    if (name)
+    {
+        actname = name;
+        if (genre)
+        {
+            actname += " (";
+            actname += genre;
+            actname += ")";
+        }
+    }
+    else {
+       actname = url;
+    }
+
+    QAction *action = new QAction(actname, favorites);
+    action->setObjectName(url);
+    QObject::connect(action, SIGNAL(triggered()), this, SLOT(loadFavorite()));
+    favorites->addAction(action);
+
+    writeFavorite();
 }
 
 void

@@ -35,7 +35,7 @@
 #include "setup.h"
 #include "remote.h"
 
-#define CONFIG_FILE	"bookmarks.xml"
+#define CONFIG_FILE	"favorites.xml"
 #define _MINMAX(a,b,c)  (((a)>(c)) ? (c) : (((a)<(b)) ? (b) : (a)))
 
 class Ui_AudioPlayer;
@@ -95,9 +95,9 @@ private:
     void readM3U(QStringList &list, QTextStream& data, bool utf8 = false);
     void readPLS(QStringList &list, QTextStream& data, bool utf8 = false);
 
-    void readBookmarks();
-    void writeBookmarks();
-    QMenu *bookmarks;
+    void readFavorite();
+    void writeFavorite();
+    QMenu *favorites;
 
 private slots:
     void setupHardware();
@@ -115,7 +115,8 @@ private slots:
     void togglePause();
     void volumeChanged(int);
 
-    void loadBookmark();
+    void addFavorite();
+    void loadFavorite();
 
 protected slots:
     void tick();
