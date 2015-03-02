@@ -79,6 +79,7 @@ AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
     wildcards("*.wav"),
     max_samples(0), 
     play_pressed(false),
+    remote_stream(false),
     playing(false),
     paused(false)
 {
@@ -393,29 +394,49 @@ AeonWavePlayer::writeFavorite()
 void
 AeonWavePlayer::addFavorite()
 {
-    const char *name = aaxDriverGetSetup(indev, AAX_SONG_COMPOSER_STRING); 
-    const char *genre = aaxDriverGetSetup(indev, AAX_MUSIC_GENRE_STRING);
-
-    std::string file = infile.toUtf8().constData();
-    const char *url = file.c_str();
-
-    QString actname;
-    if (name)
+    QString actname, objname;
+    if (remote_stream)
     {
-        actname = name;
-        if (genre)
+        QString name = aaxDriverGetSetup(indev, AAX_SONG_COMPOSER_STRING); 
+        QString genre = aaxDriverGetSetup(indev, AAX_MUSIC_GENRE_STRING);
+
+        if (!name.isEmpty())
         {
-            actname += " (";
-            actname += genre;
-            actname += ")";
+            actname = name;
+            if (!genre.isEmpty()) {
+                actname += " (" + genre + ")";
+            }
         }
+        else {
+           actname = infile;
+        }
+        objname = infile;
     }
-    else {
-       actname = url;
+    else if (indir.isEmpty())	// file
+    {
+        QString artist = aaxDriverGetSetup(indev, AAX_MUSIC_PERFORMER_STRING);
+        QString title = aaxDriverGetSetup(indev, AAX_TRACK_TITLE_STRING);
+
+        if (!artist.isEmpty())
+        {
+            actname = artist;
+            if (!title.isEmpty()) {
+                actname += " - " + title;
+            }
+        }
+        else {
+           actname = infile;
+        }
+        objname = infile;
+    }
+    else	// directory
+    {
+        actname = infiles_path;
+        objname = infiles_path;
     }
 
     QAction *action = new QAction(actname, favorites);
-    action->setObjectName(url);
+    action->setObjectName(infile);
     QObject::connect(action, SIGNAL(triggered()), this, SLOT(loadFavorite()));
     favorites->addAction(action);
 
@@ -662,6 +683,7 @@ AeonWavePlayer::connectRemote()
 
         QObject::connect(reply, SIGNAL(readyRead()),this, SLOT(loadPlaylist()));
     }
+    remote_stream = true;
 }
 
 void
@@ -677,6 +699,7 @@ AeonWavePlayer::loadFile()
         indir.clear();
         indir_pos = 0;
         new_file = true;
+        remote_stream = false;
         infile = fileName;
         if (setFileOrPlaylist(indir) == false)
         {
@@ -738,6 +761,7 @@ AeonWavePlayer::loadDirectory()
         
         infiles_path = dir;
         new_file = true;
+        remote_stream = false;
     }
 }
 

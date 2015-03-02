@@ -85,6 +85,7 @@ private:
 
     size_t max_samples;
     bool play_pressed;
+    bool remote_stream;
     bool playing;
     bool paused;
     bool new_file;
