@@ -35,6 +35,7 @@
 #include "setup.h"
 #include "remote.h"
 
+#define CONFIG_FILE	"bookmarks.xml"
 #define _MINMAX(a,b,c)  (((a)>(c)) ? (c) : (((a)<(b)) ? (b) : (a)))
 
 class Ui_AudioPlayer;

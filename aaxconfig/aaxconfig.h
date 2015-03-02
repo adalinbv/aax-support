@@ -29,6 +29,8 @@
 #include <QtGui/QComboBox>
 #include <QShortcut>
 
+#define CONFIG_FILE	"config.xml"
+
 class Ui_Configuration;
 
 class AeonWaveConfig : public QDialog

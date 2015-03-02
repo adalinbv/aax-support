@@ -18,15 +18,18 @@
  *  along with AeonWave-Player.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __API_H
-#define __API_H 1
+#ifndef __BASE_API_H
+#define __BASE_API_H 1
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
 
-char* userConfigFile();
+const char* tmpDir();
+const char* userHomeDir();
+char* userConfigFile(const char*);
+char* systemConfigFile(const char*);
 
 #if defined(__cplusplus)
 }  /* extern "C" */

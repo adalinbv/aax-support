@@ -30,6 +30,7 @@
 #include <QMessageBox>
 #include <QStandardItemModel>
 
+#include <base/api.h>
 #include "aaxconfig_ui.h"
 #include "aaxconfig.h"
 #include "types.h"
@@ -753,7 +754,7 @@ void
 AeonWaveConfig::readConfigFiles()
 {
     /* read the system wide configuration file */
-    std::string path = systemConfigFile();
+    std::string path = systemConfigFile(CONFIG_FILE);
     if (!path.empty())
     {
         void *xid = xmlOpen(path.c_str());
@@ -765,7 +766,7 @@ AeonWaveConfig::readConfigFiles()
     }
 
      /* read the user configurstion file */
-    path = userConfigFile();
+    path = userConfigFile(CONFIG_FILE);
     if (!path.empty())
     {
         void *xid = xmlOpen(path.c_str());
@@ -1357,7 +1358,7 @@ AeonWaveConfig::itemsGrayOut(QComboBox *combobox, unsigned int min, unsigned int
 void
 AeonWaveConfig::writeConfigFile()
 {
-    std::string from_path = userConfigFile();
+    std::string from_path = userConfigFile(CONFIG_FILE);
     if (!from_path.empty())
     {
         const char *username = getenv("SUDO_USER");

@@ -38,6 +38,7 @@
 #include <QEventLoop>
 #include <QDir>
 
+#include <base/api.h>
 #include <copyright.h>
 #include <types.h>
 
@@ -45,7 +46,6 @@
 #include "aaxplayer.h"
 #include "remote_ui.h"
 #include "setup.h"
-#include "api.h"
 
 #undef NDEBUG
 
@@ -253,7 +253,7 @@ AeonWavePlayer::exit()
 void
 AeonWavePlayer::readBookmarks()
 {
-    std::string path = userConfigFile();
+    std::string path = userConfigFile(CONFIG_FILE);
     if (!path.empty())
     {
         void *xid = xmlOpen(path.c_str());
