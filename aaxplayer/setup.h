@@ -81,6 +81,7 @@ private slots:
 
     void changeAGC(bool);
     void changeAutoPlay(bool);
+    void changeVUmeters(bool);
     void changeOutputDevice(int val);
 };
 

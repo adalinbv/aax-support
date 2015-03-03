@@ -34,6 +34,7 @@ Setup::Setup(QWidget *parent)
     _cfg->setupUi(this);
 
     QObject::connect(_cfg->OutputDevice, SIGNAL(currentIndexChanged(int)), this, SLOT(changeOutputDevice(int)));
+    QObject::connect(_cfg->enableVUmeters, SIGNAL(clicked(bool)), this, SLOT(changeVUmeters(bool)));
     QObject::connect(_cfg->enableAGC, SIGNAL(clicked(bool)), this, SLOT(changeAGC(bool)));
     QObject::connect(_cfg->enableAutoPlay, SIGNAL(clicked(bool)), this, SLOT(changeAutoPlay(bool)));
 
@@ -122,6 +123,9 @@ Setup::displayUiConfig()
 
     _cfg->enableAGC->setChecked(_mw->agc_enabled);
     _cfg->enableAutoPlay->setChecked(_mw->autoplay);
+    _cfg->enableVUmeters->setChecked(_mw->show_vu);
+
+    _mw->resize();
 }
 
 void
@@ -159,12 +163,18 @@ Setup::changeOutputDevice(int value)
 void
 Setup::changeAGC(bool val)
 {
-    _mw->agc_enabled = _cfg->enableAGC->isChecked();
+    _mw->agc_enabled = val;
 }
 
 
 void
 Setup::changeAutoPlay(bool val)
 {
-    _mw->autoplay = _cfg->enableAutoPlay->isChecked();
+    _mw->autoplay = val;
+}
+
+void
+Setup::changeVUmeters(bool val)
+{
+    _mw->show_vu = val;
 }

@@ -23,6 +23,7 @@
 #define AAXPLAYER_H
 
 #include <QtNetwork/QNetworkAccessManager>
+#include <QtGui/QProgressBar>
 #include <QtGui/QDialog>
 #include <QStringList>
 #include <QTextStream>
@@ -35,6 +36,7 @@
 #include "setup.h"
 #include "remote.h"
 
+#define MAX_TRACKS	8
 #define CONFIG_FILE	"favorites.xml"
 #define _MINMAX(a,b,c)  (((a)>(c)) ? (c) : (((a)<(b)) ? (b) : (a)))
 
@@ -64,7 +66,9 @@ public:
     float in_freq;
     bool agc_enabled;
     bool autoplay;
+    bool show_vu;
 
+    void resize();
     void stopOutput();
     void startOutput();
     void setWildcards();
@@ -83,12 +87,15 @@ private:
     QString infiles_path;
     QString wildcards;
 
+    int tracks;
     size_t max_samples;
     bool play_pressed;
     bool remote_stream;
     bool playing;
     bool paused;
     bool new_file;
+
+    QProgressBar *VU[8];
 
     void alert(QString msg);
     bool setFileOrPlaylist(QStringList& list);

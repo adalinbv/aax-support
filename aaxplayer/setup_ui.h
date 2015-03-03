@@ -31,6 +31,7 @@ public:
     QComboBox *OutputInterface;
     QCheckBox *enableAGC;
     QCheckBox *enableAutoPlay;
+    QCheckBox *enableVUmeters;
 
     void setupUi(QDialog *Configuration)
     {
@@ -65,11 +66,15 @@ public:
         OutputInterface->setSizeAdjustPolicy(QComboBox::AdjustToContents);
         enableAGC = new QCheckBox(Configuration);
         enableAGC->setObjectName(QString::fromUtf8("enableAGC"));
-        enableAGC->setGeometry(QRect(20, 110, 251, 22));
+        enableAGC->setEnabled(true);
+        enableAGC->setGeometry(QRect(20, 130, 251, 22));
         enableAGC->setChecked(true);
         enableAutoPlay = new QCheckBox(Configuration);
         enableAutoPlay->setObjectName(QString::fromUtf8("enableAutoPlay"));
-        enableAutoPlay->setGeometry(QRect(20, 90, 251, 22));
+        enableAutoPlay->setGeometry(QRect(20, 110, 251, 22));
+        enableVUmeters = new QCheckBox(Configuration);
+        enableVUmeters->setObjectName(QString::fromUtf8("enableVUmeters"));
+        enableVUmeters->setGeometry(QRect(20, 90, 251, 22));
         QWidget::setTabOrder(OutputDevice, OutputInterface);
         QWidget::setTabOrder(OutputInterface, enableAutoPlay);
         QWidget::setTabOrder(enableAutoPlay, enableAGC);
@@ -93,6 +98,10 @@ public:
         enableAutoPlay->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Auto Play will start the newly selected file from the file selection dialog as soon as the input device is ready (finished playing the previous track).</p></body></html>", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
         enableAutoPlay->setText(QApplication::translate("Configuration", "Enable Auto Play", 0, QApplication::UnicodeUTF8));
+#ifndef QT_NO_TOOLTIP
+        enableVUmeters->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Auto Play will start the newly selected file from the file selection dialog as soon as the input device is ready (finished playing the previous track).</p></body></html>", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+        enableVUmeters->setText(QApplication::translate("Configuration", "Show VU meters", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

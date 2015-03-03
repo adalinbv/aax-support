@@ -47,8 +47,6 @@ public:
     QPushButton *startPlay;
     QLabel *timeTotal;
     QPushButton *pausePlay;
-    QProgressBar *VUleft;
-    QProgressBar *VUright;
     QDial *volume;
     QLabel *labelVolumeMin;
     QLabel *labelVolumeMax;
@@ -58,9 +56,9 @@ public:
     {
         if (AudioPlayer->objectName().isEmpty())
             AudioPlayer->setObjectName(QString::fromUtf8("AudioPlayer"));
-        AudioPlayer->resize(400, 125);
-        AudioPlayer->setMinimumSize(QSize(400, 125));
-        AudioPlayer->setMaximumSize(QSize(400, 125));
+        AudioPlayer->resize(350, 125);
+        AudioPlayer->setMinimumSize(QSize(350, 125));
+        AudioPlayer->setMaximumSize(QSize(350, 125));
         actionOpen = new QAction(AudioPlayer);
         actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
         actionExit = new QAction(AudioPlayer);
@@ -81,7 +79,7 @@ public:
         actionAddFavorite->setObjectName(QString::fromUtf8("actionAddFavorite"));
         menubar = new QMenuBar(AudioPlayer);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 181, 25));
+        menubar->setGeometry(QRect(0, 0, 351, 25));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuHelp = new QMenu(menubar);
@@ -126,22 +124,6 @@ public:
         pausePlay->setObjectName(QString::fromUtf8("pausePlay"));
         pausePlay->setGeometry(QRect(70, 80, 51, 25));
         pausePlay->setFocusPolicy(Qt::NoFocus);
-        VUleft = new QProgressBar(AudioPlayer);
-        VUleft->setObjectName(QString::fromUtf8("VUleft"));
-        VUleft->setGeometry(QRect(355, 30, 14, 85));
-        QFont font1;
-        font1.setPointSize(10);
-        font1.setBold(true);
-        font1.setWeight(75);
-        VUleft->setFont(font1);
-        VUleft->setValue(0);
-        VUleft->setOrientation(Qt::Vertical);
-        VUright = new QProgressBar(AudioPlayer);
-        VUright->setObjectName(QString::fromUtf8("VUright"));
-        VUright->setGeometry(QRect(375, 30, 14, 85));
-        VUright->setFont(font1);
-        VUright->setValue(0);
-        VUright->setOrientation(Qt::Vertical);
         volume = new QDial(AudioPlayer);
         volume->setObjectName(QString::fromUtf8("volume"));
         volume->setGeometry(QRect(270, 35, 70, 80));
@@ -151,17 +133,17 @@ public:
         labelVolumeMin = new QLabel(AudioPlayer);
         labelVolumeMin->setObjectName(QString::fromUtf8("labelVolumeMin"));
         labelVolumeMin->setGeometry(QRect(255, 100, 31, 16));
-        QFont font2;
-        font2.setFamily(QString::fromUtf8("Liberation Sans Narrow"));
-        font2.setPointSize(9);
-        font2.setBold(false);
-        font2.setWeight(50);
-        labelVolumeMin->setFont(font2);
+        QFont font1;
+        font1.setFamily(QString::fromUtf8("Liberation Sans Narrow"));
+        font1.setPointSize(9);
+        font1.setBold(false);
+        font1.setWeight(50);
+        labelVolumeMin->setFont(font1);
         labelVolumeMin->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         labelVolumeMax = new QLabel(AudioPlayer);
         labelVolumeMax->setObjectName(QString::fromUtf8("labelVolumeMax"));
         labelVolumeMax->setGeometry(QRect(325, 100, 31, 16));
-        labelVolumeMax->setFont(font2);
+        labelVolumeMax->setFont(font1);
         labelVolumeMax->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
         labelVolume = new QLabel(AudioPlayer);
         labelVolume->setObjectName(QString::fromUtf8("labelVolume"));
@@ -246,14 +228,6 @@ public:
 #ifndef QT_NO_TOOLTIP
         pausePlay->setToolTip(QApplication::translate("AudioPlayer", "<html><head/><body><p>Pause</p></body></html>", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
-#ifndef QT_NO_TOOLTIP
-        VUleft->setToolTip(QApplication::translate("AudioPlayer", "<html><head/><body><br>Left channel</br><br>VU meter</br></body></html>", 0, QApplication::UnicodeUTF8));
-#endif // QT_NO_TOOLTIP
-        VUleft->setFormat(QString());
-#ifndef QT_NO_TOOLTIP
-        VUright->setToolTip(QApplication::translate("AudioPlayer", "<html><head/><body><br>Right channel</br><br>VU meter</br></body></html>", 0, QApplication::UnicodeUTF8));
-#endif // QT_NO_TOOLTIP
-        VUright->setFormat(QString());
         labelVolumeMin->setText(QApplication::translate("AudioPlayer", "min", 0, QApplication::UnicodeUTF8));
         labelVolumeMax->setText(QApplication::translate("AudioPlayer", "max", 0, QApplication::UnicodeUTF8));
         labelVolume->setText(QApplication::translate("AudioPlayer", "volume", 0, QApplication::UnicodeUTF8));

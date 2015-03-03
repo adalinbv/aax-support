@@ -74,9 +74,11 @@ AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
     in_freq(44100.0f),
     agc_enabled(false),
     autoplay(true),
+    show_vu(true),
     elapsed(0.0f),
     indir_pos(0),
     wildcards("*.wav"),
+    tracks(2),
     max_samples(0), 
     play_pressed(false),
     remote_stream(false),
@@ -135,6 +137,22 @@ AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
     timer.start(100);
 
     ui->pctPlaying->setValue(0);
+
+    QFont font1;
+    font1.setPointSize(10);
+    font1.setBold(true);
+    font1.setWeight(75);
+    for (int track=0; track<MAX_TRACKS; track++)
+    {
+        VU[track] = new QProgressBar(this);
+        VU[track]->setGeometry(355+20*track, 30, 14, 85);
+        VU[track]->setFont(font1);
+        VU[track]->setOrientation(Qt::Vertical);
+        VU[track]->setFormat(QString());
+        VU[track]->setValue(0);
+        if (track > 2) VU[track]->setVisible(false);
+    }
+    resize();
 }
 
 AeonWavePlayer::~AeonWavePlayer()
@@ -142,12 +160,43 @@ AeonWavePlayer::~AeonWavePlayer()
     stopInput();
     stopOutput();
 
+    for (int track=0; track<MAX_TRACKS; track++) {
+        delete VU[track];
+    }
+
     ui->menuView->clear();
     delete favorites;
 
     if (setup) delete setup;
 
     delete ui;
+}
+
+void
+AeonWavePlayer::resize()
+{
+    if (show_vu)
+    {
+        int width = 350 + show_vu*(int)(20*(tracks+0.5f));
+        setFixedWidth(width);
+        ui->menubar->setGeometry(0, 0, width, 25);
+
+        for (int track=0; track<tracks; track++) {
+            VU[track]->setVisible(true);
+        }
+        for (int track=tracks; track<MAX_TRACKS; track++) {
+            VU[track]->setVisible(false);
+        }
+    }
+    else
+    {
+        setFixedWidth(350);
+        ui->menubar->setGeometry(0, 0, 350, 25);
+
+        for (int track=0; track<MAX_TRACKS; track++) {
+            VU[track]->setVisible(false);
+        }
+    }
 }
 
 /* ------------------------------------------------------------------------- */
@@ -200,23 +249,24 @@ AeonWavePlayer::tick()
             ui->pctPlaying->setValue(100*pos/max_samples);
         }
 
-        static const double MAX = 8388608;
-        static const double MAXDIV = 1.0/MAX;
-        static const double REFERENCE = 256;
-        static const double MIN_DB = 10*log10(1.0/REFERENCE);
-        static const double MAX_DB = 0;
-        float dB, vu[2];
-        for (int track=0; track<2; track++)
+        if (show_vu)
         {
-            enum aaxSetupType e1 = aaxSetupType(AAX_AVERAGE_VALUE+track);
-            int ival;
+            static const double MAX = 8388608;
+            static const double MAXDIV = 1.0/MAX;
+            static const double REFERENCE = 256;
+            static const double MIN_DB = 10*log10(1.0/REFERENCE);
+            static const double MAX_DB = 0;
+            for (int track=0; track<tracks; track++)
+            {
+                enum aaxSetupType e1 = aaxSetupType(AAX_AVERAGE_VALUE+track);
 
-            ival = aaxMixerGetSetup(outdev, e1);
-            dB = (ival > 0) ? 10*log10(ival*MAXDIV) : -1000000.0;
-            vu[track] = _MINMAX(100*(dB-MIN_DB)/(MAX_DB-MIN_DB), 0, 99);
+                int ival = aaxMixerGetSetup(indev, e1);
+                float dB = (ival > 0) ? 10*log10(ival*MAXDIV) : -1000000.0;
+
+                ival = _MINMAX(100*(dB-MIN_DB)/(MAX_DB-MIN_DB), 0, 99);
+                VU[track]->setValue(ival);
+            }
         }
-        ui->VUleft->setValue(vu[0]);
-        ui->VUright->setValue(vu[1]);
 
         QApplication::processEvents();
     }
@@ -538,6 +588,8 @@ AeonWavePlayer::startInput()
 
             in_freq = (float)aaxMixerGetSetup(indev, AAX_FREQUENCY);
             max_samples = (float)aaxMixerGetSetup(indev, AAX_SAMPLES_MAX);
+            tracks = _MINMAX(aaxMixerGetSetup(indev, AAX_TRACKS), 2, 8);
+            resize();
 
             if (!max_samples) {
                 ui->timeTotal->setText("00:00:00");
@@ -621,8 +673,6 @@ AeonWavePlayer::stopInput()
 
     setWindowTitle(QApplication::translate("AudioPlayer", "AeonWave Audio Player", 0, QApplication::UnicodeUTF8));
     setToolTip(QApplication::translate("AudioPlayer", "Audio Player", 0, QApplication::UnicodeUTF8));
-    ui->VUleft->setValue(0);
-    ui->VUright->setValue(0);
     ui->timeTotal->setText("00:00:00");
     new_file = false;
     max_samples = 0;
