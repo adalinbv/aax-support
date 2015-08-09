@@ -1,3 +1,9 @@
+* Tue Mar 02 2015 - - tech@adalin.org
+- Added support for adding and using Favorites
+- Add the option to hide or show the VU meters
+- Dynamically adjust dialog size and the no. VU meters based on the no. tracks
+- Update the window title when new information is available from the stream
+
 * Mon Dec 29 2014 - tech@adalin.org
 - Added a graphical audio streaming player
 - Completely updated Graphical User Interface for AeonWave Config

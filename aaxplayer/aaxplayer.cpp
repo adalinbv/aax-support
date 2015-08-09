@@ -275,8 +275,8 @@ AeonWavePlayer::tick()
     {
         elapsed -= 3.0f;
 
-        QString title = aaxDriverGetSetup(indev, AAX_TRACK_TITLE_STRING);
-        QString artist = aaxDriverGetSetup(indev, AAX_MUSIC_PERFORMER_STRING);
+        QString title = aaxDriverGetSetup(indev, AAX_TRACK_TITLE_UPDATE);
+        QString artist = aaxDriverGetSetup(indev, AAX_MUSIC_PERFORMER_UPDATE);
         if (!title.isEmpty() || !artist.isEmpty())
         {
             if (title.isEmpty()) {
