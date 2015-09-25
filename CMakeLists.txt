@@ -189,6 +189,7 @@ CONFIGURE_FILE(
 
 SET(BASE_OBJS
      base/api.c
+     base/types.c
    )
 SET(LIBBASE base)
 ADD_LIBRARY(${LIBBASE} STATIC ${BASE_OBJS})

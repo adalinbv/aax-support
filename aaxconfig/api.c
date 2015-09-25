@@ -189,6 +189,8 @@ speaker_t speaker_setup[MAX_SPEAKER_SETUP] =
 };
 
 #if defined(WIN32)
+#include <sddl.h> 
+
 int
 createDACL(SECURITY_ATTRIBUTES * pSA)
 {

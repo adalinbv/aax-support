@@ -627,10 +627,14 @@ AeonWaveConfig::FreqToIndex(unsigned int freq)
 void
 AeonWaveConfig::getSystemResources()
 {
-    if (aaxGetMajorVersion() < 2 || aaxGetMinorVersion() < 5)
+    int major = aaxGetMajorVersion();
+    int minor = aaxGetMinorVersion();
+
+    if (major < 2 || minor < 5)
     {
         alert(tr("WARNING:\n"
-                 "This software only works with AeonWave 2.5.0 or later."));
+                 "This software only works with AeonWave 2.5.0 or later.\n"
+                 "Current version is %1.%2").arg(major).arg(minor));
         exit(-1);
     }
 
