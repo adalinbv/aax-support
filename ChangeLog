@@ -1,5 +1,8 @@
 * Sat Sep 26 2015 - tech@adalin.org
-- Fixed a typo in the version checking algorithm
+- Added support for adding and using Favorites
+- Add the option to hide or show the VU meters
+- Dynamically adjust dialog size and the no. VU meters based on the no. tracks
+- Fixed a typo in the version checking algorithm for AeonWave Config
 
 * Tue Mar 02 2015 - tech@adalin.org
 - Added support for adding and using Favorites
