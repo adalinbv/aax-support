@@ -630,7 +630,7 @@ AeonWaveConfig::getSystemResources()
     int major = aaxGetMajorVersion();
     int minor = aaxGetMinorVersion();
 
-    if (major < 2 || minor < 5)
+    if (major < 2 || (major == 2 && minor < 5))
     {
         alert(tr("WARNING:\n"
                  "This software only works with AeonWave 2.5.0 or later.\n"
