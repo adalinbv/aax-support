@@ -50,6 +50,7 @@ FindFilesRecursively(LPCTSTR lpFolder, LPCTSTR lpFilePattern)
 #include <sys/types.h>
 #include <dirent.h>
 #include <fnmatch.h>
+#include <errno.h>
 
 // http://compgroups.net/comp.unix.programmer/recursively-search-directories-in-c-c++/172909
 
@@ -61,7 +62,7 @@ FindFilesRecursively(const char *path, char *pattern)
     {
         struct dirent *dp;
         errno = 0;
-        if ((dp = readdir(dirp)) != NULL)
+        if ((dp = readdir(dirp)) != 0)
         {
             if (dp->d_type == DT_DIR) // go recursive
             {
