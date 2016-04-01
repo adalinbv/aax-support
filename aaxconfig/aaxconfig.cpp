@@ -404,7 +404,6 @@ AeonWaveConfig::changeMixer(int val)
     {
         int dev = _MINMAX(val, 0, max_output);
         std::string name;
-        aaxConfig cfg;
         QString desc;
 
         name = devices[be]->name.c_str();
@@ -420,43 +419,43 @@ AeonWaveConfig::changeMixer(int val)
             name += ": " + std::string(tmpDir()) + "/AeonWave.wav";
         }
 
-        cfg = aaxDriverOpenByName(name.c_str(), AAX_MODE_WRITE_STEREO);
+        AAX::AeonWave cfg(name.c_str(), AAX_MODE_WRITE_STEREO);
         if (cfg)
         {
             unsigned int x, y, min, max;
             const char *s;
 
-            if (aaxIsValid(cfg, AAX_CONFIG_HD)) {
+            if (cfg.valid(AAX_CONFIG_HD)) {
                ui->label_acquire->setVisible(false);
             }
 
             desc = tr("<tabel>");
-            aaxMixerSetState(cfg, AAX_INITIALIZED);
+            cfg.set(AAX_INITIALIZED);
 
-            s = aaxDriverGetSetup(cfg, AAX_DRIVER_STRING);
+            s = cfg.info(AAX_DRIVER_STRING);
             desc += tr("<tr><td>Driver:</td>");
             desc += tr("<td colspan=\"3\">%1</td></tr>").arg(s);
 
-            s = aaxDriverGetSetup(cfg, AAX_RENDERER_STRING);
+            s = cfg.info(AAX_RENDERER_STRING);
             desc += tr("<tr><td>Renderer:</td>");
             desc += tr("<td colspan=\"3\">%1</td></tr>").arg(s);
 
-            x = aaxGetMajorVersion();
-            y = aaxGetMinorVersion();
-            s = aaxGetVersionString(cfg);
+            x = cfg.major_version();
+            y = cfg.minor_version();
+            s = cfg.version();
             desc += tr("<tr><td width=\"25%\">Version:</td>");
             desc += tr("<td width=\"75%\" colspan=\"3\">%1 (%2.%3)</td></tr>").arg(s).arg(x).arg(y);
 
-            s = aaxDriverGetSetup(cfg, AAX_VENDOR_STRING);
+            s = cfg.info(AAX_VENDOR_STRING);
             desc += tr("<tr><td>Vendor:</td>");
             desc += tr("<td colspan=\"3\">%1</td></tr>").arg(s);
 
-            min = aaxMixerGetSetup(cfg, AAX_TRACKS_MIN);
-            max = aaxMixerGetSetup(cfg, AAX_TRACKS_MAX);
+            min = cfg.get(AAX_TRACKS_MIN);
+            max = cfg.get(AAX_TRACKS_MAX);
             desc += tr("<tr><td>Supported tacks:</td>");
             desc += tr("<td>%1 - %2 tracks</td>").arg(min).arg(max);
             desc += tr("<td width=\"25%\">&nbsp;</td>");
-            x = aaxMixerGetSetup(cfg, AAX_TIMER_MODE);
+            x = cfg.get(AAX_TIMER_MODE);
             desc += tr("<td width=\"25%\">");
             if (x) {
                desc += tr("<img src=\":/checked.png\">");
@@ -466,12 +465,12 @@ AeonWaveConfig::changeMixer(int val)
             desc += tr(" timed mode</td></tr>");
             
 
-            min = aaxMixerGetSetup(cfg, AAX_FREQUENCY_MIN);
-            max = aaxMixerGetSetup(cfg, AAX_FREQUENCY_MAX);
+            min = cfg.get(AAX_FREQUENCY_MIN);
+            max = cfg.get(AAX_FREQUENCY_MAX);
             desc += tr("<tr><td>Frequency range:</td>");
             desc += tr("<td>%1 - %2 kHz</td>").arg(min/1000.0f).arg(max/1000.0f);
             desc += tr("<td></td>");
-            x = aaxMixerGetSetup(cfg, AAX_SHARED_MODE);
+            x = cfg.get(AAX_SHARED_MODE);
             if (x) {
                desc += tr("<td><img src=\":/checked.png\">");
             } else {
@@ -479,11 +478,11 @@ AeonWaveConfig::changeMixer(int val)
             }
             desc += tr(" shared mode</td></tr>");
 
-            x = aaxMixerGetSetup(cfg, AAX_FREQUENCY);
+            x = cfg.get(AAX_FREQUENCY);
             desc += tr("<tr><td>Mixer frequency:</td>");
             desc += tr("<td>%1 Hz</td>").arg(x);
             desc += tr("<td></td>");
-            x = aaxMixerGetSetup(cfg, AAX_BATCHED_MODE);
+            x = cfg.get(AAX_BATCHED_MODE);
             if (x) {
                desc += tr("<td><img src=\":/checked.png\">");
             } else {
@@ -491,14 +490,14 @@ AeonWaveConfig::changeMixer(int val)
             }
             desc += tr(" batched mode</td></tr>");
 
-            x = aaxMixerGetSetup(cfg, AAX_REFRESHRATE);
+            x = cfg.get(AAX_REFRESHRATE);
             if (x)
             {
                desc += tr("<tr><td>Mixer refresh rate:</td>");
                desc += tr("<td>%1 Hz</td>").arg(x);
             }
 
-            x = aaxMixerGetSetup(cfg, AAX_LATENCY);
+            x = cfg.get(AAX_LATENCY);
             if (x)
             {
                desc += tr("<tr><td>Mixer latency:</td>");
@@ -507,7 +506,7 @@ AeonWaveConfig::changeMixer(int val)
             desc += tr("<td></td>");
             desc += tr("<td></td></tr>");
 
-            x = aaxMixerGetSetup(cfg, AAX_MONO_EMITTERS);
+            x = cfg.get(AAX_MONO_EMITTERS);
             desc += tr("<tr><td>Max. mono emitters:</td>");
             if (x == UINT_MAX) {
                desc += tr("<td>infinite</td>");
@@ -517,7 +516,7 @@ AeonWaveConfig::changeMixer(int val)
             desc += tr("<td></td>");
             desc += tr("<td></td></tr>");
 
-            y = aaxMixerGetSetup(cfg, AAX_STEREO_EMITTERS);
+            y = cfg.get(AAX_STEREO_EMITTERS);
             desc += tr("<tr><td>Max. stereo emitters:</td>");
             if (y == UINT_MAX/2) {
                desc += tr("<td>infinite</td>");
@@ -528,7 +527,7 @@ AeonWaveConfig::changeMixer(int val)
             desc += tr("<td></td></tr>");
 
             desc += tr("<tr><td>Max. audio-frames:</td>");
-            x = aaxMixerGetSetup(cfg, AAX_AUDIO_FRAMES);
+            x = cfg.get(AAX_AUDIO_FRAMES);
             if (x == UINT_MAX) {
                desc += tr("<td>infinite</td>");
             } else {
@@ -559,8 +558,8 @@ AeonWaveConfig::changeMixer(int val)
                     desc += tr("<tr>");
                     if (i < max_flt)
                     {
-                        s = aaxFilterGetNameByType(cfg, aaxFilterType(i));
-                        if (aaxIsFilterSupported(cfg, s)) {
+                        s = cfg.info(aaxFilterType(i));
+                        if (cfg.supports(s)) {
                             desc += tr("<td><img src=\":/checked.png\">");
                             desc += tr("<font>&nbsp;%1</font>").arg(s);
                             desc += tr("</td>");
@@ -573,8 +572,8 @@ AeonWaveConfig::changeMixer(int val)
 
                     if (i < max_eff)
                     {
-                        s = aaxEffectGetNameByType(cfg, aaxEffectType(i));
-                        if (aaxIsEffectSupported(cfg, s)) {
+                        s = cfg.info(aaxEffectType(i));
+                        if (cfg.supports(s)) {
                             desc += tr("<td><img src=\":/checked.png\">");
                             desc += tr("<font>&nbsp;%1</font>").arg(s);
                             desc += tr("</td>");
@@ -592,9 +591,6 @@ AeonWaveConfig::changeMixer(int val)
                desc = tr("Unsupported by this version of AeonWave");
             }
             ui->FiltersEffects->setText(desc);
-
-            aaxDriverClose(cfg);
-            aaxDriverDestroy(cfg);
         }
     }
 }
@@ -627,8 +623,9 @@ AeonWaveConfig::FreqToIndex(unsigned int freq)
 void
 AeonWaveConfig::getSystemResources()
 {
-    int major = aaxGetMajorVersion();
-    int minor = aaxGetMinorVersion();
+    AAX::AeonWave aax;
+    int major = aax.major_version();
+    int minor = aax.minor_version();
 
     if (major < 2 || (major == 2 && minor < 5))
     {
@@ -638,118 +635,87 @@ AeonWaveConfig::getSystemResources()
         exit(-1);
     }
 
-    unsigned max_driver = aaxDriverGetCount(general_setup);
-    for (unsigned driver=0; driver<max_driver; driver++)
+    device_t *device;
+    while (const char* d = aax.drivers(general_setup))
     {
-        aaxConfig cfg = aaxDriverGetByPos(driver, general_setup);
-        if (cfg)
+        if (std::string(d) == "None")
+            continue;
+
+        while (const char* r = aax.devices(false))
         {
-            enum aaxRenderMode mode;
-            unsigned max_dev;
-            device_t *device;
-            std::string d;
+            device = new device_t;
+            device->default_output_connector = 0;
+            device->current_output_connector = 0;
+            device->current_input_connector = 0;
+            device->name = d;
+            if (r && *r) device->name += std::string(" on ") + r;
+            devices.push_back(device);
 
-            d = aaxDriverGetSetup(cfg, AAX_NAME_STRING);
-            if (d == "None") //  || d == "AeonWave Loopback")
-                        continue;
-
-            mode = general_setup;
-            max_dev = aaxDriverGetDeviceCount(cfg, mode);
-            if (max_dev)
+            while (const char* i = aax.interfaces(false))
             {
-                for (unsigned dev=0; dev<max_dev; dev++)
+                if (*i)
                 {
-                    unsigned max_ifs;
-                    std::string r;
-
-                    r = aaxDriverGetDeviceNameByPos(cfg, dev, mode);
-                    device = new device_t;
-                    device->default_output_connector = 0;
-                    device->current_output_connector = 0;
-                    device->current_input_connector = 0;
-                    device->name = d + " on " + r;
-                    devices.push_back(device);
-
-                    max_ifs = aaxDriverGetInterfaceCount(cfg, r.c_str(), mode);
-                    if (max_ifs)
-                    {
-                        for (unsigned ifs=0; ifs<max_ifs; ifs++)
-                        {
-                            std::string i;
-                            i = aaxDriverGetInterfaceNameByPos(cfg, r.c_str(),
-                                                               ifs, mode);
-
-                            connector_t *connector = new connector_t(i);
-                            device->output.push_back(connector);
-                        }
-                    }
-                    else
-                    {
-                        connector_t *connector = new connector_t("default");
-                        device->output.push_back(connector);
-                    }
+                    connector_t *connector = new connector_t(i);
+                    device->output.push_back(connector);
                 }
             }
 
-            mode = AAX_MODE_READ;
-            max_dev = aaxDriverGetDeviceCount(cfg, mode);
-            if (max_dev)
+            if (device->output.size() == 0) {
+                connector_t *connector = new connector_t("default");
+                device->output.push_back(connector);
+            }
+        }
+    }
+
+    while (const char* d = aax.drivers(AAX_MODE_READ))
+    {
+        if (std::string(d) == "None")
+            continue;
+
+        while (const char* r = aax.devices(false))
+        {
+            std::string devname = d;
+            if (r && *r) devname += std::string(" on ") + r;
+
+            unsigned int q;
+            for (q=0; q<devices.size(); q++)
             {
-                for (unsigned dev=0; dev<max_dev; dev++)
-                {
-                    std::string r, devname;
-                    unsigned max_ifs;
-                    size_t q;
-
-                    r = aaxDriverGetDeviceNameByPos(cfg, dev, mode);
-
-                    devname = d + " on " + r;
-                    for (q=0; q<devices.size(); q++)
-                    {
-                        if (devices[q]->name == devname) {
-                            break;
-                        }
-                    }
-
-                    if (q == devices.size())
-                    {
-                        device = new device_t;
-                        device->default_output_connector = 0;
-                        device->current_output_connector = 0;
-                        device->current_input_connector = 0;
-                        device->name = devname;
-                        devices.push_back(device);
-                    }
-                    else
-                    {
-                        device = devices[q];
-
-                        if (devname == "AeonWave on Audio Files") {
-                            file_be_pos = q;
-                        }
-                    }
-
-                    max_ifs = aaxDriverGetInterfaceCount(cfg, r.c_str(), mode);
-                    if (max_ifs)
-                    {
-                        for (unsigned ifs=0; ifs<max_ifs; ifs++)
-                        {
-                            std::string i;
-                            i = aaxDriverGetInterfaceNameByPos(cfg, r.c_str(),
-                                                               ifs, mode);
-
-                            connector_t *connector = new connector_t(i, false);
-                            device->input.push_back(connector);
-                        }
-                    }
-                    else
-                    {
-                        connector_t *connector = new connector_t("default", false);
-                        device->input.push_back(connector);
-                    }
+                if (devices[q]->name == devname) {
+                    break;
                 }
             }
-            aaxDriverDestroy(cfg);
+
+            if (q == devices.size())
+            {
+                device = new device_t;
+                device->default_output_connector = 0;
+                device->current_output_connector = 0;
+                device->current_input_connector = 0;
+                device->name = devname;
+                devices.push_back(device);
+            }
+            else
+            {
+                device = devices[q];
+
+                if (devname == "AeonWave on Audio Files") {
+                    file_be_pos = q;
+                }
+            }
+
+            while (const char* i = aax.interfaces(false))
+            {
+                if (*i)
+                {
+                    connector_t *connector = new connector_t(i, false);
+                    device->input.push_back(connector);
+                }
+            }
+
+            if (device->input.size() == 0) {
+                connector_t *connector = new connector_t("default", false);
+                device->input.push_back(connector);
+            }
         }
     }
 }
@@ -1177,7 +1143,6 @@ AeonWaveConfig::displayUiDevicesConfig()
     unsigned be = current_device;
     const char *devname;
     std::string name;
-    aaxConfig cfg;
     bool found;
     int idx;
 
@@ -1202,23 +1167,21 @@ AeonWaveConfig::displayUiDevicesConfig()
         name += std::string(": ") + ifname;
     }
 
-    cfg = aaxDriverOpenByName(name.c_str(), AAX_MODE_READ);
+    AAX::AeonWave cfg(name.c_str(), AAX_MODE_READ);
     if (cfg)
     {
        int min, max;
 
-       aaxMixerSetState(cfg, AAX_INITIALIZED);
+       cfg.set(AAX_INITIALIZED);
 
-       min = aaxMixerGetSetup(cfg, AAX_FREQUENCY_MIN);
-       max = aaxMixerGetSetup(cfg, AAX_FREQUENCY_MAX);
+       min = cfg.get(AAX_FREQUENCY_MIN);
+       max = cfg.get(AAX_FREQUENCY_MAX);
        itemsGrayOut(ui->InputSampleFreq, min, max);
 
-       min = aaxMixerGetSetup(cfg, AAX_PERIODS_MIN);
-       max = aaxMixerGetSetup(cfg, AAX_PERIODS_MAX);
+       min = cfg.get(AAX_PERIODS_MIN);
+       max = cfg.get(AAX_PERIODS_MAX);
        itemsGrayOut(ui->InputPeriods, min, max);
 
-       aaxDriverClose(cfg);
-       aaxDriverDestroy(cfg);
        found = true;
     }
     else
@@ -1263,34 +1226,31 @@ AeonWaveConfig::displayUiDevicesConfig()
        name += ": " + std::string(tmpDir()) + "/AeonWave.wav";
     }
 
-    cfg = aaxDriverOpenByName(name.c_str(), AAX_MODE_WRITE_STEREO);
+    cfg = AAX::AeonWave(name.c_str(), AAX_MODE_WRITE_STEREO);
     if (cfg)
     {
        int min, max;
        bool x;
 
-       aaxMixerSetState(cfg, AAX_INITIALIZED);
+       cfg.set(AAX_INITIALIZED);
 
-       x = aaxMixerGetSetup(cfg, AAX_TIMER_MODE);
+       x = cfg.get(AAX_TIMER_MODE);
        ui->Timer->setEnabled(x);
 
-       x = aaxMixerGetSetup(cfg, AAX_SHARED_MODE);
+       x = cfg.get(AAX_SHARED_MODE);
        ui->Shared->setEnabled(x);
 
-       min = aaxMixerGetSetup(cfg, AAX_TRACKS_MIN);
-       max = aaxMixerGetSetup(cfg, AAX_TRACKS_MAX);
+       min = cfg.get(AAX_TRACKS_MIN);
+       max = cfg.get(AAX_TRACKS_MAX);
        itemsGrayOut(ui->OutputSpeakers, min, max);
 
-       min = aaxMixerGetSetup(cfg, AAX_FREQUENCY_MIN);
-       max = aaxMixerGetSetup(cfg, AAX_FREQUENCY_MAX);
+       min = cfg.get(AAX_FREQUENCY_MIN);
+       max = cfg.get(AAX_FREQUENCY_MAX);
        itemsGrayOut(ui->OutputSampleFreq, min, max);
 
-       min = aaxMixerGetSetup(cfg, AAX_PERIODS_MIN);
-       max = aaxMixerGetSetup(cfg, AAX_PERIODS_MAX);
+       min = cfg.get(AAX_PERIODS_MIN);
+       max = cfg.get(AAX_PERIODS_MAX);
        itemsGrayOut(ui->OutputPeriods, min, max);
-
-       aaxDriverClose(cfg);
-       aaxDriverDestroy(cfg);
     }
     else if (found) {
         alert(tr("Output device unavailable or busy"));
@@ -1803,4 +1763,3 @@ aaxConfigLineEdit::eventFilter(QObject* object, QEvent* event)
     }
     return false;
 }
-

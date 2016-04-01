@@ -23,7 +23,7 @@
 #include <vector>
 #include <string>
 
-#include <aax/aax.h>
+#include <aax/AeonWave>
 
 #include <QtGui/QDialog>
 #include <QtGui/QComboBox>
@@ -88,6 +88,16 @@ private:
 
         _connector(bool m = true) :
             name("default"),
+            bitrate(320),
+            refresh_rate(46),
+            sample_freq(44100),
+            no_speakers(2),
+            no_periods(2),
+            setup(m ? int(AAX_MODE_WRITE_STEREO) : AAX_TRACK_ALL),
+            shared(false),
+            timed(false) {};
+         _connector(const char* n, bool m = true) :
+            name(n),
             bitrate(320),
             refresh_rate(46),
             sample_freq(44100),
