@@ -31,7 +31,7 @@
 #include <QMenu>
 
 #include <SimpleGlob.h>
-#include <aax/aax.h>
+#include <aax/AeonWave.hpp>
 
 #include "setup.h"
 #include "remote.h"
@@ -58,10 +58,10 @@ public:
     QString odevname_str;
     struct device_t odevices;
 
-    aaxConfig outdev;
-    aaxConfig indev;
+    AAX::AeonWave outdev;
+    AAX::AeonWave indev;
 
-    aaxConfig file;
+    AAX::AeonWave file;
     int bitrate;
     float in_freq;
     bool agc_enabled;

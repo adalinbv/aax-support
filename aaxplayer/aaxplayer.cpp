@@ -67,9 +67,6 @@ do {                            \
 AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
     QDialog(parent),
     setup(NULL),
-    outdev(NULL),
-    indev(NULL),
-    file(NULL),
     bitrate(-1),
     in_freq(44100.0f),
     agc_enabled(false),
@@ -208,7 +205,7 @@ AeonWavePlayer::tick()
 
     if (playing)
     {
-        if (aaxMixerGetState(indev) == AAX_PROCESSED) {
+        if (indev.get() == AAX_PROCESSED) {
             stopInput();
         }
     }
@@ -221,7 +218,7 @@ AeonWavePlayer::tick()
     {
         float hour, minutes, seconds, pos;
 
-        pos = (float)aaxSensorGetOffset(indev, AAX_SAMPLES);
+        pos = (float)indev.offset(AAX_SAMPLES);
 
         seconds = floorf(pos/in_freq);
         hour = floorf(seconds/(60.0f*60.0f));
@@ -260,7 +257,7 @@ AeonWavePlayer::tick()
             {
                 enum aaxSetupType e1 = aaxSetupType(AAX_AVERAGE_VALUE+track);
 
-                int ival = aaxMixerGetSetup(indev, e1);
+                int ival = indev.get(e1);
                 float dB = (ival > 0) ? 10*log10(ival*MAXDIV) : -1000000.0;
 
                 ival = _MINMAX(100*(dB-MIN_DB)/(MAX_DB-MIN_DB), 0, 99);
@@ -275,8 +272,8 @@ AeonWavePlayer::tick()
     {
         elapsed -= 3.0f;
 
-        QString title = aaxDriverGetSetup(indev, AAX_TRACK_TITLE_UPDATE);
-        QString artist = aaxDriverGetSetup(indev, AAX_MUSIC_PERFORMER_UPDATE);
+        QString title = indev.info(AAX_TRACK_TITLE_UPDATE);
+        QString artist = indev.info(AAX_MUSIC_PERFORMER_UPDATE);
         if (!title.isEmpty() || !artist.isEmpty())
         {
             if (title.isEmpty()) {
@@ -447,8 +444,8 @@ AeonWavePlayer::addFavorite()
     QString actname, objname;
     if (remote_stream)
     {
-        QString name = aaxDriverGetSetup(indev, AAX_SONG_COMPOSER_STRING); 
-        QString genre = aaxDriverGetSetup(indev, AAX_MUSIC_GENRE_STRING);
+        QString name = indev.info(AAX_SONG_COMPOSER_STRING); 
+        QString genre = indev.info(AAX_MUSIC_GENRE_STRING);
 
         if (!name.isEmpty())
         {
@@ -464,8 +461,8 @@ AeonWavePlayer::addFavorite()
     }
     else if (indir.isEmpty())	// file
     {
-        QString artist = aaxDriverGetSetup(indev, AAX_MUSIC_PERFORMER_STRING);
-        QString title = aaxDriverGetSetup(indev, AAX_TRACK_TITLE_STRING);
+        QString artist = indev.info(AAX_MUSIC_PERFORMER_STRING);
+        QString title = indev.info(AAX_TRACK_TITLE_STRING);
 
         if (!artist.isEmpty())
         {
@@ -499,28 +496,25 @@ AeonWavePlayer::startOutput()
     std::string d = std::string(odevname_str.toUtf8().constData());
     const char *dev = d.empty() ? NULL : d.c_str();
 
-    outdev = aaxDriverOpenByName(dev, AAX_MODE_WRITE_STEREO);
+    outdev = AAX::AeonWave(dev, AAX_MODE_WRITE_STEREO);
     if (outdev)
     {
-        aaxFilter flt = aaxMixerGetFilter(outdev, AAX_VOLUME_FILTER);
-        float vol = _MIN(aaxFilterGetParam(flt, AAX_GAIN, AAX_LINEAR), 1.0f);
+        AAX::DSP flt = outdev.get(AAX_VOLUME_FILTER);
+        float vol = _MIN(flt.get(AAX_GAIN, AAX_LINEAR), 1.0f);
         ui->volume->setValue(rintf(vol*100));
-        _TEST(aaxFilterDestroy(flt));
 
-        int res = aaxMixerSetState(outdev, AAX_INITIALIZED);
+        int res = outdev.set(AAX_INITIALIZED);
         if (res)
         {
-            _TEST(aaxMixerSetState(outdev, AAX_PLAYING));
-            odevname_str = aaxDriverGetSetup(outdev, AAX_RENDERER_STRING);
+            _TEST(outdev.set(AAX_PLAYING));
+            odevname_str = outdev.info(AAX_RENDERER_STRING);
         }
         else
         {
             alert(tr("<br>Unable to initialize the output device:</br>"
                         "<p><i><b>%1</b></i></p>"
-                    ).arg(aaxGetErrorString(aaxGetErrorNo())));
-            _TEST(aaxDriverClose(outdev));
-            _TEST(aaxDriverDestroy(outdev));
-            outdev = NULL;
+                    ).arg(outdev.error()));
+            _TEST(outdev.close());
         }
     }
 }
@@ -529,10 +523,8 @@ void
 AeonWavePlayer::stopOutput()
 {
     play_pressed = false;
-    _TEST(aaxMixerSetState(outdev, AAX_STOPPED));
-    _TEST(aaxDriverClose(outdev));
-    _TEST(aaxDriverDestroy(outdev));
-    outdev = NULL;
+    _TEST(outdev.set(AAX_STOPPED));
+    _TEST(outdev.close());
 
 }
 
@@ -555,40 +547,38 @@ AeonWavePlayer::startInput()
         std::string d = std::string(idevname_str.toUtf8().constData());
         const char *dev = d.empty() ? NULL : d.c_str();
 
-        indev = aaxDriverOpenByName(dev, AAX_MODE_READ);
+        indev = AAX::AeonWave(dev, AAX_MODE_READ);
         if (indev)
         {
             /** set capturing Auto-Gain Control (AGC): 0dB */
             if (agc_enabled)
             {
-                aaxFilter filter = aaxMixerGetFilter(indev, AAX_VOLUME_FILTER);
+                AAX::DSP filter = indev.get(AAX_VOLUME_FILTER);
                 if (filter)
                 {
-                    aaxFilterSetParam(filter, AAX_AGC_RESPONSE_RATE,
-                                                AAX_LINEAR, 1.5f);
-                    _TEST(aaxMixerSetFilter(indev, filter));
-                    _TEST(aaxFilterDestroy(filter));
+                    filter.set(AAX_AGC_RESPONSE_RATE, AAX_LINEAR, 1.5f);
+                    _TEST(indev.set(filter));
                 }
             }
 
-            _TEST(aaxMixerRegisterSensor(outdev, indev));
+            _TEST(outdev.add(indev));
 
             /** must be called after aaxMixerRegisterSensor */
-            int res = aaxMixerSetState(indev, AAX_INITIALIZED);
+            int res = indev.set(AAX_INITIALIZED);
             if (!res)
             {
                 alert(tr("<br>File initialization error:</br><br>%1</br>"
                             "<p><i><b>%2</b></i></p>"
-                        ).arg(infile).arg(aaxGetErrorString(aaxGetErrorNo())));
+                        ).arg(infile).arg(indev.error()));
                 infile = QString();
                 stopInput();
                 return;
             }
-            _TEST(aaxSensorSetState(indev, AAX_CAPTURING));
+            _TEST(indev.set(AAX_CAPTURING));
 
-            in_freq = (float)aaxMixerGetSetup(indev, AAX_FREQUENCY);
-            max_samples = (float)aaxMixerGetSetup(indev, AAX_SAMPLES_MAX);
-            tracks = _MINMAX(aaxMixerGetSetup(indev, AAX_TRACKS), 2, 8);
+            in_freq = (float)indev.set(AAX_FREQUENCY);
+            max_samples = (float)indev.set(AAX_SAMPLES_MAX);
+            tracks = _MINMAX(indev.get(AAX_TRACKS), 2, 8);
             resize();
 
             if (!max_samples) {
@@ -608,8 +598,8 @@ AeonWavePlayer::startInput()
             }
             ui->pctPlaying->setValue(0);
 
-            QString title = aaxDriverGetSetup(indev, AAX_TRACK_TITLE_STRING);
-            QString artist = aaxDriverGetSetup(indev, AAX_MUSIC_PERFORMER_STRING);
+            QString title = indev.info(AAX_TRACK_TITLE_STRING);
+            QString artist = indev.info(AAX_MUSIC_PERFORMER_STRING);
             if (!title.isEmpty() || !artist.isEmpty())
             {
                 if (title.isEmpty()) {
@@ -620,7 +610,7 @@ AeonWavePlayer::startInput()
             }
             else
             {
-                title = aaxDriverGetSetup(indev, AAX_RENDERER_STRING);
+                title = indev.info(AAX_RENDERER_STRING);
                 int spos = title.lastIndexOf('/');
                 if (!spos) spos = title.lastIndexOf(QDir::separator());
                 if (spos >= 0)
@@ -648,7 +638,7 @@ AeonWavePlayer::startInput()
     }
     else if (paused)
     {
-        _TEST(aaxSensorSetState(indev, AAX_CAPTURING));
+        _TEST(indev.set(AAX_CAPTURING));
         paused = false;
     }
     else if (playing && !indir.isEmpty())	// Next song is requested
@@ -665,10 +655,9 @@ AeonWavePlayer::stopInput()
 {
     if (playing)
     {
-        _TEST(aaxMixerSetState(indev, AAX_STOPPED));
-        _TEST(aaxMixerDeregisterSensor(outdev, indev));
-        _TEST(aaxDriverClose(indev));
-        _TEST(aaxDriverDestroy(indev));
+        _TEST(indev.set(AAX_STOPPED));
+        _TEST(outdev.remove(indev));
+        _TEST(indev.close());
     }
 
     setWindowTitle(QApplication::translate("AudioPlayer", "AeonWave Audio Player", 0, QApplication::UnicodeUTF8));
@@ -685,7 +674,7 @@ AeonWavePlayer::togglePause()
 {
     if (playing && !paused)
     {
-        _TEST(aaxSensorSetState(indev, AAX_SUSPENDED));
+        _TEST(indev.set(AAX_SUSPENDED));
         paused = true;
     }
 }
@@ -693,26 +682,22 @@ AeonWavePlayer::togglePause()
 void
 AeonWavePlayer::volumeChanged(int val)
 {
-    aaxFilter flt = aaxMixerGetFilter(outdev, AAX_VOLUME_FILTER);
-    _TEST(aaxFilterSetParam(flt, AAX_GAIN, AAX_LINEAR, (float)val/100.0f));
-    _TEST(aaxMixerSetFilter(outdev, flt));
-    _TEST(aaxFilterDestroy(flt));
+    AAX::DSP flt = outdev.get(AAX_VOLUME_FILTER);
+    _TEST(flt.set(AAX_GAIN, AAX_LINEAR, (float)val/100.0f));
+    _TEST(outdev.set(flt));
 }
 
 void
 AeonWavePlayer::setWildcards()
 {
-    aaxConfig cfgi;
-
-    cfgi = aaxDriverGetByName("AeonWave on Audio Files", AAX_MODE_READ);
+    AAX::AeonWave cfgi("AeonWave on Audio Files", AAX_MODE_WRITE_STEREO);
     if (cfgi)
     {
         const char *d, *f;
 
-        d = aaxDriverGetDeviceNameByPos(cfgi, 0, AAX_MODE_WRITE_STEREO);
-        f = aaxDriverGetInterfaceNameByPos(cfgi, d, 0, AAX_MODE_WRITE_STEREO);
+        d = cfgi.device(0);
+        f = cfgi.interface(d, 0);
         wildcards = f;
-        _TEST(aaxDriverDestroy(cfgi));
     }
 }
 
@@ -940,7 +925,7 @@ AeonWavePlayer::getSystemResources(device_t &type, enum aaxRenderMode mode)
     unsigned max = aaxDriverGetCount(mode);
     for (unsigned b=0; b<max; b++)
     {
-        aaxConfig cfg = aaxDriverGetByPos(b, mode);
+        AAX::AeonWave cfg(b, mode);
         if (cfg)
         {
             unsigned max_device;
@@ -979,7 +964,7 @@ AeonWavePlayer::freeDevices()
 {
     togglePause();
     if (playing) {
-        _TEST(aaxMixerDeregisterSensor(outdev, indev));
+        _TEST(outdev.remove(indev));
     }
 
     stopOutput();
@@ -987,7 +972,7 @@ AeonWavePlayer::freeDevices()
 
     if (playing)
     {
-        _TEST(aaxMixerRegisterSensor(outdev, indev));
+        _TEST(outdev.add(indev));
         startInput();
     }
 }
@@ -1012,34 +997,34 @@ AeonWavePlayer::showSongInfo()
     QString msg = "<table width=\"300\"><tr rowspan=\"9\">";
     msg += "<td></td></tr>";
 
-    s = aaxDriverGetSetup(indev, AAX_MUSIC_PERFORMER_STRING);
+    s = indev.info(AAX_MUSIC_PERFORMER_STRING);
     msg += tr("<tr><td>Performer:</td><td>%1</td></tr>").arg(s ? s : "-");
 
-    s = aaxDriverGetSetup(indev, AAX_TRACK_TITLE_STRING);
+    s = indev.info(AAX_TRACK_TITLE_STRING);
     msg += tr("<tr><td>Title:</td><td>%1</td></tr>").arg(s ? s : "-");
 
-    s = aaxDriverGetSetup(indev, AAX_ALBUM_NAME_STRING);
+    s = indev.info(AAX_ALBUM_NAME_STRING);
     msg += tr("<tr><td>Album:</td><td>%1</td></tr>").arg(s ? s : "-");
 
-    s = aaxDriverGetSetup(indev, AAX_SONG_COMPOSER_STRING);
+    s = indev.info(AAX_SONG_COMPOSER_STRING);
     msg += tr("<tr><td>Composer:</td><td>%1</td></tr>").arg(s ? s : "-");
 
-    s = aaxDriverGetSetup(indev, AAX_ORIGINAL_PERFORMER_STRING);
+    s = indev.ino(AAX_ORIGINAL_PERFORMER_STRING);
     msg += tr("<tr><td>Original:</td><td>%1</td></tr>").arg(s ? s : "-");
 
-    s = aaxDriverGetSetup(indev, AAX_MUSIC_GENRE_STRING);
+    s = indev.info(AAX_MUSIC_GENRE_STRING);
     msg += tr("<tr><td>Genre:</td><td>%1</td></tr>").arg(s ? s : "-");
 
-    s = aaxDriverGetSetup(indev, AAX_RELEASE_DATE_STRING);
+    s = indev.info(AAX_RELEASE_DATE_STRING);
     msg += tr("<tr><td>Release date:</td><td>%1</td></tr>").arg(s ? s : "-");
 
-    s = aaxDriverGetSetup(indev, AAX_TRACK_NUMBER_STRING);
+    s = indev.info(AAX_TRACK_NUMBER_STRING);
     msg += tr("<tr><td>Track number:&nbsp;</td><td>%1</td></tr>").arg(s ? s : "-");
 
-    s = aaxDriverGetSetup(indev, AAX_SONG_COPYRIGHT_STRING);
+    s = indev.info(AAX_SONG_COPYRIGHT_STRING);
     msg += tr("<tr><td>Copyright:</td><td>%1</td></tr>").arg(s ? s : "-");
 
-    s = aaxDriverGetSetup(indev, AAX_WEBSITE_STRING);
+    s = indev.info(AAX_WEBSITE_STRING);
     msg += tr("<tr><td>Website:</td><td>%1</td></tr>").arg(s ? s : "-");
     
     msgBox.setText(msg);
@@ -1060,7 +1045,7 @@ AeonWavePlayer::viewAbout()
                 "all played at the same volume level when Auto Gain Control "
                 "(AGC) is selected.<p>"
                 "<sub>This softare makes use of: AeonWave 2.5+, Qt 4.7+</sub>"
-            ).arg(AAXSUPPORT_MAJOR_VERSION).arg(AAXSUPPORT_MINOR_VERSION).arg(aaxGetVersionString(outdev)));
+            ).arg(AAXSUPPORT_MAJOR_VERSION).arg(AAXSUPPORT_MINOR_VERSION).arg(outdev.version()));
 }
 
 void
