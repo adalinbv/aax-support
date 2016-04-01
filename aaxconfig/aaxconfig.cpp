@@ -1225,31 +1225,32 @@ AeonWaveConfig::displayUiDevicesConfig()
     else {
        name += ": " + std::string(tmpDir()) + "/AeonWave.wav";
     }
+    cfg.close();
 
-    cfg = AAX::AeonWave(name.c_str(), AAX_MODE_WRITE_STEREO);
-    if (cfg)
+    AAX::AeonWave cfgi(name.c_str(), AAX_MODE_WRITE_STEREO);
+    if (cfgi)
     {
        int min, max;
        bool x;
 
-       cfg.set(AAX_INITIALIZED);
+       cfgi.set(AAX_INITIALIZED);
 
-       x = cfg.get(AAX_TIMER_MODE);
+       x = cfgi.get(AAX_TIMER_MODE);
        ui->Timer->setEnabled(x);
 
-       x = cfg.get(AAX_SHARED_MODE);
+       x = cfgi.get(AAX_SHARED_MODE);
        ui->Shared->setEnabled(x);
 
-       min = cfg.get(AAX_TRACKS_MIN);
-       max = cfg.get(AAX_TRACKS_MAX);
+       min = cfgi.get(AAX_TRACKS_MIN);
+       max = cfgi.get(AAX_TRACKS_MAX);
        itemsGrayOut(ui->OutputSpeakers, min, max);
 
-       min = cfg.get(AAX_FREQUENCY_MIN);
-       max = cfg.get(AAX_FREQUENCY_MAX);
+       min = cfgi.get(AAX_FREQUENCY_MIN);
+       max = cfgi.get(AAX_FREQUENCY_MAX);
        itemsGrayOut(ui->OutputSampleFreq, min, max);
 
-       min = cfg.get(AAX_PERIODS_MIN);
-       max = cfg.get(AAX_PERIODS_MAX);
+       min = cfgi.get(AAX_PERIODS_MIN);
+       max = cfgi.get(AAX_PERIODS_MAX);
        itemsGrayOut(ui->OutputPeriods, min, max);
     }
     else if (found) {
@@ -1357,7 +1358,6 @@ AeonWaveConfig::writeConfigFile()
         if (default_input_device != UINT_MAX)
         {
             file << " <input>" << std::endl;
-
             unsigned dev = devices[default_input_device]->default_input_connector;
             file << "  <device>";
             file << devices[default_input_device]->name;
