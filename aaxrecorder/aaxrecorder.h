@@ -28,7 +28,7 @@
 #include <QTime>
 
 #include <SimpleGlob.h>
-#include <aax/aax.h>
+#include <aax/AeonWave>
 
 #include "setup.h"
 #include "record.h"
@@ -59,9 +59,9 @@ public:
     struct device_t idevices;
     struct device_t odevices;
 
-    aaxConfig outdev;
-    aaxConfig indev;
-    aaxConfig file;
+    AAX::AeonWave outdev;
+    AAX::AeonWave indev;
+    AAX::AeonWave file;
     int bitrate;
     float in_freq;
     bool agc_enabled;

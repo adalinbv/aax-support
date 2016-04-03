@@ -57,9 +57,6 @@ AeonWaveRecorder::AeonWaveRecorder(QWidget *parent) :
     time(24,59,59,59),
     record(NULL),
     setup(NULL),
-    outdev(NULL),
-    indev(NULL),
-    file(NULL),
     bitrate(-1),
     in_freq(44100.0f),
     agc_enabled(true),
@@ -134,7 +131,7 @@ AeonWaveRecorder::tick()
     {
         float hour, minutes, seconds, pos;
 
-        pos = (float)aaxSensorGetOffset(file, AAX_SAMPLES);
+        pos = (float)file.offset(AAX_SAMPLES);
 
         seconds = floorf(pos/in_freq);
         hour = floorf(seconds/(60.0f*60.0f));
@@ -171,7 +168,7 @@ AeonWaveRecorder::tick()
         enum aaxSetupType e1 = aaxSetupType(AAX_AVERAGE_VALUE+track);
         int ival;
 
-        ival = aaxMixerGetSetup(outdev, e1);
+        ival = outdev.get(e1);
         dB = (ival > 0) ? 10*log10(ival*MAXDIV) : -1000000.0;
         vu[track] = _MINMAX(100*(dB-MIN_DB)/(MAX_DB-MIN_DB), 0, 99);
     }
@@ -194,62 +191,59 @@ AeonWaveRecorder::startOutput()
     std::string d = std::string(odevname_str.toUtf8().constData());
     const char *dev = d.empty() ? NULL : d.c_str();
 
-    outdev = aaxDriverOpenByName(dev, AAX_MODE_WRITE_STEREO);
+    outdev = AAX::AeonWave(dev, AAX_MODE_WRITE_STEREO);
     if (outdev)
     {
 #if 0
-        aaxFilter flt = aaxMixerGetFilter(outdev, AAX_VOLUME_FILTER);
-        float vol = _MIN(aaxFilterGetParam(flt, AAX_GAIN, AAX_LINEAR), 1.0f);
+        DSP flt = outdev.get(AAX_VOLUME_FILTER);
+        float vol = _MIN(flt.get(AAX_GAIN, AAX_LINEAR), 1.0f);
         ui->volume->setValue(rintf(vol*100));
-        _TEST(aaxFilterDestroy(flt));
 #endif
 
-        int res = aaxMixerSetState(outdev, AAX_INITIALIZED);
+        int res = outdev.set(AAX_INITIALIZED);
         if (!res)
         {
             alert(tr("<br>Unable to initialize the output device:</br>"
                      "<p><i><b>%1</b></i></p>"
-                  ).arg(aaxGetErrorString(aaxGetErrorNo())));
+                  ).arg(outdev.error()));
             stopOutput();
         }
         else
         {
-            _TEST(aaxMixerSetState(outdev, AAX_PLAYING));
-            odevname_str = aaxDriverGetSetup(outdev, AAX_RENDERER_STRING);
+            _TEST(outdev.set(AAX_PLAYING));
+            odevname_str = outdev.get(AAX_RENDERER_STRING);
 
             d = std::string(idevname_str.toUtf8().constData());
             dev = d.empty() ? NULL : d.c_str();
-            indev = aaxDriverOpenByName(dev, AAX_MODE_READ);
+            indev = AAX::AeonWave(dev, AAX_MODE_READ);
             if (indev)
             {
-                idevname_str = aaxDriverGetSetup(indev, AAX_RENDERER_STRING);
+                idevname_str = indev.get(AAX_RENDERER_STRING);
 
-                _TEST(aaxMixerRegisterSensor(outdev, indev));
+                _TEST(outdev.add(indev));
 
                 /** must be called after aaxMixerRegisterSensor */
-                int res = aaxMixerSetState(indev, AAX_INITIALIZED);
+                int res = indev.set(AAX_INITIALIZED);
                 if (!res)
                 {
                     alert(tr("<br>Unable to initialize the input device:</br>"
                              "<p><i><b>%1</b></i></p>"
-                            ).arg(aaxGetErrorString(aaxGetErrorNo())));
+                            ).arg(indev.error()));
                     stopOutput();
                 }
                 else
                 {
-                    aaxFilter flt = aaxMixerGetFilter(indev, AAX_VOLUME_FILTER);
+                    AAX::DSP flt = indev.get(AAX_VOLUME_FILTER);
 
                     float val = ui->volume->value()/100.0f;
-                    _TEST(aaxFilterSetParam(flt, AAX_GAIN, AAX_LINEAR, val));
+                    _TEST(flt.set(AAX_GAIN, AAX_LINEAR, val));
                     if (agc_enabled) {
-                       _TEST(aaxFilterSetParam(flt, AAX_AGC_RESPONSE_RATE,
-                                                    AAX_LINEAR, 1.5f));
+                       _TEST(flt.set(AAX_AGC_RESPONSE_RATE, AAX_LINEAR, 1.5f));
                     }
-                    _TEST(aaxMixerSetFilter(indev, flt));
-                    _TEST(aaxFilterDestroy(flt));
+                    _TEST(indev.set(flt));
 
-                    _TEST(aaxSensorSetState(indev, AAX_CAPTURING));
-                    in_freq = aaxMixerGetSetup(outdev, AAX_FREQUENCY);
+                    _TEST(indev.set(AAX_CAPTURING));
+                    in_freq = outdev.get(AAX_FREQUENCY);
                 }
             }
             else {
@@ -264,18 +258,14 @@ AeonWaveRecorder::stopOutput()
 {
     if (indev)
     {
-        _TEST(aaxMixerSetState(indev, AAX_STOPPED));
-        _TEST(aaxMixerDeregisterSensor(outdev, indev));
-        _TEST(aaxDriverClose(indev));
-        _TEST(aaxDriverDestroy(indev));
-        indev = NULL;
+        _TEST(indev.set(AAX_STOPPED));
+        _TEST(outdev.remove(indev));
+        _TEST(indev.close());
     }
     if (outdev)
     {
-        _TEST(aaxMixerSetState(outdev, AAX_STOPPED));
-        _TEST(aaxDriverClose(outdev));
-        _TEST(aaxDriverDestroy(outdev));
-        outdev = NULL;
+        _TEST(outdev.set(AAX_STOPPED));
+        _TEST(outdev.close());
     }
 }
 
@@ -297,20 +287,20 @@ AeonWaveRecorder::startRecording()
             }
 
             QString filedev = "AeonWave on Audio Files: "+fileName;
-            file = aaxDriverOpenByName(filedev.toUtf8().constData(),
+            file = AAX::AeonWave(filedev.toUtf8().constData(),
                                        AAX_MODE_WRITE_STEREO);
             if (file)
             {
-                _TEST(aaxMixerRegisterSensor(outdev, file));
+                _TEST(outdev.add(file));
                 if (bitrate > 0) {
-                    _TEST(aaxMixerSetSetup(file, AAX_BITRATE, bitrate));
+                    _TEST(file.set(AAX_BITRATE, bitrate));
                 }
-                int res = aaxMixerSetState(file, AAX_INITIALIZED);
+                int res = file.set(AAX_INITIALIZED);
                 if (!res)
                 {
                    alert(tr("<br>Unable to initialize the recording device:</br>"
                             "<p><i><b>%1</b></i></p>"
-                         ).arg(aaxGetErrorString(aaxGetErrorNo())));
+                         ).arg(file.error()));
                    return;
                 }
 
@@ -327,7 +317,7 @@ AeonWaveRecorder::startRecording()
                     max_samples = in_freq*(seconds + 60*minutes + 60*60*hour);
                  }
 
-                _TEST(aaxMixerSetState(file, AAX_PLAYING));
+                _TEST(file.set(AAX_PLAYING));
                 recording = true;
             }
         }
@@ -340,12 +330,10 @@ AeonWaveRecorder::stopRecording()
 {
     if (recording)
     {
-        _TEST(aaxMixerSetState(file, AAX_STOPPED));
-        _TEST(aaxMixerDeregisterSensor(outdev, file));
-        aaxDriverClose(file);
-        aaxDriverDestroy(file);
+        _TEST(file.set(AAX_STOPPED));
+        _TEST(outdev.remove(file));
+        file.close();
         recording = false;
-        file = NULL;
     }
 }
 
@@ -354,7 +342,7 @@ AeonWaveRecorder::togglePause()
 {
     if (recording && !paused)
     {
-        _TEST(aaxSensorSetState(file, AAX_SUSPENDED));
+        _TEST(file.set(AAX_SUSPENDED));
         paused = true;
     }
 }
@@ -364,27 +352,23 @@ AeonWaveRecorder::volumeChanged(int val)
 {
     if (indev)
     {
-        aaxFilter flt = aaxMixerGetFilter(indev, AAX_VOLUME_FILTER);
-        _TEST(aaxFilterSetParam(flt, AAX_GAIN, AAX_LINEAR, (float)val/100.0f));
-        _TEST(aaxMixerSetFilter(indev, flt));
-        _TEST(aaxFilterDestroy(flt));
+        AAX::DSP flt = indev.get(AAX_VOLUME_FILTER);
+        _TEST(flt.set(AAX_GAIN, AAX_LINEAR, (float)val/100.0f));
+        _TEST(indev.set(flt));
     }
 }
 
 void
 AeonWaveRecorder::setWildcards()
 {
-    aaxConfig cfgo;
-
-    cfgo = aaxDriverGetByName("AeonWave on Audio Files",AAX_MODE_WRITE_STEREO);
+    AAX::AeonWave cfgo("AeonWave on Audio Files", AAX_MODE_WRITE_STEREO);
     if (cfgo)
     {
         const char *d, *f;
 
-        d = aaxDriverGetDeviceNameByPos(cfgo, 0, AAX_MODE_WRITE_STEREO);
-        f = aaxDriverGetInterfaceNameByPos(cfgo, d, 0, AAX_MODE_WRITE_STEREO);
+        d = cfgo.device(0);
+        f = cfgo.interface(d, 0);
         wildcards = f;
-        _TEST(aaxDriverDestroy(cfgo));
     }
 }
 
@@ -405,41 +389,23 @@ AeonWaveRecorder::alert(QString msg)
 void
 AeonWaveRecorder::getSystemResources(device_t &type, enum aaxRenderMode mode)
 {
+    AAX::AeonWave aax;
+
     type.backend.clear();
 
-    unsigned max = aaxDriverGetCount(mode);
-    for (unsigned b=0; b<max; b++)
+    while (const char *d = aax.drivers(mode))
     {
-        aaxConfig cfg = aaxDriverGetByPos(b, mode);
-        if (cfg)
+        while (const char *r = aax.devices())
         {
-            unsigned max_device;
-            QString be_name;
+           struct backend_t backend;
 
-            be_name = aaxDriverGetSetup(cfg, AAX_NAME_STRING);
-            max_device = aaxDriverGetDeviceCount(cfg, mode);
-            for (unsigned d=0; d<max_device; d++)
-            {
-                QString device = aaxDriverGetDeviceNameByPos(cfg, d, mode);
-                struct backend_t backend;
-                unsigned max_interface;
+           backend.name = d + Qstring(" on ") + r;
 
-                backend.name = be_name + " on " + device;
-                backend.interface_name.clear();
-
-                max_interface = aaxDriverGetInterfaceCount(cfg,
-                                                    device.toUtf8().constData(),
-                                                    mode);
-                for (unsigned i=0; i<max_interface; i++)
-                {
-                    QString if_name = aaxDriverGetInterfaceNameByPos(cfg,
-                                                    device.toUtf8().constData(),
-                                                    i, mode);
-                    backend.interface_name.append(if_name);
-                }
-                type.backend.append(backend);
-            }
-            _TEST(aaxDriverDestroy(cfg));
+           backend.interface_name.clear();
+           while (const char *i = aax.interfaces()) {
+               backend.interface_name.append(i);
+           }
+           type.backend.append(backend);
         }
     }
 }
@@ -449,7 +415,7 @@ AeonWaveRecorder::freeDevices()
 {
     togglePause();
     if (recording) {
-        _TEST(aaxMixerDeregisterSensor(outdev, indev));
+        _TEST(outdev.remove(indev));
     }
 
     stopOutput();
@@ -457,7 +423,7 @@ AeonWaveRecorder::freeDevices()
 
     if (recording)
     {
-        _TEST(aaxMixerRegisterSensor(outdev, indev));
+        _TEST(outdev.remove(indev));
         startRecording();
     }
 }
@@ -481,7 +447,7 @@ AeonWaveRecorder::viewAbout()
              "recorded at the same volume level when Auto Gain Control "
              "(AGC) is selected.<p>"
              "<sub>This softare makes use of: AeonWave 2.5+, Qt 4.7+</sub>"
-            ).arg(AAXSUPPORT_MAJOR_VERSION).arg(AAXSUPPORT_MINOR_VERSION).arg(aaxGetVersionString(outdev)));
+            ).arg(AAXSUPPORT_MAJOR_VERSION).arg(AAXSUPPORT_MINOR_VERSION).arg(outdev.version()));
 }
 
 void

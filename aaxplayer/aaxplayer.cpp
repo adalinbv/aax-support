@@ -920,41 +920,23 @@ AeonWavePlayer::readPLS(QStringList& list, QTextStream &tstream, bool utf8)
 void
 AeonWavePlayer::getSystemResources(device_t &type, enum aaxRenderMode mode)
 {
+    AAX::AeonWave aax;
+
     type.backend.clear();
 
-    unsigned max = aaxDriverGetCount(mode);
-    for (unsigned b=0; b<max; b++)
+    while (const char *d = aax.drivers(mode))
     {
-        AAX::AeonWave cfg(b, mode);
-        if (cfg)
+        while (const char *r = aax.devices())
         {
-            unsigned max_device;
-            QString be_name;
+           struct backend_t backend;
 
-            be_name = aaxDriverGetSetup(cfg, AAX_NAME_STRING);
-            max_device = aaxDriverGetDeviceCount(cfg, mode);
-            for (unsigned d=0; d<max_device; d++)
-            {
-                QString device = aaxDriverGetDeviceNameByPos(cfg, d, mode);
-                struct backend_t backend;
-                unsigned max_interface;
+           backend.name = d + Qstring(" on ") + r;
 
-                backend.name = be_name + " on " + device;
-                backend.interface_name.clear();
-
-                max_interface = aaxDriverGetInterfaceCount(cfg,
-                                                    device.toUtf8().constData(),
-                                                    mode);
-                for (unsigned i=0; i<max_interface; i++)
-                {
-                    QString if_name = aaxDriverGetInterfaceNameByPos(cfg,
-                                                    device.toUtf8().constData(),
-                                                    i, mode);
-                    backend.interface_name.append(if_name);
-                }
-                type.backend.append(backend);
-            }
-            _TEST(aaxDriverDestroy(cfg));
+           backend.interface_name.clear();
+           while (const char *i = aax.interfaces()) {
+               backend.interface_name.append(i);
+           }
+           type.backend.append(backend);
         }
     }
 }
