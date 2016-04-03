@@ -576,8 +576,8 @@ AeonWavePlayer::startInput()
             }
             _TEST(indev.set(AAX_CAPTURING));
 
-            in_freq = (float)indev.set(AAX_FREQUENCY);
-            max_samples = (float)indev.set(AAX_SAMPLES_MAX);
+            in_freq = (float)indev.get(AAX_FREQUENCY);
+            max_samples = (float)indev.get(AAX_SAMPLES_MAX);
             tracks = _MINMAX(indev.get(AAX_TRACKS), 2, 8);
             resize();
 
@@ -930,7 +930,7 @@ AeonWavePlayer::getSystemResources(device_t &type, enum aaxRenderMode mode)
         {
            struct backend_t backend;
 
-           backend.name = d + Qstring(" on ") + r;
+           backend.name = d + QString(" on ") + r;
 
            backend.interface_name.clear();
            while (const char *i = aax.interfaces()) {
@@ -991,7 +991,7 @@ AeonWavePlayer::showSongInfo()
     s = indev.info(AAX_SONG_COMPOSER_STRING);
     msg += tr("<tr><td>Composer:</td><td>%1</td></tr>").arg(s ? s : "-");
 
-    s = indev.ino(AAX_ORIGINAL_PERFORMER_STRING);
+    s = indev.info(AAX_ORIGINAL_PERFORMER_STRING);
     msg += tr("<tr><td>Original:</td><td>%1</td></tr>").arg(s ? s : "-");
 
     s = indev.info(AAX_MUSIC_GENRE_STRING);

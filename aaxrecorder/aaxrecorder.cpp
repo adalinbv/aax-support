@@ -399,7 +399,7 @@ AeonWaveRecorder::getSystemResources(device_t &type, enum aaxRenderMode mode)
         {
            struct backend_t backend;
 
-           backend.name = d + Qstring(" on ") + r;
+           backend.name = d + QString(" on ") + r;
 
            backend.interface_name.clear();
            while (const char *i = aax.interfaces()) {

@@ -31,7 +31,7 @@
 #include <QMenu>
 
 #include <SimpleGlob.h>
-#include <aax/AeonWave.hpp>
+#include <aax/AeonWave>
 
 #include "setup.h"
 #include "remote.h"
