@@ -574,7 +574,7 @@ AeonWavePlayer::startInput()
                 stopInput();
                 return;
             }
-            _TEST(indev.set(AAX_CAPTURING));
+            _TEST(indev.sensor(AAX_CAPTURING));
 
             in_freq = (float)indev.get(AAX_FREQUENCY);
             max_samples = (float)indev.get(AAX_SAMPLES_MAX);
@@ -638,7 +638,7 @@ AeonWavePlayer::startInput()
     }
     else if (paused)
     {
-        _TEST(indev.set(AAX_CAPTURING));
+        _TEST(indev.sensor(AAX_CAPTURING));
         paused = false;
     }
     else if (playing && !indir.isEmpty())	// Next song is requested
@@ -655,7 +655,7 @@ AeonWavePlayer::stopInput()
 {
     if (playing)
     {
-        _TEST(indev.set(AAX_STOPPED));
+        _TEST(indev.sensor(AAX_STOPPED));
         _TEST(outdev.remove(indev));
         _TEST(indev.close());
     }
@@ -674,7 +674,7 @@ AeonWavePlayer::togglePause()
 {
     if (playing && !paused)
     {
-        _TEST(indev.set(AAX_SUSPENDED));
+        _TEST(indev.sensor(AAX_SUSPENDED));
         paused = true;
     }
 }
@@ -920,10 +920,9 @@ AeonWavePlayer::readPLS(QStringList& list, QTextStream &tstream, bool utf8)
 void
 AeonWavePlayer::getSystemResources(device_t &type, enum aaxRenderMode mode)
 {
-    AAX::AeonWave aax;
+    AAX::AeonWave aax("None");
 
     type.backend.clear();
-
     while (const char *d = aax.drivers(mode))
     {
         while (const char *r = aax.devices())

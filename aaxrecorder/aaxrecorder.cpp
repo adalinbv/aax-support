@@ -242,7 +242,7 @@ AeonWaveRecorder::startOutput()
                     }
                     _TEST(indev.set(flt));
 
-                    _TEST(indev.set(AAX_CAPTURING));
+                    _TEST(indev.sensor(AAX_CAPTURING));
                     in_freq = outdev.get(AAX_FREQUENCY);
                 }
             }
@@ -258,7 +258,7 @@ AeonWaveRecorder::stopOutput()
 {
     if (indev)
     {
-        _TEST(indev.set(AAX_STOPPED));
+        _TEST(indev.sensor(AAX_STOPPED));
         _TEST(outdev.remove(indev));
         _TEST(indev.close());
     }
