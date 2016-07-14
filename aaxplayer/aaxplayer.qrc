@@ -1,0 +1,9 @@
+<!DOCTYPE RCC><RCC version="1.0">
+  <qresource>
+    <file alias="aaxplayer.qss">admin/aaxplayer.qss</file>
+    <file alias="play.png">admin/play.png</file>
+    <file alias="stop.png">admin/stop.png</file>
+    <file alias="pause.png">admin/pause.png</file>
+    <file alias="record.png">admin/record.png</file>
+ </qresource>
+</RCC>

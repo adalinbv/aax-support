@@ -10,15 +10,15 @@
 #define SETUP_UI_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QCheckBox>
-#include <QtGui/QComboBox>
-#include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
 
 QT_BEGIN_NAMESPACE
 
@@ -96,13 +96,13 @@ public:
 
     void retranslateUi(QDialog *Configuration)
     {
-        Configuration->setWindowTitle(QApplication::translate("Configuration", "Hardware Configuration", 0, QApplication::UnicodeUTF8));
-        label_output_device->setText(QApplication::translate("Configuration", "Output Device:", 0, QApplication::UnicodeUTF8));
+        Configuration->setWindowTitle(QApplication::translate("Configuration", "Hardware Configuration", 0));
+        label_output_device->setText(QApplication::translate("Configuration", "Output Device:", 0));
 #ifndef QT_NO_TOOLTIP
-        enableAGC->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>AGC (Auto Gain Control) automatically adjusts the input gain to 0dB.</p><p>As a result all files will sound about equally loud.</p></body></html>", 0, QApplication::UnicodeUTF8));
+        enableAGC->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>AGC (Auto Gain Control) automatically adjusts the input gain to 0dB.</p><p>As a result all files will sound about equally loud.</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
-        enableAGC->setText(QApplication::translate("Configuration", "Enable AGC", 0, QApplication::UnicodeUTF8));
-        label_input_device->setText(QApplication::translate("Configuration", "Input Device:", 0, QApplication::UnicodeUTF8));
+        enableAGC->setText(QApplication::translate("Configuration", "Enable AGC", 0));
+        label_input_device->setText(QApplication::translate("Configuration", "Input Device:", 0));
     } // retranslateUi
 
 };

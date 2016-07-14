@@ -10,14 +10,14 @@
 #define REMOTE_UI_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 
 QT_BEGIN_NAMESPACE
 
@@ -53,8 +53,8 @@ public:
 
     void retranslateUi(QDialog *Connect)
     {
-        Connect->setWindowTitle(QApplication::translate("Remote", "Remote Connect", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("Remote", "Type the URL of the remote streaming server to connect to. Only mp3 streams over http are supported.", 0, QApplication::UnicodeUTF8));
+        Connect->setWindowTitle(QApplication::translate("Remote", "Remote Connect", 0));
+        label->setText(QApplication::translate("Remote", "Type the URL of the remote streaming server to connect to. Only mp3 streams over http are supported.", 0));
     } // retranslateUi
 
 };

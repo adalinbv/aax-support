@@ -10,26 +10,26 @@
 #define AAXCONFIG_UI_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QCheckBox>
-#include <QtGui/QComboBox>
-#include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QSpinBox>
-#include <QtGui/QTabWidget>
-#include <QtGui/QWidget>
-#include "widgets.h"
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QWidget>
+#include "aaxwidgets.h"
 
 QT_BEGIN_NAMESPACE
 
 class Ui_Configuration
 {
 public:
-    aaxConfigLineEdit *ProductKey;
+    ConfigLineEdit *ProductKey;
     QLabel *label_product_key;
     QComboBox *Device;
     QLabel *label_backend;
@@ -80,7 +80,7 @@ public:
         Configuration->resize(530, 400);
         Configuration->setMinimumSize(QSize(530, 400));
         Configuration->setMaximumSize(QSize(530, 400));
-        ProductKey = new aaxConfigLineEdit(Configuration);
+        ProductKey = new ConfigLineEdit(Configuration);
         ProductKey->setObjectName(QString::fromUtf8("ProductKey"));
         ProductKey->setGeometry(QRect(300, 33, 221, 21));
         label_product_key = new QLabel(Configuration);
@@ -254,134 +254,134 @@ public:
 
     void retranslateUi(QDialog *Configuration)
     {
-        Configuration->setWindowTitle(QApplication::translate("Configuration", "AeonWave Configuration", 0, QApplication::UnicodeUTF8));
+        Configuration->setWindowTitle(QApplication::translate("Configuration", "AeonWave Configuration", 0));
 #ifndef QT_NO_TOOLTIP
-        ProductKey->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>A valid prouduct key unlocks the advanced options of AeonWave and turns the software from the Lite mode to the HD mode.</p></body></html>", 0, QApplication::UnicodeUTF8));
+        ProductKey->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>A valid prouduct key unlocks the advanced options of AeonWave and turns the software from the Lite mode to the HD mode.</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
-        label_product_key->setText(QApplication::translate("Configuration", "Product-Key:", 0, QApplication::UnicodeUTF8));
-        label_backend->setText(QApplication::translate("Configuration", "Device:", 0, QApplication::UnicodeUTF8));
-        label_input_sample_bitrate->setText(QApplication::translate("Configuration", "Bitrate", 0, QApplication::UnicodeUTF8));
-        label_output_sample_freq->setText(QApplication::translate("Configuration", "Frequency:", 0, QApplication::UnicodeUTF8));
+        label_product_key->setText(QApplication::translate("Configuration", "Product-Key:", 0));
+        label_backend->setText(QApplication::translate("Configuration", "Device:", 0));
+        label_input_sample_bitrate->setText(QApplication::translate("Configuration", "Bitrate", 0));
+        label_output_sample_freq->setText(QApplication::translate("Configuration", "Frequency:", 0));
         OutputSampleFreq->clear();
         OutputSampleFreq->insertItems(0, QStringList()
-         << QApplication::translate("Configuration", "8000 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "11025 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "16000 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "22050 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "32000 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "44056 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "44100 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "48000 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "88200 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "96000 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "176400 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "192000 Hz", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("Configuration", "8000 Hz", 0)
+         << QApplication::translate("Configuration", "11025 Hz", 0)
+         << QApplication::translate("Configuration", "16000 Hz", 0)
+         << QApplication::translate("Configuration", "22050 Hz", 0)
+         << QApplication::translate("Configuration", "32000 Hz", 0)
+         << QApplication::translate("Configuration", "44056 Hz", 0)
+         << QApplication::translate("Configuration", "44100 Hz", 0)
+         << QApplication::translate("Configuration", "48000 Hz", 0)
+         << QApplication::translate("Configuration", "88200 Hz", 0)
+         << QApplication::translate("Configuration", "96000 Hz", 0)
+         << QApplication::translate("Configuration", "176400 Hz", 0)
+         << QApplication::translate("Configuration", "192000 Hz", 0)
         );
         OutputSpeakers->clear();
         OutputSpeakers->insertItems(0, QStringList()
-         << QApplication::translate("Configuration", "2", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "4", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "5.1", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "7.1", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("Configuration", "2", 0)
+         << QApplication::translate("Configuration", "4", 0)
+         << QApplication::translate("Configuration", "5.1", 0)
+         << QApplication::translate("Configuration", "7.1", 0)
         );
-        label_periods->setText(QApplication::translate("Configuration", "Buffer Periods:", 0, QApplication::UnicodeUTF8));
+        label_periods->setText(QApplication::translate("Configuration", "Buffer Periods:", 0));
         SpeakerSetup->clear();
         SpeakerSetup->insertItems(0, QStringList()
-         << QApplication::translate("Configuration", "Stereo", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "Spatial", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "Surround", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "HRTF", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("Configuration", "Stereo", 0)
+         << QApplication::translate("Configuration", "Spatial", 0)
+         << QApplication::translate("Configuration", "Surround", 0)
+         << QApplication::translate("Configuration", "HRTF", 0)
         );
 #ifndef QT_NO_TOOLTIP
-        Timer->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Enable the system timer for pushing data to the audio device.</p><p>This will save power consumption but is less reliable for lower latencies. Therefore this option is only used for refresh rates below 75Hz.</p></body></html>", 0, QApplication::UnicodeUTF8));
+        Timer->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Enable the system timer for pushing data to the audio device.</p><p>This will save power consumption but is less reliable for lower latencies. Therefore this option is only used for refresh rates below 75Hz.</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
-        Timer->setText(QApplication::translate("Configuration", "Timer Driven (experimental)", 0, QApplication::UnicodeUTF8));
+        Timer->setText(QApplication::translate("Configuration", "Timer Driven (experimental)", 0));
         OutputPeriods->clear();
         OutputPeriods->insertItems(0, QStringList()
-         << QApplication::translate("Configuration", "1", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "2", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "3", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "4", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("Configuration", "1", 0)
+         << QApplication::translate("Configuration", "2", 0)
+         << QApplication::translate("Configuration", "3", 0)
+         << QApplication::translate("Configuration", "4", 0)
         );
 #ifndef QT_NO_TOOLTIP
-        OutputPeriods->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>For lowest latencies set this option to 1 or 2 (default).</p><p>Some devices require more playback-periods for smooth playback but this will increase the latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
+        OutputPeriods->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>For lowest latencies set this option to 1 or 2 (default).</p><p>Some devices require more playback-periods for smooth playback but this will increase the latency.</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
-        label_speakers->setText(QApplication::translate("Configuration", "No. Speakers:", 0, QApplication::UnicodeUTF8));
-        label_setup->setText(QApplication::translate("Configuration", "Speaker Setup:", 0, QApplication::UnicodeUTF8));
+        label_speakers->setText(QApplication::translate("Configuration", "No. Speakers:", 0));
+        label_setup->setText(QApplication::translate("Configuration", "Speaker Setup:", 0));
         OutputBitrate->clear();
         OutputBitrate->insertItems(0, QStringList()
-         << QApplication::translate("Configuration", "64kbps", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "128kpbs", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "192kbps", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "256kbps", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "320kbps", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("Configuration", "64kbps", 0)
+         << QApplication::translate("Configuration", "128kpbs", 0)
+         << QApplication::translate("Configuration", "192kbps", 0)
+         << QApplication::translate("Configuration", "256kbps", 0)
+         << QApplication::translate("Configuration", "320kbps", 0)
         );
 #ifndef QT_NO_TOOLTIP
-        OutputBitrate->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>The bitrate defines the size and accuracy of compressed audio formats like mp3.</p></body></html>", 0, QApplication::UnicodeUTF8));
+        OutputBitrate->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>The bitrate defines the size and accuracy of compressed audio formats like mp3.</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
-        Shared->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Allow this device to be shared with other applications.</p><p>This will increase latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
+        Shared->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Allow this device to be shared with other applications.</p><p>This will increase latency.</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
-        Shared->setText(QApplication::translate("Configuration", "Shared", 0, QApplication::UnicodeUTF8));
-        label_refresh_rate->setText(QApplication::translate("Configuration", "Refresh Rate (Hz):", 0, QApplication::UnicodeUTF8));
+        Shared->setText(QApplication::translate("Configuration", "Shared", 0));
+        label_refresh_rate->setText(QApplication::translate("Configuration", "Refresh Rate (Hz):", 0));
 #ifndef QT_NO_TOOLTIP
-        RefreshRate->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>The refresh rate defines how often new data is retrieved from the device.</p><p>Higher values result in lower latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
+        RefreshRate->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>The refresh rate defines how often new data is retrieved from the device.</p><p>Higher values result in lower latency.</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
-        SetDefault->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Allow this device to be shared with other applications.</p><p>This will increase latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
+        SetDefault->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Allow this device to be shared with other applications.</p><p>This will increase latency.</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
-        SetDefault->setText(QApplication::translate("Configuration", "Set as default output", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("Configuration", "Playback", 0, QApplication::UnicodeUTF8));
+        SetDefault->setText(QApplication::translate("Configuration", "Set as default output", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("Configuration", "Playback", 0));
         InputSampleFreq->clear();
         InputSampleFreq->insertItems(0, QStringList()
-         << QApplication::translate("Configuration", "8000 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "11025 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "16000 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "22050 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "32000 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "44056 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "44100 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "48000 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "88200 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "96000 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "176400 Hz", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "192000 Hz", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("Configuration", "8000 Hz", 0)
+         << QApplication::translate("Configuration", "11025 Hz", 0)
+         << QApplication::translate("Configuration", "16000 Hz", 0)
+         << QApplication::translate("Configuration", "22050 Hz", 0)
+         << QApplication::translate("Configuration", "32000 Hz", 0)
+         << QApplication::translate("Configuration", "44056 Hz", 0)
+         << QApplication::translate("Configuration", "44100 Hz", 0)
+         << QApplication::translate("Configuration", "48000 Hz", 0)
+         << QApplication::translate("Configuration", "88200 Hz", 0)
+         << QApplication::translate("Configuration", "96000 Hz", 0)
+         << QApplication::translate("Configuration", "176400 Hz", 0)
+         << QApplication::translate("Configuration", "192000 Hz", 0)
         );
-        label_input_sample_freq->setText(QApplication::translate("Configuration", "Frequency:", 0, QApplication::UnicodeUTF8));
+        label_input_sample_freq->setText(QApplication::translate("Configuration", "Frequency:", 0));
 #ifndef QT_NO_TOOLTIP
-        InputRefreshRate->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>The refresh rate defines how often new data is retrieved from the device.</p><p>Higher values result in lower latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
+        InputRefreshRate->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>The refresh rate defines how often new data is retrieved from the device.</p><p>Higher values result in lower latency.</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
-        label_refresh_rate_2->setText(QApplication::translate("Configuration", "Refresh Rate (Hz):", 0, QApplication::UnicodeUTF8));
-        label_setup_2->setText(QApplication::translate("Configuration", "Line-in Setup:", 0, QApplication::UnicodeUTF8));
-        label_periods_2->setText(QApplication::translate("Configuration", "Buffer Periods:", 0, QApplication::UnicodeUTF8));
+        label_refresh_rate_2->setText(QApplication::translate("Configuration", "Refresh Rate (Hz):", 0));
+        label_setup_2->setText(QApplication::translate("Configuration", "Line-in Setup:", 0));
+        label_periods_2->setText(QApplication::translate("Configuration", "Buffer Periods:", 0));
         LineInSetup->clear();
         LineInSetup->insertItems(0, QStringList()
-         << QApplication::translate("Configuration", "Stereo", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "Mono Left", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "Mono Right", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "Mono Mix", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("Configuration", "Stereo", 0)
+         << QApplication::translate("Configuration", "Mono Left", 0)
+         << QApplication::translate("Configuration", "Mono Right", 0)
+         << QApplication::translate("Configuration", "Mono Mix", 0)
         );
         InputPeriods->clear();
         InputPeriods->insertItems(0, QStringList()
-         << QApplication::translate("Configuration", "1", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "2", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "3", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("Configuration", "4", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("Configuration", "1", 0)
+         << QApplication::translate("Configuration", "2", 0)
+         << QApplication::translate("Configuration", "3", 0)
+         << QApplication::translate("Configuration", "4", 0)
         );
 #ifndef QT_NO_TOOLTIP
-        InputPeriods->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>For lowest latencies set this option to 1 or 2 (default).</p><p>Some devices require more capture-periods for smooth recording but this will increase the latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
+        InputPeriods->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>For lowest latencies set this option to 1 or 2 (default).</p><p>Some devices require more capture-periods for smooth recording but this will increase the latency.</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
-        InputSetDefault->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Allow this device to be shared with other applications.</p><p>This will increase latency.</p></body></html>", 0, QApplication::UnicodeUTF8));
+        InputSetDefault->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Allow this device to be shared with other applications.</p><p>This will increase latency.</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
-        InputSetDefault->setText(QApplication::translate("Configuration", "Set as default intput", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("Configuration", "Capture", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("Configuration", "Information", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("Configuration", "Filters and Effects", 0, QApplication::UnicodeUTF8));
+        InputSetDefault->setText(QApplication::translate("Configuration", "Set as default intput", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("Configuration", "Capture", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("Configuration", "Information", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("Configuration", "Filters and Effects", 0));
 #ifndef QT_NO_TOOLTIP
-        label_acquire->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Click here to get a valid Product-Key (an internet connection is required)</p></body></html>", 0, QApplication::UnicodeUTF8));
+        label_acquire->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Click here to get a valid Product-Key (an internet connection is required)</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
-        label_acquire->setText(QApplication::translate("Configuration", "<html><head/><body><p><a href=\"http://www.adalin.com/buy_aeonwaveHD.html\"><span style=\" text-decoration: underline; color:#0000ff;\">Acquire</span></a></p></body></html>", 0, QApplication::UnicodeUTF8));
+        label_acquire->setText(QApplication::translate("Configuration", "<html><head/><body><p><a href=\"http://www.adalin.com/buy_aeonwaveHD.html\"><span style=\" text-decoration: underline; color:#0000ff;\">Acquire</span></a></p></body></html>", 0));
     } // retranslateUi
 
 };

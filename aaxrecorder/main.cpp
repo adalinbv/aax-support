@@ -23,7 +23,7 @@
 #include "config.h"
 #endif
 
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 #include "aaxrecorder.h"
 
 AeonWaveRecorder *_mw = 0;

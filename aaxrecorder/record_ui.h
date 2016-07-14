@@ -10,14 +10,14 @@
 #define RECORD_UI_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QTimeEdit>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QTimeEdit>
 
 QT_BEGIN_NAMESPACE
 
@@ -53,9 +53,9 @@ public:
 
     void retranslateUi(QDialog *Recording)
     {
-        Recording->setWindowTitle(QApplication::translate("Record", "Recording Time", 0, QApplication::UnicodeUTF8));
-        timeEdit->setDisplayFormat(QApplication::translate("Record", "HH:mm:ss", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("Record", "If you want to define a time length restriction, set it below and the progress indicator will show how much time is left.", 0, QApplication::UnicodeUTF8));
+        Recording->setWindowTitle(QApplication::translate("Record", "Recording Time", 0));
+        timeEdit->setDisplayFormat(QApplication::translate("Record", "HH:mm:ss", 0));
+        label->setText(QApplication::translate("Record", "If you want to define a time length restriction, set it below and the progress indicator will show how much time is left.", 0));
     } // retranslateUi
 
 };

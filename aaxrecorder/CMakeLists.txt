@@ -8,21 +8,18 @@ ENDIF(HAVE_LIBM)
 
 FIND_PACKAGE(AAX COMPONENTS aax REQUIRED)
 
-SET( PREPROCESS_HEADERS aaxrecorder.h record.h setup.h )
-SET( HEADERS aaxrecorder_ui.h record_ui.h setup_ui.h )
-SET( RCS ${CMAKE_SOURCE_DIR}/admin/aaxplayer.qrc )
-SET( WIN_RESOURCE_FILE ${CMAKE_SOURCE_DIR}/admin/aaxrecorder.rc)
-
 FILE( GLOB GUI *.ui )
 FILE( GLOB SOURCES *.cpp *.c )
+file( GLOB RC *.rc *.qrc )
 
-QT4_WRAP_UI( GUI_SRCS ${GUI} )
-QT4_WRAP_CPP( MOC_HEADERS ${PREPROCESS_HEADERS} )
-QT4_ADD_RESOURCES(RC_SRCS ${RCS})
+ADD_EXECUTABLE(aaxrecorder ${SOURCES} ${RC} ${GUI} )
 
-ADD_EXECUTABLE(aaxrecorder ${SOURCES} ${MOC_HEADERS} ${RC_SRCS} ${GUI_SRCS}  ${WIN_RESOURCE_FILE} )
-
-TARGET_LINK_LIBRARIES( aaxrecorder ${QT_LIBRARIES} ${AAX_LIBRARY})
+TARGET_LINK_LIBRARIES( aaxrecorder
+    ${AAX_LIBRARY}
+    Qt5::Widgets
+    Qt5::Core
+    Qt5::Gui
+)
 
 INSTALL(TARGETS aaxrecorder
         RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
@@ -32,7 +29,7 @@ INSTALL(TARGETS aaxrecorder
 IF(WIN32)
   # Used to create Start Menu shortcuts <EXEC> <LABEL>
   SET(CPACK_PACKAGE_EXECUTABLES "aaxrecorder;AeonWave Audio Recorder")
-  SET(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/admin\\\\aaxrecorder.xpm")
+  SET(CPACK_PACKAGE_ICON "admin\\\\aaxrecorder.xpm")
   SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\aaxrecorder.exe")
 
 ELSE(WIN32)
@@ -53,10 +50,10 @@ IF(APPLE)
 ENDIF()
 
 IF(UNIX AND NOT APPLE)
-  INSTALL(FILES ${CMAKE_SOURCE_DIR}/admin/aaxrecorder.desktop
+  INSTALL(FILES admin/aaxrecorder.desktop
           DESTINATION share/applications
           COMPONENT Media)
-  INSTALL(FILES ${CMAKE_SOURCE_DIR}/admin/aaxrecorder.xpm
+  INSTALL(FILES admin/aaxrecorder.xpm
           DESTINATION share/pixmaps
           COMPONENT Media)
 ENDIF(UNIX AND NOT APPLE)

@@ -25,7 +25,7 @@
   <property name="windowTitle">
    <string>AeonWave Configuration</string>
   </property>
-  <widget class="aaxConfigLineEdit" name="ProductKey">
+  <widget class="ConfigLineEdit" name="ProductKey">
    <property name="geometry">
     <rect>
      <x>300</x>
@@ -821,9 +821,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>aaxConfigLineEdit</class>
+   <class>ConfigLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>widgets.h</header>
+   <header>aaxwidgets.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -6,21 +6,22 @@ CHECK_LIBRARY_EXISTS(m floorf "" HAVE_LIBM)
 FIND_PACKAGE(AAX COMPONENTS aax REQUIRED)
 FIND_PACKAGE(XML COMPONENTS xml REQUIRED)
 
-SET( PREPROCESS_HEADERS aaxplayer.h remote.h setup.h )
-SET( HEADERS aaxplayer_ui.h remote_ui.h setup_ui.h )
-SET( RCS ${CMAKE_SOURCE_DIR}/admin/aaxplayer.qrc )
-SET( WIN_RESOURCE_FILE ${CMAKE_SOURCE_DIR}/admin/aaxplayer.rc)
-
+# generate a list of all files that match the globbing expressions
 FILE( GLOB GUI *.ui )
 FILE( GLOB SOURCES *.cpp *.c )
+file( GLOB RC *.rc *.qrc )
 
-QT4_WRAP_UI( GUI_SRCS ${GUI} )
-QT4_WRAP_CPP( MOC_HEADERS ${PREPROCESS_HEADERS} )
-QT4_ADD_RESOURCES(RC_SRCS ${RCS})
+ADD_EXECUTABLE(aaxplayer ${SOURCES} ${RC} ${GUI} )
 
-ADD_EXECUTABLE(aaxplayer ${SOURCES} ${MOC_HEADERS} ${RC_SRCS} ${GUI_SRCS} ${WIN_RESOURCE_FILE} )
-
-TARGET_LINK_LIBRARIES( aaxplayer ${QT_LIBRARIES} ${AAX_LIBRARY} ${XML_LIBRARY} ${EXTRA_LIBS})
+TARGET_LINK_LIBRARIES( aaxplayer
+    ${AAX_LIBRARY}
+    ${XML_LIBRARY}
+    ${EXTRA_LIBS}
+    Qt5::Widgets
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Network
+)
 
 INSTALL(TARGETS aaxplayer
         RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
@@ -30,7 +31,7 @@ INSTALL(TARGETS aaxplayer
 IF(WIN32)
   # Used to create Start Menu shortcuts <EXEC> <LABEL>
   SET(CPACK_PACKAGE_EXECUTABLES "aaxplayer;AeonWave Audio Player")
-  SET(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/admin\\\\aaxplayer.xpm")
+  SET(CPACK_PACKAGE_ICON "admin\\\\aaxplayer.xpm")
   SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\aaxplayer.exe")
 
 ELSE(WIN32)
@@ -51,10 +52,10 @@ IF(APPLE)
 ENDIF()
 
 IF(UNIX AND NOT APPLE)
-  INSTALL(FILES ${CMAKE_SOURCE_DIR}/admin/aaxplayer.desktop
+  INSTALL(FILES admin/aaxplayer.desktop
           DESTINATION share/applications
           COMPONENT Media)
-  INSTALL(FILES ${CMAKE_SOURCE_DIR}/admin/aaxplayer.xpm
+  INSTALL(FILES admin/aaxplayer.xpm
           DESTINATION share/pixmaps
           COMPONENT Media)
 ENDIF(UNIX AND NOT APPLE)

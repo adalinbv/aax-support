@@ -22,7 +22,7 @@
 #ifndef AAXRECORDER_H
 #define AAXRECORDER_H
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 #include <QStringList>
 #include <QTimer>
 #include <QTime>

@@ -25,8 +25,8 @@
 
 #include <aax/AeonWave>
 
-#include <QtGui/QDialog>
-#include <QtGui/QComboBox>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QComboBox>
 #include <QShortcut>
 
 #define CONFIG_FILE	"config.xml"

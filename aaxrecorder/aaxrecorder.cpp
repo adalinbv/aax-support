@@ -196,7 +196,7 @@ AeonWaveRecorder::startOutput()
     {
 #if 0
         DSP flt = outdev.get(AAX_VOLUME_FILTER);
-        float vol = _MIN(flt.get(AAX_GAIN, AAX_LINEAR), 1.0f);
+        float vol = _MIN(flt.get(AAX_GAIN), 1.0f);
         ui->volume->setValue(rintf(vol*100));
 #endif
 
@@ -234,11 +234,10 @@ AeonWaveRecorder::startOutput()
                 else
                 {
                     AAX::DSP flt = indev.get(AAX_VOLUME_FILTER);
-
                     float val = ui->volume->value()/100.0f;
-                    _TEST(flt.set(AAX_GAIN, AAX_LINEAR, val));
+                    _TEST(flt.set(AAX_GAIN, val));
                     if (agc_enabled) {
-                       _TEST(flt.set(AAX_AGC_RESPONSE_RATE, AAX_LINEAR, 1.5f));
+                       _TEST(flt.set(AAX_AGC_RESPONSE_RATE, 1.5f));
                     }
                     _TEST(indev.set(flt));
 
@@ -353,7 +352,7 @@ AeonWaveRecorder::volumeChanged(int val)
     if (indev)
     {
         AAX::DSP flt = indev.get(AAX_VOLUME_FILTER);
-        _TEST(flt.set(AAX_GAIN, AAX_LINEAR, (float)val/100.0f));
+        _TEST(flt.set(AAX_GAIN, (float)val/100.0f));
         _TEST(indev.set(flt));
     }
 }

@@ -23,7 +23,7 @@
 #include "config.h"
 #endif
 
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 #include "aaxplayer.h"
 
 AeonWavePlayer *_mw = 0;

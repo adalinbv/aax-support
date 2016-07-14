@@ -24,7 +24,7 @@
 #ifndef AAXCONFIG_H
 #define AAXCONFIG_H
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 #include <QStringList>
 #include <QString>
 

@@ -24,7 +24,7 @@
 #ifndef SETUP_H
 #define SETUP_H
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 #include <QStringList>
 #include <QString>
 

@@ -24,7 +24,7 @@
 #ifndef AAXRECORD_H
 #define AAXRECORD_H
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 
 class Ui_Record;
 

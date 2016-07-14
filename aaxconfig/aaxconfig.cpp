@@ -542,7 +542,7 @@ AeonWaveConfig::changeMixer(int val)
 //          ui->MixerInfo->adjustSize();
 //          ui->MixerInfo->show();
 
-            if (aaxGetMajorVersion() >= 2 && aaxGetMinorVersion() >= 5)
+            if (cfg.major_version() >= 2 && cfg.minor_version() >= 5)
             {
                 desc = tr("<table width=\"100%\">");
                 desc += tr("<tr><td width=\"50%\">");
@@ -1747,7 +1747,7 @@ AeonWaveConfig::writeOldConfigFile()
 #endif
 
 bool
-aaxConfigLineEdit::eventFilter(QObject* object, QEvent* event)
+ConfigLineEdit::eventFilter(QObject* object, QEvent* event)
 {
     if (_mw && _mw->ui && object == _mw->ui->ProductKey)
     {

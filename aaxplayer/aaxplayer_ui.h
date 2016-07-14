@@ -10,17 +10,17 @@
 #define AAXPLAYER_UI_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QDial>
-#include <QtGui/QDialog>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
-#include <QtGui/QProgressBar>
-#include <QtGui/QPushButton>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QDial>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QMenuBar>
+#include <QProgressBar>
+#include <QtWidgets/QPushButton>
 
 QT_BEGIN_NAMESPACE
 
@@ -173,64 +173,64 @@ public:
 
     void retranslateUi(QDialog *AudioPlayer)
     {
-        AudioPlayer->setWindowTitle(QApplication::translate("AudioPlayer", "AeonWave Audio Player", 0, QApplication::UnicodeUTF8));
+        AudioPlayer->setWindowTitle(QApplication::translate("AudioPlayer", "AeonWave Audio Player", 0));
 #ifndef QT_NO_TOOLTIP
-        AudioPlayer->setToolTip(QApplication::translate("AudioPlayer", "<html><head/><body><p>Audio Player</p></body></html>", 0, QApplication::UnicodeUTF8));
+        AudioPlayer->setToolTip(QApplication::translate("AudioPlayer", "<html><head/><body><p>Audio Player</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
-        actionOpen->setText(QApplication::translate("AudioPlayer", "Select File", 0, QApplication::UnicodeUTF8));
+        actionOpen->setText(QApplication::translate("AudioPlayer", "Select File", 0));
 #ifndef QT_NO_TOOLTIP
-        actionOpen->setToolTip(QApplication::translate("AudioPlayer", "Select an Input File", 0, QApplication::UnicodeUTF8));
+        actionOpen->setToolTip(QApplication::translate("AudioPlayer", "Select an Input File", 0));
 #endif // QT_NO_TOOLTIP
-        actionOpen->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+F", 0, QApplication::UnicodeUTF8));
-        actionExit->setText(QApplication::translate("AudioPlayer", "Exit", 0, QApplication::UnicodeUTF8));
+        actionOpen->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+F", 0));
+        actionExit->setText(QApplication::translate("AudioPlayer", "Exit", 0));
 #ifndef QT_NO_TOOLTIP
-        actionExit->setToolTip(QApplication::translate("AudioPlayer", "Close the application", 0, QApplication::UnicodeUTF8));
+        actionExit->setToolTip(QApplication::translate("AudioPlayer", "Close the application", 0));
 #endif // QT_NO_TOOLTIP
-        actionExit->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+X", 0, QApplication::UnicodeUTF8));
-        actionHardware->setText(QApplication::translate("AudioPlayer", "Configure", 0, QApplication::UnicodeUTF8));
+        actionExit->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+X", 0));
+        actionHardware->setText(QApplication::translate("AudioPlayer", "Configure", 0));
 #ifndef QT_NO_TOOLTIP
-        actionHardware->setToolTip(QApplication::translate("AudioPlayer", "Hardware Configuration", 0, QApplication::UnicodeUTF8));
+        actionHardware->setToolTip(QApplication::translate("AudioPlayer", "Hardware Configuration", 0));
 #endif // QT_NO_TOOLTIP
-        actionHardware->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+H", 0, QApplication::UnicodeUTF8));
-        actionAbout->setText(QApplication::translate("AudioPlayer", "About", 0, QApplication::UnicodeUTF8));
-        actionAbout->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+A", 0, QApplication::UnicodeUTF8));
-        actionLicense->setText(QApplication::translate("AudioPlayer", "Copyright License", 0, QApplication::UnicodeUTF8));
-        actionLicense->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+C", 0, QApplication::UnicodeUTF8));
-        actionOpenDir->setText(QApplication::translate("AudioPlayer", "Open Directory", 0, QApplication::UnicodeUTF8));
-        actionOpenDir->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+D", 0, QApplication::UnicodeUTF8));
-        actionInfo->setText(QApplication::translate("AudioPlayer", "Song Info", 0, QApplication::UnicodeUTF8));
-        actionInfo->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+I", 0, QApplication::UnicodeUTF8));
-        actionConnect->setText(QApplication::translate("AudioPlayer", "Open Stream", 0, QApplication::UnicodeUTF8));
-        actionConnect->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+S", 0, QApplication::UnicodeUTF8));
-        actionAddFavorite->setText(QApplication::translate("AudioPlayer", "Add Favorite", 0, QApplication::UnicodeUTF8));
-        actionAddFavorite->setShortcut(QApplication::translate("AudioPlayer", "Alt+F", 0, QApplication::UnicodeUTF8));
-        menuFile->setTitle(QApplication::translate("AudioPlayer", "File", 0, QApplication::UnicodeUTF8));
-        menuHelp->setTitle(QApplication::translate("AudioPlayer", "Help", 0, QApplication::UnicodeUTF8));
-        menuView->setTitle(QApplication::translate("AudioPlayer", "View", 0, QApplication::UnicodeUTF8));
+        actionHardware->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+H", 0));
+        actionAbout->setText(QApplication::translate("AudioPlayer", "About", 0));
+        actionAbout->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+A", 0));
+        actionLicense->setText(QApplication::translate("AudioPlayer", "Copyright License", 0));
+        actionLicense->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+C", 0));
+        actionOpenDir->setText(QApplication::translate("AudioPlayer", "Open Directory", 0));
+        actionOpenDir->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+D", 0));
+        actionInfo->setText(QApplication::translate("AudioPlayer", "Song Info", 0));
+        actionInfo->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+I", 0));
+        actionConnect->setText(QApplication::translate("AudioPlayer", "Open Stream", 0));
+        actionConnect->setShortcut(QApplication::translate("AudioPlayer", "Ctrl+S", 0));
+        actionAddFavorite->setText(QApplication::translate("AudioPlayer", "Add Favorite", 0));
+        actionAddFavorite->setShortcut(QApplication::translate("AudioPlayer", "Alt+F", 0));
+        menuFile->setTitle(QApplication::translate("AudioPlayer", "File", 0));
+        menuHelp->setTitle(QApplication::translate("AudioPlayer", "Help", 0));
+        menuView->setTitle(QApplication::translate("AudioPlayer", "View", 0));
 #ifndef QT_NO_TOOLTIP
-        stopPlay->setToolTip(QApplication::translate("AudioPlayer", "<html><head/><body><p>Stop</p></body></html>", 0, QApplication::UnicodeUTF8));
-#endif // QT_NO_TOOLTIP
-#ifndef QT_NO_TOOLTIP
-        timeCurrent->setToolTip(QApplication::translate("AudioPlayer", "<html><head/><body><p>Playing Time</p></body></html>", 0, QApplication::UnicodeUTF8));
-#endif // QT_NO_TOOLTIP
-        timeCurrent->setText(QApplication::translate("AudioPlayer", "00:00:00", 0, QApplication::UnicodeUTF8));
-#ifndef QT_NO_TOOLTIP
-        timeRemaining->setToolTip(QApplication::translate("AudioPlayer", "<html><head/><body><p>Time Remaining</p></body></html>", 0, QApplication::UnicodeUTF8));
-#endif // QT_NO_TOOLTIP
-        timeRemaining->setText(QApplication::translate("AudioPlayer", "00:00:00", 0, QApplication::UnicodeUTF8));
-#ifndef QT_NO_TOOLTIP
-        startPlay->setToolTip(QApplication::translate("AudioPlayer", "<html><head/><body><p>Play</p></body></html>", 0, QApplication::UnicodeUTF8));
+        stopPlay->setToolTip(QApplication::translate("AudioPlayer", "<html><head/><body><p>Stop</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
-        timeTotal->setToolTip(QApplication::translate("AudioPlayer", "<html><head/><body><p>Total Time</p></body></html>", 0, QApplication::UnicodeUTF8));
+        timeCurrent->setToolTip(QApplication::translate("AudioPlayer", "<html><head/><body><p>Playing Time</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
-        timeTotal->setText(QApplication::translate("AudioPlayer", "00:00:00", 0, QApplication::UnicodeUTF8));
+        timeCurrent->setText(QApplication::translate("AudioPlayer", "00:00:00", 0));
 #ifndef QT_NO_TOOLTIP
-        pausePlay->setToolTip(QApplication::translate("AudioPlayer", "<html><head/><body><p>Pause</p></body></html>", 0, QApplication::UnicodeUTF8));
+        timeRemaining->setToolTip(QApplication::translate("AudioPlayer", "<html><head/><body><p>Time Remaining</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
-        labelVolumeMin->setText(QApplication::translate("AudioPlayer", "min", 0, QApplication::UnicodeUTF8));
-        labelVolumeMax->setText(QApplication::translate("AudioPlayer", "max", 0, QApplication::UnicodeUTF8));
-        labelVolume->setText(QApplication::translate("AudioPlayer", "volume", 0, QApplication::UnicodeUTF8));
+        timeRemaining->setText(QApplication::translate("AudioPlayer", "00:00:00", 0));
+#ifndef QT_NO_TOOLTIP
+        startPlay->setToolTip(QApplication::translate("AudioPlayer", "<html><head/><body><p>Play</p></body></html>", 0));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        timeTotal->setToolTip(QApplication::translate("AudioPlayer", "<html><head/><body><p>Total Time</p></body></html>", 0));
+#endif // QT_NO_TOOLTIP
+        timeTotal->setText(QApplication::translate("AudioPlayer", "00:00:00", 0));
+#ifndef QT_NO_TOOLTIP
+        pausePlay->setToolTip(QApplication::translate("AudioPlayer", "<html><head/><body><p>Pause</p></body></html>", 0));
+#endif // QT_NO_TOOLTIP
+        labelVolumeMin->setText(QApplication::translate("AudioPlayer", "min", 0));
+        labelVolumeMax->setText(QApplication::translate("AudioPlayer", "max", 0));
+        labelVolume->setText(QApplication::translate("AudioPlayer", "volume", 0));
     } // retranslateUi
 
 };

@@ -17,28 +17,10 @@
  *  along with AeonWave-Config.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AAXCONFIG_WIDGETS_H
-#define AAXCONFIG_WIDGETS_H
+#include "aaxwidgets.h"
 
-#include <QLineEdit>
-#include <QEvent>
-
-#include "aaxconfig.h"
-
-class aaxConfigLineEdit : public QLineEdit
+ConfigLineEdit::ConfigLineEdit(QWidget* parent) : QLineEdit(parent)
 {
+    installEventFilter(this);
+}
 
-    Q_OBJECT
-
-public:
-    inline aaxConfigLineEdit(QWidget* parent) : QLineEdit(parent)
-    {
-        installEventFilter(this);
-    }
-    ~aaxConfigLineEdit() {};
-
-private:
-    bool eventFilter(QObject* object, QEvent* event);
-};
-
-#endif

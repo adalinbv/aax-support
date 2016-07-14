@@ -23,8 +23,8 @@
 #define AAXPLAYER_H
 
 #include <QtNetwork/QNetworkAccessManager>
-#include <QtGui/QProgressBar>
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
+#include <QProgressBar>
 #include <QStringList>
 #include <QTextStream>
 #include <QTimer>

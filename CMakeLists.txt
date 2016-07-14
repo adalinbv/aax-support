@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 2.8.11)
 SET( cmake_verbose_makefile TRUE)
 
 PROJECT(aaxsupport)
@@ -65,9 +65,14 @@ INCLUDE(CPack_Defaults)
 INCLUDE(CheckLibraryExists)
 
 
-FIND_PACKAGE(Qt4 REQUIRED QtMain QtCore QtGui QtNetwork)
-INCLUDE( ${QT_USE_FILE} )
+SET(CMAKE_AUTOMOC ON)
+SET(CMAKE_AUTOUIC ON)
+SET(CMAKE_AUTORCC ON)
+FIND_PACKAGE(Qt5Widgets)
+find_package(Qt5Gui)
+find_package(Qt5Network)
 IF(WIN32)
+  FIND_PACKAGE(Qt5WinMain REQUIRED)
   SET (QT_USE_QTMAIN TRUE)
   SET(CPACK_NSIS_MODIFY_PATH "ON")
   ADD_DEFINITIONS("-D_WIN32")
@@ -79,7 +84,7 @@ ELSE(WIN32)
   # DEBIAN
   SET(CPACK_DEBIAN_PACKAGE_REPLACES "aaxconfig, aaxconfig-bin")
   SET(CPACK_DEBIAN_PACKAGE_SECTION "support utilities")
-  SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.1), libaax2-bin (>= 2.5), libqt4-core (>= 4.6.2), libqt4-gui (>= 4.7.0)")
+  SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.1), libaax2-bin (>= 2.5), libqt5core5a (>= 5.1.0), libqt5gui5 (>= 5.1.0), libqt5network5 (>= 5.1.0)")
 
   # RPM
   SET(CPACK_RPM_PACKAGE_LICENSE "GPL v3")

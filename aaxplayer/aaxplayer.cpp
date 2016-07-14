@@ -205,7 +205,7 @@ AeonWavePlayer::tick()
 
     if (playing)
     {
-        if (indev.get() == AAX_PROCESSED) {
+        if (indev.state() == AAX_PROCESSED) {
             stopInput();
         }
     }
@@ -287,12 +287,11 @@ AeonWavePlayer::tick()
         {
             std::string t = std::string(title.toUtf8().constData());
             setWindowTitle(QApplication::translate("AudioPlayer", t.c_str(),
-                                        0, QApplication::UnicodeUTF8));
+                                        0));
 
             title = QString("<html><head/><body><p>%1</p></body></html>").arg(title);
             t = std::string(title.toUtf8().constData());
-            setToolTip(QApplication::translate("AudioPlayer", t.c_str(), 0,
-                                            QApplication::UnicodeUTF8));
+            setToolTip(QApplication::translate("AudioPlayer", t.c_str(), 0));
         }
     }
 }
@@ -500,7 +499,7 @@ AeonWavePlayer::startOutput()
     if (outdev)
     {
         AAX::DSP flt = outdev.get(AAX_VOLUME_FILTER);
-        float vol = _MIN(flt.get(AAX_GAIN, AAX_LINEAR), 1.0f);
+        float vol = _MIN(flt.get(AAX_GAIN), 1.0f);
         ui->volume->setValue(rintf(vol*100));
 
         int res = outdev.set(AAX_INITIALIZED);
@@ -556,7 +555,7 @@ AeonWavePlayer::startInput()
                 AAX::DSP filter = indev.get(AAX_VOLUME_FILTER);
                 if (filter)
                 {
-                    filter.set(AAX_AGC_RESPONSE_RATE, AAX_LINEAR, 1.5f);
+                    filter.set(AAX_AGC_RESPONSE_RATE, 1.5f);
                     _TEST(indev.set(filter));
                 }
             }
@@ -625,12 +624,11 @@ AeonWavePlayer::startInput()
             {
                 std::string t = std::string(title.toUtf8().constData());
                 setWindowTitle(QApplication::translate("AudioPlayer", t.c_str(),
-                                                0, QApplication::UnicodeUTF8));
+                                                0));
 
                 title = QString("<html><head/><body><p>%1</p></body></html>").arg(title);
                 t = std::string(title.toUtf8().constData());
-                setToolTip(QApplication::translate("AudioPlayer", t.c_str(), 0,
-                                                QApplication::UnicodeUTF8));
+                setToolTip(QApplication::translate("AudioPlayer", t.c_str(), 0));
             }
 
             playing = true;
@@ -660,8 +658,8 @@ AeonWavePlayer::stopInput()
         _TEST(indev.close());
     }
 
-    setWindowTitle(QApplication::translate("AudioPlayer", "AeonWave Audio Player", 0, QApplication::UnicodeUTF8));
-    setToolTip(QApplication::translate("AudioPlayer", "Audio Player", 0, QApplication::UnicodeUTF8));
+    setWindowTitle(QApplication::translate("AudioPlayer", "AeonWave Audio Player", 0));
+    setToolTip(QApplication::translate("AudioPlayer", "Audio Player", 0));
     ui->timeTotal->setText("00:00:00");
     new_file = false;
     max_samples = 0;
@@ -683,7 +681,7 @@ void
 AeonWavePlayer::volumeChanged(int val)
 {
     AAX::DSP flt = outdev.get(AAX_VOLUME_FILTER);
-    _TEST(flt.set(AAX_GAIN, AAX_LINEAR, (float)val/100.0f));
+    _TEST(flt.set(AAX_GAIN, (float)val/100.0f));
     _TEST(outdev.set(flt));
 }
 

@@ -10,17 +10,17 @@
 #define AAXRECORDER_UI_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QDial>
-#include <QtGui/QDialog>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
-#include <QtGui/QProgressBar>
-#include <QtGui/QPushButton>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QDial>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
+#include <QProgressBar>
 
 QT_BEGIN_NAMESPACE
 
@@ -176,67 +176,67 @@ public:
 
     void retranslateUi(QDialog *AudioRecorder)
     {
-        AudioRecorder->setWindowTitle(QApplication::translate("AudioRecorder", "AeonWave Audio Recorder", 0, QApplication::UnicodeUTF8));
+        AudioRecorder->setWindowTitle(QApplication::translate("AudioRecorder", "AeonWave Audio Recorder", 0));
 #ifndef QT_NO_TOOLTIP
-        AudioRecorder->setToolTip(QApplication::translate("AudioRecorder", "<html><head/><body><p>Audio Recorder</p></body></html>", 0, QApplication::UnicodeUTF8));
+        AudioRecorder->setToolTip(QApplication::translate("AudioRecorder", "<html><head/><body><p>Audio Recorder</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
-        actionOpen->setText(QApplication::translate("AudioRecorder", "Select File", 0, QApplication::UnicodeUTF8));
+        actionOpen->setText(QApplication::translate("AudioRecorder", "Select File", 0));
 #ifndef QT_NO_TOOLTIP
-        actionOpen->setToolTip(QApplication::translate("AudioRecorder", "Select an Input File", 0, QApplication::UnicodeUTF8));
+        actionOpen->setToolTip(QApplication::translate("AudioRecorder", "Select an Input File", 0));
 #endif // QT_NO_TOOLTIP
-        actionOpen->setShortcut(QApplication::translate("AudioRecorder", "Ctrl+F", 0, QApplication::UnicodeUTF8));
-        actionExit->setText(QApplication::translate("AudioRecorder", "Exit", 0, QApplication::UnicodeUTF8));
+        actionOpen->setShortcut(QApplication::translate("AudioRecorder", "Ctrl+F", 0));
+        actionExit->setText(QApplication::translate("AudioRecorder", "Exit", 0));
 #ifndef QT_NO_TOOLTIP
-        actionExit->setToolTip(QApplication::translate("AudioRecorder", "Close the application", 0, QApplication::UnicodeUTF8));
+        actionExit->setToolTip(QApplication::translate("AudioRecorder", "Close the application", 0));
 #endif // QT_NO_TOOLTIP
-        actionExit->setShortcut(QApplication::translate("AudioRecorder", "Ctrl+X", 0, QApplication::UnicodeUTF8));
-        actionHardware->setText(QApplication::translate("AudioRecorder", "Configure", 0, QApplication::UnicodeUTF8));
+        actionExit->setShortcut(QApplication::translate("AudioRecorder", "Ctrl+X", 0));
+        actionHardware->setText(QApplication::translate("AudioRecorder", "Configure", 0));
 #ifndef QT_NO_TOOLTIP
-        actionHardware->setToolTip(QApplication::translate("AudioRecorder", "Hardware Configuration", 0, QApplication::UnicodeUTF8));
+        actionHardware->setToolTip(QApplication::translate("AudioRecorder", "Hardware Configuration", 0));
 #endif // QT_NO_TOOLTIP
-        actionHardware->setShortcut(QApplication::translate("AudioRecorder", "Ctrl+H", 0, QApplication::UnicodeUTF8));
-        actionAbout->setText(QApplication::translate("AudioRecorder", "About", 0, QApplication::UnicodeUTF8));
-        actionAbout->setShortcut(QApplication::translate("AudioRecorder", "Ctrl+A", 0, QApplication::UnicodeUTF8));
-        actionLicense->setText(QApplication::translate("AudioRecorder", "Copyright License", 0, QApplication::UnicodeUTF8));
-        actionLicense->setShortcut(QApplication::translate("AudioRecorder", "Ctrl+C", 0, QApplication::UnicodeUTF8));
-        actionOpenDir->setText(QApplication::translate("AudioRecorder", "Open Directory", 0, QApplication::UnicodeUTF8));
-        actionOpenDir->setShortcut(QApplication::translate("AudioRecorder", "Ctrl+D", 0, QApplication::UnicodeUTF8));
-        actionInfo->setText(QApplication::translate("AudioRecorder", "Song Info", 0, QApplication::UnicodeUTF8));
-        actionInfo->setShortcut(QApplication::translate("AudioRecorder", "Ctrl+I", 0, QApplication::UnicodeUTF8));
-        menuFile->setTitle(QApplication::translate("AudioRecorder", "File", 0, QApplication::UnicodeUTF8));
-        menuHelp->setTitle(QApplication::translate("AudioRecorder", "Help", 0, QApplication::UnicodeUTF8));
+        actionHardware->setShortcut(QApplication::translate("AudioRecorder", "Ctrl+H", 0));
+        actionAbout->setText(QApplication::translate("AudioRecorder", "About", 0));
+        actionAbout->setShortcut(QApplication::translate("AudioRecorder", "Ctrl+A", 0));
+        actionLicense->setText(QApplication::translate("AudioRecorder", "Copyright License", 0));
+        actionLicense->setShortcut(QApplication::translate("AudioRecorder", "Ctrl+C", 0));
+        actionOpenDir->setText(QApplication::translate("AudioRecorder", "Open Directory", 0));
+        actionOpenDir->setShortcut(QApplication::translate("AudioRecorder", "Ctrl+D", 0));
+        actionInfo->setText(QApplication::translate("AudioRecorder", "Song Info", 0));
+        actionInfo->setShortcut(QApplication::translate("AudioRecorder", "Ctrl+I", 0));
+        menuFile->setTitle(QApplication::translate("AudioRecorder", "File", 0));
+        menuHelp->setTitle(QApplication::translate("AudioRecorder", "Help", 0));
 #ifndef QT_NO_TOOLTIP
-        stopRecord->setToolTip(QApplication::translate("AudioRecorder", "<html><head/><body><p>Stop</p></body></html>", 0, QApplication::UnicodeUTF8));
-#endif // QT_NO_TOOLTIP
-#ifndef QT_NO_TOOLTIP
-        timeCurrent->setToolTip(QApplication::translate("AudioRecorder", "<html><head/><body><p>Recording Time</p></body></html>", 0, QApplication::UnicodeUTF8));
-#endif // QT_NO_TOOLTIP
-        timeCurrent->setText(QApplication::translate("AudioRecorder", "00:00:00", 0, QApplication::UnicodeUTF8));
-#ifndef QT_NO_TOOLTIP
-        timeRemaining->setToolTip(QApplication::translate("AudioRecorder", "<html><head/><body><p>Time Remaining</p></body></html>", 0, QApplication::UnicodeUTF8));
-#endif // QT_NO_TOOLTIP
-        timeRemaining->setText(QApplication::translate("AudioRecorder", "00:00:00", 0, QApplication::UnicodeUTF8));
-#ifndef QT_NO_TOOLTIP
-        startRecord->setToolTip(QApplication::translate("AudioRecorder", "<html><head/><body><p>Record</p></body></html>", 0, QApplication::UnicodeUTF8));
+        stopRecord->setToolTip(QApplication::translate("AudioRecorder", "<html><head/><body><p>Stop</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
-        timeTotal->setToolTip(QApplication::translate("AudioRecorder", "<html><head/><body><p>Total Time</p></body></html>", 0, QApplication::UnicodeUTF8));
+        timeCurrent->setToolTip(QApplication::translate("AudioRecorder", "<html><head/><body><p>Recording Time</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
-        timeTotal->setText(QApplication::translate("AudioRecorder", "00:00:00", 0, QApplication::UnicodeUTF8));
+        timeCurrent->setText(QApplication::translate("AudioRecorder", "00:00:00", 0));
 #ifndef QT_NO_TOOLTIP
-        pauseRecord->setToolTip(QApplication::translate("AudioRecorder", "<html><head/><body><p>Pause</p></body></html>", 0, QApplication::UnicodeUTF8));
+        timeRemaining->setToolTip(QApplication::translate("AudioRecorder", "<html><head/><body><p>Time Remaining</p></body></html>", 0));
+#endif // QT_NO_TOOLTIP
+        timeRemaining->setText(QApplication::translate("AudioRecorder", "00:00:00", 0));
+#ifndef QT_NO_TOOLTIP
+        startRecord->setToolTip(QApplication::translate("AudioRecorder", "<html><head/><body><p>Record</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
-        VUleft->setToolTip(QApplication::translate("AudioRecorder", "<html><head/><body><br>Left channel</br><br>VU meter</br></body></html>", 0, QApplication::UnicodeUTF8));
+        timeTotal->setToolTip(QApplication::translate("AudioRecorder", "<html><head/><body><p>Total Time</p></body></html>", 0));
+#endif // QT_NO_TOOLTIP
+        timeTotal->setText(QApplication::translate("AudioRecorder", "00:00:00", 0));
+#ifndef QT_NO_TOOLTIP
+        pauseRecord->setToolTip(QApplication::translate("AudioRecorder", "<html><head/><body><p>Pause</p></body></html>", 0));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        VUleft->setToolTip(QApplication::translate("AudioRecorder", "<html><head/><body><br>Left channel</br><br>VU meter</br></body></html>", 0));
 #endif // QT_NO_TOOLTIP
         VUleft->setFormat(QString());
 #ifndef QT_NO_TOOLTIP
-        VUright->setToolTip(QApplication::translate("AudioRecorder", "<html><head/><body><br>Right channel</br><br>VU meter</br></body></html>", 0, QApplication::UnicodeUTF8));
+        VUright->setToolTip(QApplication::translate("AudioRecorder", "<html><head/><body><br>Right channel</br><br>VU meter</br></body></html>", 0));
 #endif // QT_NO_TOOLTIP
         VUright->setFormat(QString());
-        labelVolumeMin->setText(QApplication::translate("AudioRecorder", "min", 0, QApplication::UnicodeUTF8));
-        labelVolumeMax->setText(QApplication::translate("AudioRecorder", "max", 0, QApplication::UnicodeUTF8));
-        labelVolume->setText(QApplication::translate("AudioRecorder", "volume", 0, QApplication::UnicodeUTF8));
+        labelVolumeMin->setText(QApplication::translate("AudioRecorder", "min", 0));
+        labelVolumeMax->setText(QApplication::translate("AudioRecorder", "max", 0));
+        labelVolume->setText(QApplication::translate("AudioRecorder", "volume", 0));
     } // retranslateUi
 
 };
