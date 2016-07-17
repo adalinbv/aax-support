@@ -1406,14 +1406,13 @@ AeonWaveConfig::writeConfigFile()
             char *ptr;
 
             ptr = strstr(device, " on ");
-            if (ptr)
-            {
-                *ptr = 0;
-                ptr += strlen(" on ");
-            }
+            if (!ptr) continue;
+
+            *ptr = 0;
+            ptr += strlen(" on ");
 
             file << " <device backend=\"" << device << "\"";
-            file << " name=\"" << ptr << "\">" << std::endl;;
+            file << " name=\"" << ptr << "\">" << std::endl;
             free(device);
 
             for (unsigned dev=0; dev<devices[be]->output.size(); dev++)
