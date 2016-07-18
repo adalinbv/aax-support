@@ -648,7 +648,10 @@ AeonWaveConfig::getSystemResources()
             device->current_output_connector = 0;
             device->current_input_connector = 0;
             device->name = d;
-            if (r && *r) device->name += std::string(" on ") + r;
+
+            if (!r || !*r) continue;
+
+            device->name += std::string(" on ") + r;
             devices.push_back(device);
 
             while (const char* i = aax.interfaces(false))
