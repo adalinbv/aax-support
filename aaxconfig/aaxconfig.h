@@ -23,7 +23,7 @@
 #include <vector>
 #include <string>
 
-#include <aax/AeonWave>
+#include <aax/aeonwave.hpp>
 
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QComboBox>

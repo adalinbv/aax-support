@@ -28,7 +28,7 @@
 #include <QTime>
 
 #include <SimpleGlob.h>
-#include <aax/AeonWave>
+#include <aax/aeonwave.hpp>
 
 #include "setup.h"
 #include "record.h"
