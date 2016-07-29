@@ -495,11 +495,11 @@ AeonWavePlayer::startOutput()
     std::string d = std::string(odevname_str.toUtf8().constData());
     const char *dev = d.empty() ? NULL : d.c_str();
 
-    outdev = AAX::AeonWave(dev, AAX_MODE_WRITE_STEREO);
+    outdev = aax::AeonWave(dev, AAX_MODE_WRITE_STEREO);
     if (outdev)
     {
-        AAX::DSP flt = outdev.get(AAX_VOLUME_FILTER);
-        float vol = _MIN(flt.get(AAX_GAIN), 1.0f);
+        aax::dsp dsp = outdev.get(AAX_VOLUME_FILTER);
+        float vol = _MIN(dsp.get(AAX_GAIN), 1.0f);
         ui->volume->setValue(rintf(vol*100));
 
         int res = outdev.set(AAX_INITIALIZED);
@@ -512,7 +512,7 @@ AeonWavePlayer::startOutput()
         {
             alert(tr("<br>Unable to initialize the output device:</br>"
                         "<p><i><b>%1</b></i></p>"
-                    ).arg(outdev.error()));
+                    ).arg(aax::error()));
             _TEST(outdev.close());
         }
     }
@@ -546,13 +546,13 @@ AeonWavePlayer::startInput()
         std::string d = std::string(idevname_str.toUtf8().constData());
         const char *dev = d.empty() ? NULL : d.c_str();
 
-        indev = AAX::AeonWave(dev, AAX_MODE_READ);
+        indev = aax::AeonWave(dev, AAX_MODE_READ);
         if (indev)
         {
             /** set capturing Auto-Gain Control (AGC): 0dB */
             if (agc_enabled)
             {
-                AAX::DSP filter = indev.get(AAX_VOLUME_FILTER);
+                aax::dsp filter = indev.get(AAX_VOLUME_FILTER);
                 if (filter)
                 {
                     filter.set(AAX_AGC_RESPONSE_RATE, 1.5f);
@@ -568,7 +568,7 @@ AeonWavePlayer::startInput()
             {
                 alert(tr("<br>File initialization error:</br><br>%1</br>"
                             "<p><i><b>%2</b></i></p>"
-                        ).arg(infile).arg(indev.error()));
+                        ).arg(infile).arg(aax::error()));
                 infile = QString();
                 stopInput();
                 return;
@@ -680,15 +680,15 @@ AeonWavePlayer::togglePause()
 void
 AeonWavePlayer::volumeChanged(int val)
 {
-    AAX::DSP flt = outdev.get(AAX_VOLUME_FILTER);
-    _TEST(flt.set(AAX_GAIN, (float)val/100.0f));
-    _TEST(outdev.set(flt));
+    aax::dsp dsp = outdev.get(AAX_VOLUME_FILTER);
+    _TEST(dsp.set(AAX_GAIN, (float)val/100.0f));
+    _TEST(outdev.set(dsp));
 }
 
 void
 AeonWavePlayer::setWildcards()
 {
-    AAX::AeonWave cfgi("AeonWave on Audio Files", AAX_MODE_WRITE_STEREO);
+    aax::AeonWave cfgi("AeonWave on Audio Files", AAX_MODE_WRITE_STEREO);
     if (cfgi)
     {
         const char *d, *f;
@@ -918,7 +918,7 @@ AeonWavePlayer::readPLS(QStringList& list, QTextStream &tstream, bool utf8)
 void
 AeonWavePlayer::getSystemResources(device_t &type, enum aaxRenderMode mode)
 {
-    AAX::AeonWave aax("None");
+    aax::AeonWave aax("None");
 
     type.backend.clear();
     while (const char *d = aax.drivers(mode))

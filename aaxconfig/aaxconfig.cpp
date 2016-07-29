@@ -419,7 +419,7 @@ AeonWaveConfig::changeMixer(int val)
             name += ": " + std::string(tmpDir()) + "/AeonWave.wav";
         }
 
-        AAX::AeonWave cfg(name.c_str(), AAX_MODE_WRITE_STEREO);
+        aax::AeonWave cfg(name.c_str(), AAX_MODE_WRITE_STEREO);
         if (cfg)
         {
             unsigned int x, y, min, max;
@@ -440,8 +440,8 @@ AeonWaveConfig::changeMixer(int val)
             desc += tr("<tr><td>Renderer:</td>");
             desc += tr("<td colspan=\"3\">%1</td></tr>").arg(s);
 
-            x = cfg.major_version();
-            y = cfg.minor_version();
+            x = aax::major_version();
+            y = aax::minor_version();
             s = cfg.version();
             desc += tr("<tr><td width=\"25%\">Version:</td>");
             desc += tr("<td width=\"75%\" colspan=\"3\">%1 (%2.%3)</td></tr>").arg(s).arg(x).arg(y);
@@ -542,7 +542,7 @@ AeonWaveConfig::changeMixer(int val)
 //          ui->MixerInfo->adjustSize();
 //          ui->MixerInfo->show();
 
-            if (cfg.major_version() >= 2 && cfg.minor_version() >= 5)
+            if (aax::major_version() >= 2 && aax::minor_version() >= 5)
             {
                 desc = tr("<table width=\"100%\">");
                 desc += tr("<tr><td width=\"50%\">");
@@ -623,9 +623,9 @@ AeonWaveConfig::FreqToIndex(unsigned int freq)
 void
 AeonWaveConfig::getSystemResources()
 {
-    AAX::AeonWave aax;
-    int major = aax.major_version();
-    int minor = aax.minor_version();
+    aax::AeonWave aax;
+    int major = aax::major_version();
+    int minor = aax::minor_version();
 
     if (major < 2 || (major == 2 && minor < 5))
     {
@@ -1170,7 +1170,7 @@ AeonWaveConfig::displayUiDevicesConfig()
         name += std::string(": ") + ifname;
     }
 
-    AAX::AeonWave cfg(name.c_str(), AAX_MODE_READ);
+    aax::AeonWave cfg(name.c_str(), AAX_MODE_READ);
     if (cfg)
     {
        int min, max;
@@ -1230,7 +1230,7 @@ AeonWaveConfig::displayUiDevicesConfig()
     }
     cfg.close();
 
-    AAX::AeonWave cfgi(name.c_str(), AAX_MODE_WRITE_STEREO);
+    aax::AeonWave cfgi(name.c_str(), AAX_MODE_WRITE_STEREO);
     if (cfgi)
     {
        int min, max;

@@ -59,9 +59,9 @@ public:
     struct device_t idevices;
     struct device_t odevices;
 
-    AAX::AeonWave outdev;
-    AAX::AeonWave indev;
-    AAX::AeonWave file;
+    aax::AeonWave outdev;
+    aax::AeonWave indev;
+    aax::AeonWave file;
     int bitrate;
     float in_freq;
     bool agc_enabled;

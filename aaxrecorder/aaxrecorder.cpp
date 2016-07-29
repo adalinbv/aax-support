@@ -191,12 +191,12 @@ AeonWaveRecorder::startOutput()
     std::string d = std::string(odevname_str.toUtf8().constData());
     const char *dev = d.empty() ? NULL : d.c_str();
 
-    outdev = AAX::AeonWave(dev, AAX_MODE_WRITE_STEREO);
+    outdev = aax::AeonWave(dev, AAX_MODE_WRITE_STEREO);
     if (outdev)
     {
 #if 0
-        DSP flt = outdev.get(AAX_VOLUME_FILTER);
-        float vol = _MIN(flt.get(AAX_GAIN), 1.0f);
+        aax:dsp dsp = outdev.get(AAX_VOLUME_FILTER);
+        float vol = _MIN(dsp.get(AAX_GAIN), 1.0f);
         ui->volume->setValue(rintf(vol*100));
 #endif
 
@@ -205,7 +205,7 @@ AeonWaveRecorder::startOutput()
         {
             alert(tr("<br>Unable to initialize the output device:</br>"
                      "<p><i><b>%1</b></i></p>"
-                  ).arg(outdev.error()));
+                  ).arg(aax::error()));
             stopOutput();
         }
         else
@@ -215,7 +215,7 @@ AeonWaveRecorder::startOutput()
 
             d = std::string(idevname_str.toUtf8().constData());
             dev = d.empty() ? NULL : d.c_str();
-            indev = AAX::AeonWave(dev, AAX_MODE_READ);
+            indev = aax::AeonWave(dev, AAX_MODE_READ);
             if (indev)
             {
                 idevname_str = indev.get(AAX_RENDERER_STRING);
@@ -228,18 +228,18 @@ AeonWaveRecorder::startOutput()
                 {
                     alert(tr("<br>Unable to initialize the input device:</br>"
                              "<p><i><b>%1</b></i></p>"
-                            ).arg(indev.error()));
+                            ).arg(aax::error()));
                     stopOutput();
                 }
                 else
                 {
-                    AAX::DSP flt = indev.get(AAX_VOLUME_FILTER);
+                    aax::dsp dsp = indev.get(AAX_VOLUME_FILTER);
                     float val = ui->volume->value()/100.0f;
-                    _TEST(flt.set(AAX_GAIN, val));
+                    _TEST(dsp.set(AAX_GAIN, val));
                     if (agc_enabled) {
-                       _TEST(flt.set(AAX_AGC_RESPONSE_RATE, 1.5f));
+                       _TEST(dsp.set(AAX_AGC_RESPONSE_RATE, 1.5f));
                     }
-                    _TEST(indev.set(flt));
+                    _TEST(indev.set(dsp));
 
                     _TEST(indev.sensor(AAX_CAPTURING));
                     in_freq = outdev.get(AAX_FREQUENCY);
@@ -286,7 +286,7 @@ AeonWaveRecorder::startRecording()
             }
 
             QString filedev = "AeonWave on Audio Files: "+fileName;
-            file = AAX::AeonWave(filedev.toUtf8().constData(),
+            file = aax::AeonWave(filedev.toUtf8().constData(),
                                        AAX_MODE_WRITE_STEREO);
             if (file)
             {
@@ -299,7 +299,7 @@ AeonWaveRecorder::startRecording()
                 {
                    alert(tr("<br>Unable to initialize the recording device:</br>"
                             "<p><i><b>%1</b></i></p>"
-                         ).arg(file.error()));
+                         ).arg(aax::error()));
                    return;
                 }
 
@@ -351,16 +351,16 @@ AeonWaveRecorder::volumeChanged(int val)
 {
     if (indev)
     {
-        AAX::DSP flt = indev.get(AAX_VOLUME_FILTER);
-        _TEST(flt.set(AAX_GAIN, (float)val/100.0f));
-        _TEST(indev.set(flt));
+        aax::dsp dsp = indev.get(AAX_VOLUME_FILTER);
+        _TEST(dsp.set(AAX_GAIN, (float)val/100.0f));
+        _TEST(indev.set(dsp));
     }
 }
 
 void
 AeonWaveRecorder::setWildcards()
 {
-    AAX::AeonWave cfgo("AeonWave on Audio Files", AAX_MODE_WRITE_STEREO);
+    aax::AeonWave cfgo("AeonWave on Audio Files", AAX_MODE_WRITE_STEREO);
     if (cfgo)
     {
         const char *d, *f;
@@ -388,7 +388,7 @@ AeonWaveRecorder::alert(QString msg)
 void
 AeonWaveRecorder::getSystemResources(device_t &type, enum aaxRenderMode mode)
 {
-    AAX::AeonWave aax;
+    aax::AeonWave aax;
 
     type.backend.clear();
 

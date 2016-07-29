@@ -58,10 +58,10 @@ public:
     QString odevname_str;
     struct device_t odevices;
 
-    AAX::AeonWave outdev;
-    AAX::AeonWave indev;
+    aax::AeonWave outdev;
+    aax::AeonWave indev;
 
-    AAX::AeonWave file;
+    aax::AeonWave file;
     int bitrate;
     float in_freq;
     bool agc_enabled;
