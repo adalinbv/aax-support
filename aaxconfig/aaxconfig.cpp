@@ -425,7 +425,7 @@ AeonWaveConfig::changeMixer(int val)
             unsigned int x, y, min, max;
             const char *s;
 
-            if (cfg.valid(AAX_CONFIG_HD)) {
+            if (aax::is_valid(cfg, AAX_CONFIG_HD)) {
                ui->label_acquire->setVisible(false);
             }
 

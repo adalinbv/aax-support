@@ -512,7 +512,7 @@ AeonWavePlayer::startOutput()
         {
             alert(tr("<br>Unable to initialize the output device:</br>"
                         "<p><i><b>%1</b></i></p>"
-                    ).arg(aax::error()));
+                    ).arg(aax::strerror()));
             _TEST(outdev.close());
         }
     }
@@ -568,7 +568,7 @@ AeonWavePlayer::startInput()
             {
                 alert(tr("<br>File initialization error:</br><br>%1</br>"
                             "<p><i><b>%2</b></i></p>"
-                        ).arg(infile).arg(aax::error()));
+                        ).arg(infile).arg(aax::strerror()));
                 infile = QString();
                 stopInput();
                 return;

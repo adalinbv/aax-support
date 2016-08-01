@@ -205,7 +205,7 @@ AeonWaveRecorder::startOutput()
         {
             alert(tr("<br>Unable to initialize the output device:</br>"
                      "<p><i><b>%1</b></i></p>"
-                  ).arg(aax::error()));
+                  ).arg(outdev.strerror()));
             stopOutput();
         }
         else
@@ -228,7 +228,7 @@ AeonWaveRecorder::startOutput()
                 {
                     alert(tr("<br>Unable to initialize the input device:</br>"
                              "<p><i><b>%1</b></i></p>"
-                            ).arg(aax::error()));
+                            ).arg(indev.strerror()));
                     stopOutput();
                 }
                 else
@@ -299,7 +299,7 @@ AeonWaveRecorder::startRecording()
                 {
                    alert(tr("<br>Unable to initialize the recording device:</br>"
                             "<p><i><b>%1</b></i></p>"
-                         ).arg(aax::error()));
+                         ).arg(file.strerror()));
                    return;
                 }
 
