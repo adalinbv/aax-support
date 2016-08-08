@@ -1,6 +1,6 @@
 /*
- * Copyright 2011-2015 by Erik Hofman.
- * Copyright 2011-2015 by Adalin B.V.
+ * Copyright 2011-2016 by Erik Hofman.
+ * Copyright 2011-2016 by Adalin B.V.
  * All Rights Reserved.
  *
  * This file is part of AeonWave-AudioPlayer.

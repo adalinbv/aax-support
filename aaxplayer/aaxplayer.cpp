@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2014-2015 by Erik Hofman
- * Copyright (C) 2014-2015 by Adalin B.V.
+ * Copyright (C) 2014-2016 by Erik Hofman
+ * Copyright (C) 2014-2016 by Adalin B.V.
  *
  * This file is part of AeonWave-AudioPlayer.
  *
@@ -1015,7 +1015,7 @@ AeonWavePlayer::viewAbout()
 {
     alert(tr("<h2>AeonWave Audio Player version %1.%2</h2>"
                 "<h5>using %3</h5>"
-                "<h4>(C) Copyright 2014-2015 by Adalin B.V.</h4><br>"
+                "<h4>(C) Copyright 2014-2016 by Adalin B.V.</h4><br>"
                 "<b><i>AeonWave Audio Player is a streaming audio player.</i></b>"
                 "<p><br>This software lets you play audio files using the "
                 "automatic audio streaming capabilities of AeonWave. It is "
@@ -1037,7 +1037,7 @@ AeonWavePlayer::viewLicense()
 //  license.setTextFormat(Qt::RichText);
     license.setDetailedText(text);
     license.setIcon(QMessageBox::Information);
-    license.setText(tr("<h5>(C) Copyright 2014-2015 by Adalin B.V.</h5>"
+    license.setText(tr("<h5>(C) Copyright 2014-2016 by Adalin B.V.</h5>"
             "This program is free software: you can redistribute it and/or "
             "modify it under the terms of the GNU General Public License as "
             "published by the Free Software Foundation, either version 3 of "

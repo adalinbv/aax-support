@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 by Adalin B.V.
+ * Copyright (C) 2014-2016 by Adalin B.V.
  *
  * This file is part of AeonWave-Config.
  *
