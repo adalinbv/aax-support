@@ -542,7 +542,7 @@ AeonWaveConfig::changeMixer(int val)
 //          ui->MixerInfo->adjustSize();
 //          ui->MixerInfo->show();
 
-            if (aax::major_version() >= 2 && aax::minor_version() >= 5)
+            if (aax::major_version() > 2 || (aax::major_version() == 2 && aax::minor_version() >= 5))
             {
                 desc = tr("<table width=\"100%\">");
                 desc += tr("<tr><td width=\"50%\">");
@@ -568,6 +568,9 @@ AeonWaveConfig::changeMixer(int val)
                             desc += tr("<font color=\"LightSlateGray\">&nbsp;%1</font>").arg(s);
                             desc += tr("</td>");
                         }
+                    }
+                    else {
+                       desc += tr("<td></td>");
                     }
 
                     if (i < max_eff)
