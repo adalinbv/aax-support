@@ -92,8 +92,6 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     connect(ui->SetDefault, SIGNAL(clicked(bool)), this, SLOT(changeSetDefault(bool)));
     connect(ui->InputSetDefault, SIGNAL(clicked(bool)), this, SLOT(changeInputSetDefault(bool)));
 
-    connect(ui->ProductKey, SIGNAL(textEdited(QString)), this, SLOT(changeProductKey(QString)));
-
     saveAct = new QShortcut(this);
     saveAct->setKey(tr("Ctrl+S"));
     saveAct->setContext(Qt::ApplicationShortcut);
@@ -141,12 +139,6 @@ void
 AeonWaveConfig::alert(QString msg)
 {
    QMessageBox::warning(0, "AeonWave-Config", msg);
-}
-
-void
-AeonWaveConfig::changeProductKey(QString str)
-{
-    product_key = str.toStdString();
 }
 
 void
@@ -922,9 +914,6 @@ AeonWaveConfig::readConfigSettings(void* xid)
         char *default_input_device = NULL;
         char *default_device = NULL;
 
-        char *str = xmlNodeGetString(xcid, "product-key");
-        if (str) product_key = str;
-
         void *xoid = xmlNodeGet(xcid, "output");
         if (xoid)
         {
@@ -1267,12 +1256,6 @@ AeonWaveConfig::displayUiDevicesConfig()
 void
 AeonWaveConfig::displayUiConfig()
 {
-    /* General */
-//  ui->ProductKey->setText( QString::fromStdString(product_key) );
-    std::string hidden;
-    hidden.assign(product_key.size(), '*');
-    ui->ProductKey->setText( QString::fromStdString(hidden) );
-
     /* Devices */
     ui->Device->clear();
     for(unsigned be=0; be<devices.size(); be++)
@@ -1357,9 +1340,6 @@ AeonWaveConfig::writeConfigFile()
         file << "<?xml version=\"1.0\"?>" << std::endl << std::endl;
         file << "<configuration>" << std::endl;
         file << " <version>2.0</version>" << std::endl;
-
-        file << " <product-key>" << product_key;
-        file << "</product-key>" << std::endl;
 
         if (default_input_device != UINT_MAX)
         {
@@ -1626,9 +1606,6 @@ AeonWaveConfig::writeOldConfigFile()
         file << "<configuration>" << std::endl;
 //      file << " <version>1.1</version>" << std::endl;
 
-        file << " <product-key>" << product_key;
-        file << "</product-key>" << std::endl;
-
         file << " <output>" << std::endl;
         file << "  <frequency-hz>"<< general_sample_freq;
         file << "</frequency-hz>" << std::endl;
@@ -1751,20 +1728,3 @@ AeonWaveConfig::writeOldConfigFile()
 }
 #endif
 
-bool
-ConfigLineEdit::eventFilter(QObject* object, QEvent* event)
-{
-    if (_mw && _mw->ui && object == _mw->ui->ProductKey)
-    {
-        if (event->type() == QEvent::FocusIn) {
-            setText( QString::fromStdString(_mw->get_productkey()) );
-        }
-        else if (event->type() == QEvent::FocusOut)
-        {
-            std::string hidden;
-            hidden.assign(_mw->get_productkey().size(), '*');
-            setText( QString::fromStdString(hidden) );
-        }
-    }
-    return false;
-}

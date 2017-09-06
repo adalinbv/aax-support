@@ -22,15 +22,12 @@
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QWidget>
-#include "aaxwidgets.h"
 
 QT_BEGIN_NAMESPACE
 
 class Ui_Configuration
 {
 public:
-    ConfigLineEdit *ProductKey;
-    QLabel *label_product_key;
     QComboBox *Device;
     QLabel *label_backend;
     QDialogButtonBox *OK;
@@ -80,12 +77,6 @@ public:
         Configuration->resize(530, 400);
         Configuration->setMinimumSize(QSize(530, 400));
         Configuration->setMaximumSize(QSize(530, 400));
-        ProductKey = new ConfigLineEdit(Configuration);
-        ProductKey->setObjectName(QString::fromUtf8("ProductKey"));
-        ProductKey->setGeometry(QRect(300, 33, 221, 21));
-        label_product_key = new QLabel(Configuration);
-        label_product_key->setObjectName(QString::fromUtf8("label_product_key"));
-        label_product_key->setGeometry(QRect(300, 10, 91, 17));
         Device = new QComboBox(Configuration);
         Device->setObjectName(QString::fromUtf8("Device"));
         Device->setGeometry(QRect(10, 30, 271, 27));
@@ -225,8 +216,6 @@ public:
         label_acquire->setLayoutDirection(Qt::RightToLeft);
         label_acquire->setTextFormat(Qt::RichText);
         label_acquire->setOpenExternalLinks(true);
-        QWidget::setTabOrder(Device, ProductKey);
-        QWidget::setTabOrder(ProductKey, tabWidget);
         QWidget::setTabOrder(tabWidget, OutputConnector);
         QWidget::setTabOrder(OutputConnector, Shared);
         QWidget::setTabOrder(Shared, Timer);
@@ -256,9 +245,7 @@ public:
     {
         Configuration->setWindowTitle(QApplication::translate("Configuration", "AeonWave Configuration", 0));
 #ifndef QT_NO_TOOLTIP
-        ProductKey->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>A valid prouduct key unlocks the advanced options of AeonWave and turns the software from the Lite mode to the HD mode.</p></body></html>", 0));
 #endif // QT_NO_TOOLTIP
-        label_product_key->setText(QApplication::translate("Configuration", "Product-Key:", 0));
         label_backend->setText(QApplication::translate("Configuration", "Device:", 0));
         label_input_sample_bitrate->setText(QApplication::translate("Configuration", "Bitrate", 0));
         label_output_sample_freq->setText(QApplication::translate("Configuration", "Frequency:", 0));
@@ -378,9 +365,6 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("Configuration", "Capture", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("Configuration", "Information", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("Configuration", "Filters and Effects", 0));
-#ifndef QT_NO_TOOLTIP
-        label_acquire->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Click here to get a valid Product-Key (an internet connection is required)</p></body></html>", 0));
-#endif // QT_NO_TOOLTIP
         label_acquire->setText(QApplication::translate("Configuration", "<html><head/><body><p><a href=\"http://www.adalin.com/buy_aeonwaveHD.html\"><span style=\" text-decoration: underline; color:#0000ff;\">Acquire</span></a></p></body></html>", 0));
     } // retranslateUi
 

@@ -25,35 +25,6 @@
   <property name="windowTitle">
    <string>AeonWave Configuration</string>
   </property>
-  <widget class="ConfigLineEdit" name="ProductKey">
-   <property name="geometry">
-    <rect>
-     <x>300</x>
-     <y>33</y>
-     <width>221</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="toolTip">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A valid prouduct key unlocks the advanced options of AeonWave and turns the software from the Lite mode to the HD mode.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-   <property name="maxLength">
-    <number>32</number>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_product_key">
-   <property name="geometry">
-    <rect>
-     <x>300</x>
-     <y>10</y>
-     <width>91</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Product-Key:</string>
-   </property>
-  </widget>
   <widget class="QComboBox" name="Device">
    <property name="geometry">
     <rect>
@@ -802,9 +773,6 @@
      <height>20</height>
     </rect>
    </property>
-   <property name="toolTip">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Click here to get a valid Product-Key (an internet connection is required)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
    <property name="layoutDirection">
     <enum>Qt::RightToLeft</enum>
    </property>
@@ -819,16 +787,8 @@
    </property>
   </widget>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>ConfigLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>aaxwidgets.h</header>
-  </customwidget>
- </customwidgets>
  <tabstops>
   <tabstop>Device</tabstop>
-  <tabstop>ProductKey</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>OutputConnector</tabstop>
   <tabstop>Shared</tabstop>
@@ -850,7 +810,6 @@
  <resources/>
  <connections/>
  <slots>
-  <slot>changeProductKey(QString)</slot>
   <slot>changeRefreshRate(int)</slot>
   <slot>changeSpeakerSetup(int)</slot>
   <slot>changeGeneralSampleFreq(int)</slot>

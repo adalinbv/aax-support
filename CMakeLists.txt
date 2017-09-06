@@ -84,13 +84,13 @@ ELSE(WIN32)
   # DEBIAN
   SET(CPACK_DEBIAN_PACKAGE_REPLACES "aaxconfig, aaxconfig-bin")
   SET(CPACK_DEBIAN_PACKAGE_SECTION "support utilities")
-  SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.1), libaax2-bin (>= 2.5), libqt5core5a (>= 5.1.0), libqt5gui5 (>= 5.1.0), libqt5network5 (>= 5.1.0)")
+  SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.1), libaax3-bin (>= 3.0), libqt5core5a (>= 5.1.0), libqt5gui5 (>= 5.1.0), libqt5network5 (>= 5.1.0)")
 
   # RPM
   SET(CPACK_RPM_PACKAGE_LICENSE "GPL v3")
   SET(CPACK_RPM_PACKAGE_OBSOLETES "aaxconfig-bin")
   SET(CPACK_RPM_PACKAGE_GROUP "System Environment/Base")
-  SET(CPACK_RPM_PACKAGE_REQUIRES "libaax2-bin >= 2.2")
+  SET(CPACK_RPM_PACKAGE_REQUIRES "libaax3-bin >= 3.0")
 ENDIF(WIN32)
 
 # ZIP

@@ -41,10 +41,6 @@ public:
     AeonWaveConfig(QWidget *parent = 0);
     ~AeonWaveConfig();
 
-    inline std::string get_productkey() {
-        return product_key;
-    }
-
     Ui_Configuration *ui;
 
 private slots:
@@ -68,8 +64,6 @@ private slots:
     void changeDevice(int val);
     void writeConfigFile();
     void writeConfig();
-
-    void changeProductKey(QString str);
 
 private:
     QShortcut *saveAct;
@@ -133,7 +127,6 @@ private:
            
     } device_t;
  
-    std::string product_key;
     unsigned int refresh_rate;
     unsigned int general_sample_freq;
     enum aaxRenderMode general_setup;
