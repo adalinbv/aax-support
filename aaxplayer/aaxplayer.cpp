@@ -694,7 +694,7 @@ AeonWavePlayer::setWildcards()
         const char *d, *f;
 
         d = cfgi.device(0);
-        f = cfgi.interface(d, 0);
+        f = cfgi.interface_name(d, 0);
         wildcards = f;
     }
 }
