@@ -55,12 +55,6 @@ typedef unsigned __int64 uint64_t;
 # define strncasecmp _strnicmp
 # define rintf(v) (int)(v+0.5f)
 
-struct timespec
-{
-  time_t tv_sec; /* seconds */
-  long tv_nsec;  /* nanoseconds */
-};
-
 struct timezone
 {
   int tz_minuteswest; /* of Greenwich */

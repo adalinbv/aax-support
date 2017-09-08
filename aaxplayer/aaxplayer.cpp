@@ -317,8 +317,8 @@ AeonWavePlayer::readFavorite()
                 favorites->clear();
 
                 void *xuid = xmlMarkId(xbid);
-                unsigned num = xmlNodeGetNum(xuid, "url");
-                for (unsigned u=0; u<num; u++)
+                size_t num = xmlNodeGetNum(xuid, "url");
+                for (size_t u=0; u<num; u++)
                 {
                     xmlNodeGetPos(xbid, xuid, "url", u);
 
@@ -694,7 +694,7 @@ AeonWavePlayer::setWildcards()
         const char *d, *f;
 
         d = cfgi.device(0);
-        f = cfgi.interface(d, 0);
+        f = cfgi.interface_name(d, 0);
         wildcards = f;
     }
 }
@@ -736,7 +736,7 @@ AeonWavePlayer::loadFile()
         infile = fileName;
         if (setFileOrPlaylist(indir) == false)
         {
-            size_t fpos = infile.lastIndexOf('/');
+            int fpos = infile.lastIndexOf('/');
             infiles_path = infile.mid(0, fpos);
         }
     }

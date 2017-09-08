@@ -593,8 +593,8 @@ AeonWaveConfig::changeMixer(int val)
 void
 AeonWaveConfig::changeDevice(int val)
 {
-    int max_device = _MAX(devices.size()-1, 0);
-    current_device = _MINMAX(val, 0, max_device);
+    unsigned int max_device = _MAX((unsigned int)devices.size()-1, 0);
+    current_device = _MINMAX((unsigned int)val, 0, max_device);
     displayUiDevicesConfig();
 }
 
@@ -819,8 +819,8 @@ AeonWaveConfig::readOldConfigSettings(void* xcid)
     if (xcid)
     {
         void* xbid = xmlMarkId(xcid);
-        unsigned num = xmlNodeGetNum(xbid, "backend");
-        for (unsigned xbe=0; xbe<num; xbe++)
+        size_t num = xmlNodeGetNum(xbid, "backend");
+        for (size_t xbe=0; xbe<num; xbe++)
         {
             xmlNodeGetPos(xcid, xbid, "backend", xbe);
 
@@ -973,8 +973,8 @@ AeonWaveConfig::readNewConfigSettings(void* xcid)
     if (xcid)
     {
         void *xdid = xmlMarkId(xcid);
-        unsigned dev_num = xmlNodeGetNum(xdid, "device");
-        for (unsigned int xdev=0; xdev<dev_num; xdev++)
+        size_t dev_num = xmlNodeGetNum(xdid, "device");
+        for (size_t xdev=0; xdev<dev_num; xdev++)
         {
             xmlNodeGetPos(xcid, xdid, "device", xdev);
 
@@ -986,8 +986,8 @@ AeonWaveConfig::readNewConfigSettings(void* xcid)
             xmlFree(backend);
 
             void *xiid = xmlMarkId(xdid);
-            unsigned int con_num = xmlNodeGetNum(xiid, "connector");
-            for (unsigned int con=0; con<con_num; con++)
+            size_t con_num = xmlNodeGetNum(xiid, "connector");
+            for (size_t con=0; con<con_num; con++)
             {
                 xmlNodeGetPos(xdid, xiid, "connector", con);
 
