@@ -366,7 +366,7 @@ AeonWaveRecorder::setWildcards()
         const char *d, *f;
 
         d = cfgo.device(0);
-        f = cfgo.interface(d, 0);
+        f = cfgo.interface_name(d, 0);
         wildcards = f;
     }
 }
