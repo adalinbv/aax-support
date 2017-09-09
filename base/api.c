@@ -24,7 +24,6 @@
 #include <base/types.h>
 
 #if defined(WIN32)
-# define _WIN32_WINNT 0x0500
 # include <Windows.h>
 # include <sddl.h>
 # include <stdio.h>
