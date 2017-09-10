@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 2.8.11)
 
+# Link to Qt5's WinMain automatically (in executables).
+if (POLICY CMP0020)
+  cmake_policy(SET CMP0020 NEW)
+endif ()
+
 set(CMAKE_PREFIX_PATH "C:/Qt/Qt5.7.0/5.7/msvc2015_64")
 SET( cmake_verbose_makefile TRUE)
 

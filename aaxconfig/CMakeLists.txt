@@ -16,7 +16,6 @@ target_link_libraries(aaxconfig
     ${AAX_LIBRARY}
     ${XML_LIBRARY}
     ${EXTRA_LIBS}
-    Qt5::WinMain
     Qt5::Widgets
     Qt5::Core
     Qt5::Gui

@@ -26,7 +26,7 @@ FIND_PATH(XML_INCLUDE_DIR xml.h
 )
 
 FIND_LIBRARY(XML_LIBRARY 
-  NAMES XML xml ZeroXML libZeroXML
+  NAMES XML xml zeroxml libzeroxml
   HINTS
   $ENV{XMLDIR}
   $ENV{ProgramFiles}/ZeroXML
