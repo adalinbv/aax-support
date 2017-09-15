@@ -51,25 +51,21 @@ ENDIF(WIN32)
 macro (CMP_QT_LIBRARIES_INSTALL_RULES QTLIBLIST destination comp)
   # message(STATUS "CMP_COPY_QT4_RUNTIME_LIBRARIES")
   if (WIN32)
-    if (DEFINED QT_QMAKE_EXECUTABLE)
-      set(TYPE "d")
-      FOREACH(qtlib ${QTLIBLIST})
- 
-        GET_FILENAME_COMPONENT(QT_DLL_PATH_tmp ${QT_QMAKE_EXECUTABLE} PATH)
-        message(STATUS "Generating Install Rule for Qt Debug DLL Library ${QT_DLL_PATH_tmp}/${qtlib}d4.dll")  
-        INSTALL(FILES ${QT_DLL_PATH_tmp}/${qtlib}${type}d4.dll 
-                DESTINATION "${destination}"
-                CONFIGURATIONS Debug
-                COMPONENT "${comp}"
-               )
-        message(STATUS "Generating Install Rule for Qt Release DLL Library ${QT_DLL_PATH_tmp}/${qtlib}4.dll")
-        INSTALL(FILES ${QT_DLL_PATH_tmp}/${qtlib}4.dll 
-                DESTINATION "${destination}"
-                CONFIGURATIONS Release
-                COMPONENT "${comp}"
-               )
-      ENDFOREACH(qtlib)
-    endif(DEFINED QT_QMAKE_EXECUTABLE)
+    FOREACH(qtlib ${QTLIBLIST})
+      get_target_property(QT_DLL_PATH_tmp ${qtlib} LOCATION)
+      message(STATUS "Generating Install Rule for Qt Debug DLL Library ${QT_DLL_PATH_tmp}")  
+      INSTALL(FILES ${QT_DLL_PATH_tmp} 
+              DESTINATION "${destination}"
+              CONFIGURATIONS Debug
+              COMPONENT "${comp}"
+             )
+      message(STATUS "Generating Install Rule for Qt Release DLL Library ${QT_DLL_PATH_tmp}")
+      INSTALL(FILES ${QT_DLL_PATH_tmp}
+              DESTINATION "${destination}"
+              CONFIGURATIONS Release
+              COMPONENT "${comp}"
+             )
+    ENDFOREACH(qtlib)
   endif()
 endmacro()
 

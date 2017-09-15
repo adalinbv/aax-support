@@ -1,5 +1,8 @@
 
+#if 0
 #ifdef WIN32
+#include <Windows.h>
+#include <Shlwapi.h>
 // http://stackoverflow.com/questions/2038912/how-to-recursively-traverse-directories-in-c-on-windows
 // call: FindFilesRecursively(_T("C:\\WINDOWS"), _T("*.wav"))
 
@@ -77,4 +80,5 @@ FindFilesRecursively(const char *path, char *pattern)
         }
     }
 }
+#endif
 #endif

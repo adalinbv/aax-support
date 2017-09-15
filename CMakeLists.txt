@@ -1,10 +1,5 @@
 cmake_minimum_required(VERSION 2.8.11)
 
-# Link to Qt5's WinMain automatically (in executables).
-if (POLICY CMP0020)
-  cmake_policy(SET CMP0020 NEW)
-endif ()
-
 set(CMAKE_PREFIX_PATH "C:/Qt/Qt5.7.0/5.7/msvc2015_64")
 SET( cmake_verbose_makefile TRUE)
 
@@ -78,13 +73,12 @@ SET(CMAKE_AUTORCC ON)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets)
 find_package(Qt5Gui)
-find_package(Qt5Network)
+find_package(QT5Network)
 IF(WIN32)
-  SET (QT_USE_QTMAIN TRUE)
   SET(CPACK_NSIS_MODIFY_PATH "ON")
   ADD_DEFINITIONS("-D_WIN32")
-  CMP_QT_LIBRARIES_INSTALL_RULES("QtCore;QtGui" "bin" "Support")
-  CMP_QT_LIBRARIES_INSTALL_RULES("QtCore;QtGui;QtNetwork" "bin" "Media")
+  CMP_QT_LIBRARIES_INSTALL_RULES("Qt5::Core;Qt5::Widgets;Qt5::Gui" "bin" "Support")
+  CMP_QT_LIBRARIES_INSTALL_RULES("Qt5::Core;Qt5::Widgets;Qt5::Gui;Qt5::Network" "bin" "Media")
 
 ELSE(WIN32)
 
@@ -117,6 +111,7 @@ IF(MSVC)
     SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG")
     ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
     ADD_DEFINITIONS(-D_CRT_NONSTDC_NO_DEPRECATE)
+    SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:libcmt.lib /entry:mainCRTStartup")
 #   ADD_DEFINITIONS(/NODEFAULTLIB:libcmt.lib)
 #   ADD_DEFINITIONS(/NODEFAULTLIB:msvcrt.lib)
 #   ADD_DEFINITIONS(/NODEFAULTLIB:libcd.lib)
