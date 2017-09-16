@@ -13,35 +13,15 @@ IF(WIN32)
   set(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS 1)
   set(CMAKE_INSTALL_UCRT_LIBRARIES 1)
   include(InstallRequiredSystemLibraries)
-#  IF(EXISTS "C:/Windows/System32/msvcp140.dll")
-#    SET(MSVC15_MSVCP140 "C:/Windows/System32/msvcp140.dll")
-#  ELSEIF (EXISTS "C:/Windows/SysWOW64/msvcp140.dll")
-#    SET(MSVC15_MSVCP140 "C:/Windows/SysWOW64/msvcp140.dll")
-#  ENDIF()
-#  IF(EXISTS "C:/Windows/System32/vcruntime140.dll")
-#    SET(MSVC15_VCRUNTIME140 "C:/Windows/System32/vcruntime140.dll")
-#  ELSEIF (EXISTS "C:/Windows/SysWOW64/vcruntime140.dll")
-#    SET(MSVC15_VCRUNTIME140 "C:/Windows/SysWOW64/vcruntime140.dll")
-#  ENDIF()
-
-  # By default, do not warn when built on machines using only VS Express:
-  # and define the library location ourselves.
-#  IF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
-#    SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS ON)
-#    SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS
-#        "${MSVC15_VCRUNTIME140}"
-#        "${MSVC15_MSVCP140}"
-#        "${MSVC15_MSWINCRT110}")
   MESSAGE("Installing: ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}")
-#  ENDIF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
 
   # InstallRequiredSystemLibraries installs the runtime libraries without
   # specifying COMPONENT Runtime. We have to do it manually here:
-  SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP TRUE)
-  INSTALL(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin
-         COMPONENT Support)
-  INSTALL(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin
-         COMPONENT Media)
+#  SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP TRUE)
+#  INSTALL(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin
+#         COMPONENT Support)
+#  INSTALL(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin
+#         COMPONENT Media)
 ENDIF(WIN32)
 
 # read 'version' file into a variable (stripping any newlines or spaces)
