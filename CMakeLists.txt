@@ -11,14 +11,19 @@ OPTION(WERROR "Treat compile warnings as errors"   OFF)
 
 IF(WIN32)
   IF(EXISTS "C:/Windows/System32/msvcp140.dll")
-    SET(MSVC10_MSVCP100 "C:/Windows/System32/msvcp140.dll")
+    SET(MSVC15_MSVCP140 "C:/Windows/System32/msvcp140.dll")
   ELSEIF (EXISTS "C:/Windows/SysWOW64/msvcp140.dll")
-    SET(MSVC10_MSVCP100 "C:/Windows/SysWOW64/msvcp140.dll")
+    SET(MSVC15_MSVCP140 "C:/Windows/SysWOW64/msvcp140.dll")
   ENDIF()
-  IF(EXISTS "C:/Windows/System32/msvcr140.dll")
-    SET(MSVC10_MSVCR100 "C:/Windows/System32/msvcr140.dll")
-  ELSEIF (EXISTS "C:/Windows/SysWOW64/msvcr140.dll")
-    SET(MSVC10_MSVCR100 "C:/Windows/SysWOW64/msvcr140.dll")
+  IF(EXISTS "C:/Windows/System32/vcruntime140.dll")
+    SET(MSVC15_VCRUNTIME140 "C:/Windows/System32/vcruntime140.dll")
+  ELSEIF (EXISTS "C:/Windows/SysWOW64/vcruntime140.dll")
+    SET(MSVC15_VCRUNTIME140 "C:/Windows/SysWOW64/vcruntime140.dll")
+  ENDIF()
+  IF(EXISTS "C:/Windows/System32/vcruntime140.dll")
+    SET(MSVC15_VCRUNTIME140 "C:/Windows/System32/vcruntime140.dll")
+  ELSEIF (EXISTS "C:/Windows/SysWOW64/vcruntime140.dll")
+    SET(MSVC15_VCRUNTIME140 "C:/Windows/SysWOW64/vcruntime140.dll")
   ENDIF()
 
   # By default, do not warn when built on machines using only VS Express:
@@ -26,8 +31,8 @@ IF(WIN32)
   IF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
     SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS ON)
     SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS
-        "${MSVC10_MSVCR100}"
-        "${MSVC10_MSVCP100}")
+        "${MSVC15_VCRUNTIME140}"
+        "${MSVC15_MSVCP140}")
   MESSAGE("Installing: ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}")
   ENDIF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
 
