@@ -69,7 +69,7 @@ macro (CMP_QT_LIBRARIES_INSTALL_RULES QTLIBLIST destination comp)
   endif()
 endmacro()
 
-macro(install_qt5_plugin QTNAME destination comp)
+macro(install_qt5_plugin QTNAME comp)
   get_target_property(QTPLUGINPATH "${QTNAME}" LOCATION)
   if(EXISTS "${QTPLUGINPATH}")
     get_filename_component(QTPLUGINFILE "${QTPLUGINPATH}" NAME)
