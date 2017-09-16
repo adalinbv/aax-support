@@ -60,6 +60,7 @@ IF(WIN32)
   ADD_DEFINITIONS("-D_WIN32")
   CMP_QT_LIBRARIES_INSTALL_RULES("Qt5::Core;Qt5::Widgets;Qt5::Gui" "bin" "Support")
   CMP_QT_LIBRARIES_INSTALL_RULES("Qt5::Core;Qt5::Widgets;Qt5::Gui;Qt5::Network" "bin" "Media")
+  install_qt5_plugin("Qt5::QWindowsIntegrationPlugin" QT_PLUGINS)
 
 ELSE(WIN32)
 
