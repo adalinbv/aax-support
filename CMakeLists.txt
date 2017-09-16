@@ -17,11 +17,10 @@ IF(WIN32)
 
   # InstallRequiredSystemLibraries installs the runtime libraries without
   # specifying COMPONENT Runtime. We have to do it manually here:
-#  SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP TRUE)
-#  INSTALL(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin
-#         COMPONENT Support)
-#  INSTALL(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin
-#         COMPONENT Media)
+  INSTALL(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin
+          COMPONENT Support)
+  INSTALL(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin
+          COMPONENT Media)
 ENDIF(WIN32)
 
 # read 'version' file into a variable (stripping any newlines or spaces)
