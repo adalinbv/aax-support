@@ -25,6 +25,11 @@ IF(WIN32)
   ELSEIF (EXISTS "C:/Windows/SysWOW64/vcruntime140.dll")
     SET(MSVC15_VCRUNTIME140 "C:/Windows/SysWOW64/vcruntime140.dll")
   ENDIF()
+  IF(EXISTS "C:/Windows/System32/api-ms-win-crt-runtime-l1-1-0.dll")
+    SET(MSVC15_MSWINCRT110 "C:/Windows/System32/api-ms-win-crt-runtime-l1-1-0.dll")
+  ELSEIF (EXISTS "C:/Windows/SysWOW64/api-ms-win-crt-runtime-l1-1-0.dll")
+    SET(MSVC15_MSWINCRT110 "C:/Windows/SysWOW64/api-ms-win-crt-runtime-l1-1-0.dll")
+  ENDIF()
 
   # By default, do not warn when built on machines using only VS Express:
   # and define the library location ourselves.
@@ -32,7 +37,8 @@ IF(WIN32)
     SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS ON)
     SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS
         "${MSVC15_VCRUNTIME140}"
-        "${MSVC15_MSVCP140}")
+        "${MSVC15_MSVCP140}"
+        "${MSVC15_MSWINCRT110})
   MESSAGE("Installing: ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}")
   ENDIF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
 
