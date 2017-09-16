@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 2.8.11)
 
+include(InstallRequiredSystemLibraries)
+set(CMAKE_INSTALL_UCRT_LIBRARIES ON)
+
 set(CMAKE_PREFIX_PATH "C:/Qt/Qt5.7.0/5.7/msvc2015_64")
 SET( cmake_verbose_makefile TRUE)
 
@@ -24,11 +27,6 @@ IF(WIN32)
     SET(MSVC15_VCRUNTIME140 "C:/Windows/System32/vcruntime140.dll")
   ELSEIF (EXISTS "C:/Windows/SysWOW64/vcruntime140.dll")
     SET(MSVC15_VCRUNTIME140 "C:/Windows/SysWOW64/vcruntime140.dll")
-  ENDIF()
-  IF(EXISTS "C:/Windows/System32/api-ms-win-crt-runtime-l1-1-0.dll")
-    SET(MSVC15_MSWINCRT110 "C:/Windows/System32/api-ms-win-crt-runtime-l1-1-0.dll")
-  ELSEIF (EXISTS "C:/Windows/SysWOW64/api-ms-win-crt-runtime-l1-1-0.dll")
-    SET(MSVC15_MSWINCRT110 "C:/Windows/SysWOW64/api-ms-win-crt-runtime-l1-1-0.dll")
   ENDIF()
 
   # By default, do not warn when built on machines using only VS Express:
