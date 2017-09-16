@@ -10,8 +10,7 @@ SET(PACKAGE "aaxsupport")
 OPTION(WERROR "Treat compile warnings as errors"   OFF)
 
 IF(WIN32)
-  set(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS 1)
-  set(CMAKE_INSTALL_UCRT_LIBRARIES 1)
+  set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
   include(InstallRequiredSystemLibraries)
   MESSAGE("Installing: ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}")
 
