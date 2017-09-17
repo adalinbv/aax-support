@@ -69,22 +69,6 @@ macro (CMP_QT_LIBRARIES_INSTALL_RULES QTLIBLIST destination comp)
   endif()
 endmacro()
 
-macro(install_qt5_plugin customlib destination comp)
-  get_target_property(LIBNAME "${customlib}" LOCATION)
-  if(EXISTS "${LIBNAME}")
-    get_filename_component(QTLIB "${LIBNAME}" NAME)
-    get_filename_component(QTTYPE "${LIBNAME}" PATH)
-    get_filename_component(QTTYPE "${QTTYPE}" NAME)
-    install(FILES "${LIBNAME}"
-      DESTINATION "${destination}"
-      CONFIGURATIONS Release
-      COMPONENT "${comp}")
-
-  else()
-    message(FATAL_ERROR "QT plugin ${customlib} not found")
-  endif()
-endmacro()
-
 macro (INSTALL_CUSTOM_LIB customlib destination comp)
   if (WIN32)
     SET(LIBNAME "${customlib}")
