@@ -69,20 +69,19 @@ macro (CMP_QT_LIBRARIES_INSTALL_RULES QTLIBLIST destination comp)
   endif()
 endmacro()
 
-macro(install_qt5_plugin QTNAME comp)
-  get_target_property(QTPLUGINPATH "${QTNAME}" LOCATION)
-  if(EXISTS "${QTPLUGINPATH}")
-    get_filename_component(QTPLUGINFILE "${QTPLUGINPATH}" NAME)
-    get_filename_component(QTPLUGINTYPE "${QTPLUGINPATH}" PATH)
-    get_filename_component(QTPLUGINTYPE "${QTPLUGINTYPE}" NAME)
-    set(QTPLUGINDEST "PlugIns/${QTPLUGINTYPE}")
-    install(FILES "${QTPLUGINPATH}"
-      DESTINATION "${QTPLUGINDEST}"
+macro(install_qt5_plugin customlib destination comp)
+  get_target_property(LIBNAME "${customlib}" LOCATION)
+  if(EXISTS "${LIBNAME}")
+    get_filename_component(QTLIB "${LIBNAME}" NAME)
+    get_filename_component(QTTYPE "${LIBNAME}" PATH)
+    get_filename_component(QTTYPE "${QTTYPE}" NAME)
+    install(FILES "${LIBNAME}"
+      DESTINATION "${destination}"
       CONFIGURATIONS Release
       COMPONENT "${comp}")
 
   else()
-    message(FATAL_ERROR "QT plugin ${QTNAME} not found")
+    message(FATAL_ERROR "QT plugin ${customlib} not found")
   endif()
 endmacro()
 
