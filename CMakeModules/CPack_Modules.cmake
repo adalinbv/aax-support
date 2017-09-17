@@ -47,7 +47,7 @@ ENDIF(WIN32)
 
 # --------------------------------------------------------------------
 # 
-macro(install_qt5_plugin _qt_plugin_name _qt_plugins_var _qt_new_plugins_root)
+macro(install_qt5_plugin _qt_plugin_name _qt_plugins_var _qt_new_plugins_root comp)
   get_target_property(_qt_plugin_path "${_qt_plugin_name}" LOCATION)
   if(EXISTS "${_qt_plugin_path}")
     get_filename_component(_qt_plugin_file "${_qt_plugin_path}" NAME)
@@ -55,7 +55,10 @@ macro(install_qt5_plugin _qt_plugin_name _qt_plugins_var _qt_new_plugins_root)
     get_filename_component(_qt_plugin_type "${_qt_plugin_type}" NAME)
     set(_qt_plugin_dest "${_qt_new_plugins_root}/${_qt_plugin_type}")
     install(FILES "${_qt_plugin_path}"
-      DESTINATION "${_qt_plugin_dest}")
+      DESTINATION "${_qt_plugin_dest}"
+      CONFIGURATIONS Release
+      COMPONENT "${comp}"
+      )
     set(${_qt_plugins_var}
       "${${_qt_plugins_var}};${_qt_plugin_dest}/${_qt_plugin_file}")
   else()
