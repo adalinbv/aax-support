@@ -455,14 +455,27 @@
     <widget class="QPushButton" name="testPlay">
      <property name="geometry">
       <rect>
-       <x>400</x>
+       <x>410</x>
        <y>10</y>
-       <width>89</width>
+       <width>71</width>
        <height>25</height>
       </rect>
      </property>
      <property name="text">
       <string>test</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="applySettings">
+     <property name="geometry">
+      <rect>
+       <x>330</x>
+       <y>10</y>
+       <width>71</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>apply</string>
      </property>
     </widget>
    </widget>
@@ -804,21 +817,24 @@
   <tabstop>Device</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>OutputConnector</tabstop>
-  <tabstop>Shared</tabstop>
-  <tabstop>Timer</tabstop>
+  <tabstop>SetDefault</tabstop>
   <tabstop>OutputSampleFreq</tabstop>
   <tabstop>RefreshRate</tabstop>
   <tabstop>SpeakerSetup</tabstop>
   <tabstop>OutputSpeakers</tabstop>
   <tabstop>OutputPeriods</tabstop>
   <tabstop>OutputBitrate</tabstop>
+  <tabstop>Shared</tabstop>
+  <tabstop>Timer</tabstop>
+  <tabstop>applySettings</tabstop>
+  <tabstop>testPlay</tabstop>
   <tabstop>InputConnector</tabstop>
+  <tabstop>InputSetDefault</tabstop>
   <tabstop>InputSampleFreq</tabstop>
   <tabstop>InputRefreshRate</tabstop>
   <tabstop>LineInSetup</tabstop>
   <tabstop>InputPeriods</tabstop>
   <tabstop>Mixer</tabstop>
-  <tabstop>OK</tabstop>
  </tabstops>
  <resources/>
  <connections/>

@@ -52,6 +52,7 @@ public:
     QLabel *graphicsView;
     QCheckBox *SetDefault;
     QPushButton *testPlay;
+    QPushButton *applySettings;
     QWidget *tab_3;
     QComboBox *InputConnector;
     QComboBox *InputSampleFreq;
@@ -152,7 +153,10 @@ public:
         SetDefault->setGeometry(QRect(20, 40, 171, 22));
         testPlay = new QPushButton(tab_2);
         testPlay->setObjectName(QStringLiteral("testPlay"));
-        testPlay->setGeometry(QRect(400, 10, 89, 25));
+        testPlay->setGeometry(QRect(410, 10, 71, 25));
+        applySettings = new QPushButton(tab_2);
+        applySettings->setObjectName(QStringLiteral("applySettings"));
+        applySettings->setGeometry(QRect(330, 10, 71, 25));
         tabWidget->addTab(tab_2, QString());
         tab_3 = new QWidget();
         tab_3->setObjectName(QStringLiteral("tab_3"));
@@ -223,21 +227,24 @@ public:
         label_acquire->setOpenExternalLinks(true);
         QWidget::setTabOrder(Device, tabWidget);
         QWidget::setTabOrder(tabWidget, OutputConnector);
-        QWidget::setTabOrder(OutputConnector, Shared);
-        QWidget::setTabOrder(Shared, Timer);
-        QWidget::setTabOrder(Timer, OutputSampleFreq);
+        QWidget::setTabOrder(OutputConnector, SetDefault);
+        QWidget::setTabOrder(SetDefault, OutputSampleFreq);
         QWidget::setTabOrder(OutputSampleFreq, RefreshRate);
         QWidget::setTabOrder(RefreshRate, SpeakerSetup);
         QWidget::setTabOrder(SpeakerSetup, OutputSpeakers);
         QWidget::setTabOrder(OutputSpeakers, OutputPeriods);
         QWidget::setTabOrder(OutputPeriods, OutputBitrate);
-        QWidget::setTabOrder(OutputBitrate, InputConnector);
-        QWidget::setTabOrder(InputConnector, InputSampleFreq);
+        QWidget::setTabOrder(OutputBitrate, Shared);
+        QWidget::setTabOrder(Shared, Timer);
+        QWidget::setTabOrder(Timer, applySettings);
+        QWidget::setTabOrder(applySettings, testPlay);
+        QWidget::setTabOrder(testPlay, InputConnector);
+        QWidget::setTabOrder(InputConnector, InputSetDefault);
+        QWidget::setTabOrder(InputSetDefault, InputSampleFreq);
         QWidget::setTabOrder(InputSampleFreq, InputRefreshRate);
         QWidget::setTabOrder(InputRefreshRate, LineInSetup);
         QWidget::setTabOrder(LineInSetup, InputPeriods);
         QWidget::setTabOrder(InputPeriods, Mixer);
-        QWidget::setTabOrder(Mixer, OK);
 
         retranslateUi(Configuration);
 
@@ -323,6 +330,7 @@ public:
 #endif // QT_NO_TOOLTIP
         SetDefault->setText(QApplication::translate("Configuration", "Set as default output", Q_NULLPTR));
         testPlay->setText(QApplication::translate("Configuration", "test", Q_NULLPTR));
+        applySettings->setText(QApplication::translate("Configuration", "apply", Q_NULLPTR));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("Configuration", "Playback", Q_NULLPTR));
         InputSampleFreq->clear();
         InputSampleFreq->insertItems(0, QStringList()
