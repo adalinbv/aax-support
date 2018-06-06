@@ -66,7 +66,7 @@ macro(install_qt5_plugin _qt_plugin_name _qt_plugins_var _qt_new_plugins_root co
   endif()
 endmacro()
 
-macro (CMP_QT_LIBRARIES_INSTALL_RULES QTLIBLIST destination comp)
+macro (CMP_QT5_LIBRARIES_INSTALL_RULES QTLIBLIST destination comp)
   # message(STATUS "CMP_COPY_QT4_RUNTIME_LIBRARIES")
   if (WIN32)
     FOREACH(qtlib ${QTLIBLIST})

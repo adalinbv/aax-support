@@ -44,6 +44,7 @@ public:
     Ui_Configuration *ui;
 
 private slots:
+    void testPlay();
     void changeShared(bool);
     void changeSetDefault(bool);
     void changeInputSetDefault(bool);

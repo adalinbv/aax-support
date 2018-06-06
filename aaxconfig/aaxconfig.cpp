@@ -75,6 +75,7 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     connect(ui->OK, SIGNAL(rejected()), this, SLOT(close()));
     connect(ui->RefreshRate, SIGNAL(valueChanged(int)), this, SLOT(changeRefreshRate(int)));
     connect(ui->InputRefreshRate, SIGNAL(valueChanged(int)), this, SLOT(changeInputRefreshRate(int)));
+    QObject::connect(ui->testPlay, SIGNAL(released()), this,  SLOT(testPlay()));
     connect(ui->SpeakerSetup, SIGNAL(currentIndexChanged(int)), this, SLOT(changeSpeakerSetup(int)));
     connect(ui->LineInSetup, SIGNAL(currentIndexChanged(int)), this, SLOT(changeLineInSetup(int)));
     connect(ui->OutputSampleFreq, SIGNAL(currentIndexChanged(int)), this, SLOT(changeOutputSampleFreq(int)));
@@ -210,6 +211,19 @@ AeonWaveConfig::changeInputSetDefault(bool val)
 
        general_sample_freq = 44100;
        general_setup = AAX_MODE_WRITE_STEREO;
+    }
+}
+
+void
+AeonWaveConfig::testPlay()
+{
+    unsigned dev = devices[current_device]->current_output_connector;
+    std::string name = devices[current_device]->name;
+    name.append(": ");
+    name.append(devices[current_device]->output[dev]->name);
+
+    if (!aaxPlaySoundLogo(name.c_str())) {
+        alert(aaxGetErrorString(aaxGetErrorNo()));
     }
 }
 

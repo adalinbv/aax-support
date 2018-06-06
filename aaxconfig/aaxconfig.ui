@@ -74,7 +74,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -450,6 +450,19 @@
      </property>
      <property name="text">
       <string>Set as default output</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="testPlay">
+     <property name="geometry">
+      <rect>
+       <x>400</x>
+       <y>10</y>
+       <width>89</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>test</string>
      </property>
     </widget>
    </widget>
