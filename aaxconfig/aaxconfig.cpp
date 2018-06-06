@@ -222,7 +222,11 @@ AeonWaveConfig::testPlay()
     name.append(": ");
     name.append(devices[current_device]->output[dev]->name);
 
-    if (!aaxPlaySoundLogo(name.c_str())) {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    int res = aaxPlaySoundLogo(name.c_str());
+    QApplication::restoreOverrideCursor();
+
+    if (!res) {
         alert(aaxGetErrorString(aaxGetErrorNo()));
     }
 }
