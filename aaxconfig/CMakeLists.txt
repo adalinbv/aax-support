@@ -1,4 +1,6 @@
 
+cmake_minimum_required (VERSION 3.10.2)
+
 ENABLE_LANGUAGE(CXX)
 
 CHECK_LIBRARY_EXISTS(m floorf "" HAVE_LIBM)
@@ -11,6 +13,7 @@ file( GLOB SOURCES *.cpp *.c )
 file( GLOB RC *.rc *.qrc )
 
 add_executable(aaxconfig ${SOURCES} ${RC} ${GUI} )
+qt5_use_modules(aaxconfig Core Gui Widgets)
 
 target_link_libraries(aaxconfig
     ${AAX_LIBRARY}
