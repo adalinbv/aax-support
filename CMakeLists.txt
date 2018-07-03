@@ -1,64 +1,64 @@
 cmake_minimum_required(VERSION 2.8.11)
 
 set(CMAKE_PREFIX_PATH "C:/Qt/Qt5.7.0/5.7/msvc2015_64")
-SET( cmake_verbose_makefile TRUE)
+set( cmake_verbose_makefile TRUE)
 
-PROJECT(aaxsupport)
-SET(PACKAGE_NAME "AeonWave-Support")
-SET(PACKAGE "aaxsupport")
+project(aaxsupport)
+set(PACKAGE_NAME "AeonWave-Support")
+set(PACKAGE "aaxsupport")
 
-OPTION(WERROR "Treat compile warnings as errors"   OFF)
+option(WERROR "Treat compile warnings as errors"   OFF)
 
-IF(WIN32)
+if(WIN32)
   set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ".")
   set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
   include(InstallRequiredSystemLibraries)
-  MESSAGE("Installing: ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}")
+  message("Installing: ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}")
 
   # InstallRequiredSystemLibraries installs the runtime libraries without
   # specifying COMPONENT Runtime. We have to do it manually here:
-  INSTALL(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin
+  install(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin
           COMPONENT Support)
-  INSTALL(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin
+  install(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin
           COMPONENT Media)
-ENDIF(WIN32)
+endif(WIN32)
 
 # read 'version' file into a variable (stripping any newlines or spaces)
-FILE(READ version versionFile)
-STRING(STRIP ${versionFile} AAXSUPPORT_VERSION)
-SET(VERSION AAXSUPPORT_VERSION)
+file(READ version versionFile)
+string(STRIP ${versionFile} AAXSUPPORT_VERSION)
+set(VERSION AAXSUPPORT_VERSION)
 
 # split version string into components, note CMAKE_MATCH_0 is the entire regexp match
-STRING(REGEX MATCH "([0-9]+)\\.([0-9]+)\\.([0-9]+)" CPACK_PACKAGE_VERSION ${AAXSUPPORT_VERSION})
+string(REGEX MATCH "([0-9]+)\\.([0-9]+)\\.([0-9]+)" CPACK_PACKAGE_VERSION ${AAXSUPPORT_VERSION})
 
-SET(AAXSUPPORT_MAJOR_VERSION ${CMAKE_MATCH_1})
-SET(AAXSUPPORT_MINOR_VERSION ${CMAKE_MATCH_2})
-SET(AAXSUPPORT_MICRO_VERSION ${CMAKE_MATCH_3})
+set(AAXSUPPORT_MAJOR_VERSION ${CMAKE_MATCH_1})
+set(AAXSUPPORT_MINOR_VERSION ${CMAKE_MATCH_2})
+set(AAXSUPPORT_MICRO_VERSION ${CMAKE_MATCH_3})
 
-SET(CPACK_PACKAGE_VERSION_MAJOR ${CMAKE_MATCH_1})
-SET(CPACK_PACKAGE_VERSION_MINOR ${CMAKE_MATCH_2})
-SET(CPACK_PACKAGE_VERSION_PATCH ${CMAKE_MATCH_3})
+set(CPACK_PACKAGE_VERSION_MAJOR ${CMAKE_MATCH_1})
+set(CPACK_PACKAGE_VERSION_MINOR ${CMAKE_MATCH_2})
+set(CPACK_PACKAGE_VERSION_PATCH ${CMAKE_MATCH_3})
 
-SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Graphical support utilities for AeonWave")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Graphical support utilities for AeonWave")
 
 # We have some custom .cmake scripts not in the official distribution.
-SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
 
-INCLUDE(CPack_Modules)
-INCLUDE(CPack_Defaults)
-INCLUDE(CheckLibraryExists)
+include(CPack_Modules)
+include(CPack_Defaults)
+include(CheckLibraryExists)
 
 
-SET(CMAKE_AUTOMOC ON)
-SET(CMAKE_AUTOUIC ON)
-SET(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets)
 find_package(Qt5Gui)
 find_package(Qt5Network)
-IF(WIN32)
-  SET(CPACK_NSIS_MODIFY_PATH "ON")
-  ADD_DEFINITIONS("-D_WIN32")
+if(WIN32)
+  set(CPACK_NSIS_MODifY_PATH "ON")
+  add_definitions("-D_WIN32")
 
   install_qt5_plugin("Qt5::QMinimalIntegrationPlugin" QT_PLUGIN "bin" "Support")
   install_qt5_plugin("Qt5::QWindowsIntegrationPlugin" QT_PLUGIN "bin" "Support")
@@ -68,138 +68,139 @@ IF(WIN32)
   CMP_QT_LIBRARIES_INSTALL_RULES("Qt5::Core;Qt5::Widgets;Qt5::Gui" "bin" "Support")
   CMP_QT_LIBRARIES_INSTALL_RULES("Qt5::Core;Qt5::Widgets;Qt5::Gui;Qt5::Network" "bin" "Media")
 
-ELSE(WIN32)
+else(WIN32)
 
   # DEBIAN
-  SET(CPACK_DEBIAN_PACKAGE_REPLACES "aaxconfig, aaxconfig-bin")
-  SET(CPACK_DEBIAN_PACKAGE_SECTION "support utilities")
-  SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.1), libaax3-bin (>= 3.0), libqt5core5a (>= 5.1.0), libqt5gui5 (>= 5.1.0), libqt5network5 (>= 5.1.0)")
+  set(CPACK_DEBIAN_PACKAGE_REPLACES "aaxconfig, aaxconfig-bin")
+  set(CPACK_DEBIAN_PACKAGE_SECTION "support utilities")
+  set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.1), libaax3-bin (>= 3.0), libqt5core5a (>= 5.1.0), libqt5gui5 (>= 5.1.0), libqt5network5 (>= 5.1.0)")
 
   # RPM
-  SET(CPACK_RPM_PACKAGE_LICENSE "GPL v3")
-  SET(CPACK_RPM_PACKAGE_OBSOLETES "aaxconfig-bin")
-  SET(CPACK_RPM_PACKAGE_GROUP "System Environment/Base")
-  SET(CPACK_RPM_PACKAGE_REQUIRES "libaax3-bin >= 3.0")
-ENDIF(WIN32)
+  set(CPACK_RPM_PACKAGE_LICENSE "GPL v3")
+  set(CPACK_RPM_PACKAGE_OBSOLETES "aaxconfig-bin")
+  set(CPACK_RPM_PACKAGE_GROUP "System Environment/Base")
+  set(CPACK_RPM_PACKAGE_REQUIRES "libaax3-bin >= 3.0")
+endif(WIN32)
 
 # ZIP
-SET(CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${AAXSUPPORT_VERSION}" CACHE INTERNAL "tarball basename")
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${AAXSUPPORT_VERSION}" CACHE INTERNAL "tarball basename")
 
+add_definitions(-DHAVE_CONFIG_H=1)
+if(WERROR)
+  add_definitions(-Werror)
+endif(WERROR)
 
+if(MSVC)
+    set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO} -D_DEBUG")
+    set(CMAKE_C_FLAGS_MINSIZEREL "${CMAKE_C_FLAGS_MINSIZEREL} -DNDEBUG")
+    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -DNDEBUG")
+    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG")
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    add_definitions(-D_CRT_NONSTDC_NO_DEPRECATE)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:libcmt.lib /entry:mainCRTStartup")
 
-ADD_DEFINITIONS(-DHAVE_CONFIG_H=1)
-IF(WERROR)
-  ADD_DEFINITIONS(-Werror)
-ENDIF(WERROR)
-
-IF(MSVC)
-    SET(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO} -D_DEBUG")
-    SET(CMAKE_C_FLAGS_MINSIZEREL "${CMAKE_C_FLAGS_MINSIZEREL} -DNDEBUG")
-    SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -DNDEBUG")
-    SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG")
-    ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
-    ADD_DEFINITIONS(-D_CRT_NONSTDC_NO_DEPRECATE)
-    SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:libcmt.lib /entry:mainCRTStartup")
-#   ADD_DEFINITIONS(/NODEFAULTLIB:libcmt.lib)
-#   ADD_DEFINITIONS(/NODEFAULTLIB:msvcrt.lib)
-#   ADD_DEFINITIONS(/NODEFAULTLIB:libcd.lib)
-#   ADD_DEFINITIONS(/NODEFAULTLIB:libcmtd.lib)
-#   ADD_DEFINITIONS(/NODEFAULTLIB:msvcrtd.lib)
-
-    OPTION(FORCE_STATIC_VCRT "Force /MT for static VC runtimes" OFF)
-    IF(FORCE_STATIC_VCRT)
+    option(FORCE_STATIC_VCRT "Force /MT for static VC runtimes" OFF)
+    if(FORCE_STATIC_VCRT)
         FOREACH(flag_var
                 CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE
                 CMAKE_C_FLAGS_MINSIZEREL CMAKE_C_FLAGS_RELWITHDEBINFO)
-            IF(${flag_var} MATCHES "/MD")
-                STRING(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
-            ENDIF()
+            if(${flag_var} MATCHES "/MD")
+                string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
+            endif()
         ENDFOREACH(flag_var)
-    ENDIF()
-ELSE(MSVC)
-    IF(X86_64)
-       SET(C_FLAGS "${C_FLAGS} -march=athlon64 -msse2 -mfpmath=sse")
-       SET(CXX_FLAGS "${CXX_FLAGS} -march=athlon64 -msse2 -mfpmath=sse")
-    ELSEIF(X86)
-       SET(C_FLAGS "${C_FLAGS} -march=i686")
-       SET(CXX_FLAGS "${CXX_FLAGS} -march=i686")
-    ELSEIF(ARM)
-       SET(C_FLAGS "${C_FLAGS} -march=armv5 -marm")
-       SET(CXX_FLAGS "${CXX_FLAGS} -march=armv5 -marm")
-    ENDIF()
+    endif()
 
-    SET(C_FLAGS "${C_FLAGS} -Os -Wall -Werror=format-security" CACHE STRING
+    get_target_property(QtWidgets_location Qt5::Widgets LOCATION)
+    get_target_property(QtCore_location Qt5::Core LOCATION)
+    get_target_property(QtGui_location Qt5::Gui LOCATION)
+    get_target_property(QtNetwork_location Qt5::Network LOCATION)
+
+    install(FILES
+            ${QtCore_location}
+            ${QtGui_location}
+            ${QtWidgets_location}
+            ${QtNetwork_location}
+            DESTINATION "${CMAKE_INSTALL_BINDIR}"
+            COMPONENT Media
+    )
+else(MSVC)
+    if(X86_64)
+       set(C_FLAGS "${C_FLAGS} -march=athlon64 -msse2 -mfpmath=sse")
+       set(CXX_FLAGS "${CXX_FLAGS} -march=athlon64 -msse2 -mfpmath=sse")
+    ELSEif(X86)
+       set(C_FLAGS "${C_FLAGS} -march=i686")
+       set(CXX_FLAGS "${CXX_FLAGS} -march=i686")
+    ELSEif(ARM)
+       set(C_FLAGS "${C_FLAGS} -march=armv5 -marm")
+       set(CXX_FLAGS "${CXX_FLAGS} -march=armv5 -marm")
+    endif()
+
+    set(C_FLAGS "${C_FLAGS} -Os -Wall -Werror=format-security" CACHE STRING
         "Flags used by al build types."
         FORCE)
 
-    SET(CXX_FLAGS "${CXX_FLAGS} -Os -Wall -Werror=format-security" CACHE STRING
+    set(CXX_FLAGS "${CXX_FLAGS} -Os -Wall -Werror=format-security" CACHE STRING
         "Flags used by al build types."
         FORCE)
 
-    SET(CMAKE_C_FLAGS_RELWITHDEBINFO "${C_FLAGS} -g -O2 -D_DEBUG" CACHE STRING
+    set(CMAKE_C_FLAGS_RELWITHDEBINFO "${C_FLAGS} -g -O2 -D_DEBUG" CACHE STRING
         "Flags used by the compiler during Release with Debug Info builds."
         FORCE)
-    SET(CMAKE_C_FLAGS_MINSIZEREL "${C_FLAGS} -Os -DNDEBUG" CACHE STRING
+    set(CMAKE_C_FLAGS_MINSIZEREL "${C_FLAGS} -Os -DNDEBUG" CACHE STRING
         "Flags used by the compiler during release minsize builds."
         FORCE)
-    SET(CMAKE_C_FLAGS_RELEASE "${C_FLAGS} -Os -fomit-frame-pointer -DNDEBUG"
+    set(CMAKE_C_FLAGS_RELEASE "${C_FLAGS} -Os -fomit-frame-pointer -DNDEBUG"
         CACHE STRING "Flags used by the compiler during release builds"
         FORCE)
-    SET(CMAKE_C_FLAGS_DEBUG "${C_FLAGS} -g3 -D_DEBUG" CACHE STRING
+    set(CMAKE_C_FLAGS_DEBUG "${C_FLAGS} -g3 -D_DEBUG" CACHE STRING
         "Flags used by the compiler during debug builds."
         FORCE)
 
-    SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${C_FLAGS} -g -O2 -D_DEBUG" CACHE STRING
+    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${C_FLAGS} -g -O2 -D_DEBUG" CACHE STRING
         "Flags used by the compiler during Release with Debug Info builds."
         FORCE)
-    SET(CMAKE_CXX_FLAGS_MINSIZEREL "${C_FLAGS} -Os -DNDEBUG" CACHE STRING
+    set(CMAKE_CXX_FLAGS_MINSIZEREL "${C_FLAGS} -Os -DNDEBUG" CACHE STRING
         "Flags used by the compiler during release minsize builds."
         FORCE)
-    SET(CMAKE_CXX_FLAGS_RELEASE "${C_FLAGS} -Os -fomit-frame-pointer -DNDEBUG"
+    set(CMAKE_CXX_FLAGS_RELEASE "${C_FLAGS} -Os -fomit-frame-pointer -DNDEBUG"
         CACHE STRING "Flags used by the compiler during release builds"
         FORCE)
-    SET(CMAKE_CXX_FLAGS_DEBUG "${C_FLAGS} -g3 -D_DEBUG" CACHE STRING
+    set(CMAKE_CXX_FLAGS_DEBUG "${C_FLAGS} -g3 -D_DEBUG" CACHE STRING
         "Flags used by the compiler during debug builds."
         FORCE)
-ENDIF(MSVC)
+endif(MSVC)
 
 # Required libraries
-FIND_PACKAGE(AAX COMPONENTS aax REQUIRED)
-FIND_PACKAGE(XML COMPONENTS xml REQUIRED)
+find_package(AAX COMPONENTS aax REQUIRED)
+find_package(XML COMPONENTS xml REQUIRED)
 
-INCLUDE_DIRECTORIES("${CMAKE_SOURCE_DIR}"
+include_DIRECTORIES("${CMAKE_SOURCE_DIR}"
    "${CMAKE_SOURCE_DIR}/include"
    "${PROJECT_BINARY_DIR}/include"
-   "${AAX_INCLUDE_DIR}"
-   "${XML_INCLUDE_DIR}"
+   "${AAX_include_DIR}"
+   "${XML_include_DIR}"
 )
 
-CONFIGURE_FILE(
+configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/include/cmake_config.h.in"
     "${CMAKE_CURRENT_BINARY_DIR}/include/config.h")
 
-SET(BASE_OBJS
+set(BASE_OBJS
      base/api.c
      base/types.c
    )
-SET(LIBBASE base)
-ADD_LIBRARY(${LIBBASE} STATIC ${BASE_OBJS})
-SET(EXTRA_LIBS ${EXTRA_LIBS} ${LIBBASE})
+set(LIBBASE base)
+add_library(${LIBBASE} STATIC ${BASE_OBJS})
+set(EXTRA_LIBS ${EXTRA_LIBS} ${LIBBASE})
 
-SET(CPACK_PACKAGE_EXECUTABLES "" "")
-ADD_SUBDIRECTORY(aaxplayer)
-ADD_SUBDIRECTORY(aaxrecorder)
-ADD_SUBDIRECTORY(aaxconfig)
+set(CPACK_PACKAGE_EXECUTABLES "" "")
+add_subdirectory(aaxplayer)
+add_subdirectory(aaxrecorder)
+add_subdirectory(aaxconfig)
 
-#IF(WIN32)
-   # Used to create Start Menu shortcuts <EXEC> <LABEL>
-SET(CPACK_PACKAGE_EXECUTABLES "aaxconfig;AeonWave Config" "aaxplayer;Audio Player" "aaxrecorder;Audio Recorder")
-#  SET(CPACK_PACKAGE_EXECUTABLES "aaxconfig" "AeonWave Config")
-#  SET(CPACK_PACKAGE_EXECUTABLE "aaxplayer" "Audio Player")
-#  SET(CPACK_PACKAGE_EXECUTABLE "aaxrecorder" "Audio Recorder")
-#ENDIF(WIN32)
+set(CPACK_PACKAGE_EXECUTABLES "aaxconfig;AeonWave Config" "aaxplayer;Audio Player" "aaxrecorder;Audio Recorder")
 
-INCLUDE(CPack)
+include(CPack)
 
 #-----------------------------------------------------------------------------
 ### uninstall target
@@ -208,5 +209,5 @@ CONFIGURE_FILE(
   "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/cmake_uninstall.cmake.in"
   "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
   IMMEDIATE @ONLY)
-#ADD_CUSTOM_TARGET(uninstall
+#add_CUSTOM_TARGET(uninstall
 #  "${CMAKE_COMMAND}" -P "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake")
