@@ -107,11 +107,15 @@ if(MSVC)
         ENDFOREACH(flag_var)
     endif()
 
+    get_target_property(QtCore_location Qt5::Core LOCATION)
+    get_target_property(QtGui_location Qt5::Gui LOCATION)
+    get_target_property(QtWidgets_location Qt5::Widgets LOCATION)
+    get_target_property(QtNetworklocation Qt5::Network LOCATION)
     install(FILES
-            ${QtCore_DIR}
-            ${QtGui_DIR}
-            ${QtWidgets_DIR}
-            ${QtNetwork_DIR}
+            ${QtCore_location}
+            ${QtGui_location}
+            ${QtWidgets_location}
+            ${QtNetwork_location}
             DESTINATION "${CMAKE_INSTALL_BINDIR}"
             COMPONENT Media
     )
