@@ -13,13 +13,21 @@ if(WIN32)
   set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ".")
   set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
   include(InstallRequiredSystemLibraries)
+
+  get_target_property(QtCore_location Qt5::Core LOCATION)
+  get_target_property(QtGui_location Qt5::Gui LOCATION)
+  get_target_property(QtWidgets_location Qt5::Widgets LOCATION)
+  get_target_property(QtNetworklocation Qt5::Network LOCATION)
+  set(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS "${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS};${QtCore_location};${QtGui_location};${QtWidgets_location};${QtNetworklocation}")
   message("Installing: ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}")
 
   # InstallRequiredSystemLibraries installs the runtime libraries without
   # specifying COMPONENT Runtime. We have to do it manually here:
-  install(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin
+  install(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
+          DESTINATION bin
           COMPONENT Support)
-  install(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin
+  install(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
+          DESTINATION bin
           COMPONENT Media)
 endif(WIN32)
 
@@ -107,27 +115,6 @@ if(MSVC)
         ENDFOREACH(flag_var)
     endif()
 
-    get_target_property(QtCore_location Qt5::Core LOCATION)
-    get_target_property(QtGui_location Qt5::Gui LOCATION)
-    get_target_property(QtWidgets_location Qt5::Widgets LOCATION)
-    get_target_property(QtNetworklocation Qt5::Network LOCATION)
-    message("Installing: ${QtCore_location};${QtGui_location};${QtWidgets_location};${QtNetworklocation}")
-
-    install(FILES
-            ${QtCore_location}
-            ${QtGui_location}
-            ${QtWidgets_location}
-            DESTINATION bin
-            COMPONENT Support
-    )
-    install(FILES
-            ${QtCore_location}
-            ${QtGui_location}
-            ${QtWidgets_location}
-            ${QtNetwork_location}
-            DESTINATION bin
-            COMPONENT Media
-    )
 else(MSVC)
     if(X86_64)
        set(C_FLAGS "${C_FLAGS} -march=athlon64 -msse2 -mfpmath=sse")
