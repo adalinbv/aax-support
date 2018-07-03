@@ -53,8 +53,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 find_package(Qt5Core REQUIRED)
-find_package(Qt5Widgets)
-find_package(Qt5Gui)
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Gui REQUIRED)
 find_package(Qt5Network)
 if(WIN32)
   set(CPACK_NSIS_MODifY_PATH "ON")
@@ -115,8 +115,15 @@ if(MSVC)
             ${QtCore_location}
             ${QtGui_location}
             ${QtWidgets_location}
+            DESTINATION bin
+            COMPONENT Support
+    )
+    install(FILES
+            ${QtCore_location}
+            ${QtGui_location}
+            ${QtWidgets_location}
             ${QtNetwork_location}
-            DESTINATION "${CMAKE_INSTALL_BINDIR}"
+            DESTINATION bin
             COMPONENT Media
     )
 else(MSVC)
