@@ -65,9 +65,6 @@ if(WIN32)
   install_qt5_plugin("Qt5::QMinimalIntegrationPlugin" QT_PLUGIN "bin" "Media")
   install_qt5_plugin("Qt5::QWindowsIntegrationPlugin" QT_PLUGIN "bin" "Media")
 
-  CMP_QT_LIBRARIES_INSTALL_RULES("Qt5::Core;Qt5::Widgets;Qt5::Gui" "bin" "Support")
-  CMP_QT_LIBRARIES_INSTALL_RULES("Qt5::Core;Qt5::Widgets;Qt5::Gui;Qt5::Network" "bin" "Media")
-
 else(WIN32)
 
   # DEBIAN
@@ -110,16 +107,11 @@ if(MSVC)
         ENDFOREACH(flag_var)
     endif()
 
-    get_target_property(QtWidgets_location Qt5::Widgets LOCATION)
-    get_target_property(QtCore_location Qt5::Core LOCATION)
-    get_target_property(QtGui_location Qt5::Gui LOCATION)
-    get_target_property(QtNetwork_location Qt5::Network LOCATION)
-
     install(FILES
-            ${QtCore_location}
-            ${QtGui_location}
-            ${QtWidgets_location}
-            ${QtNetwork_location}
+            ${QtCore_DIR}
+            ${QtGui_DIR}
+            ${QtWidgets_DIR}
+            ${QtNetwork_DIR}
             DESTINATION "${CMAKE_INSTALL_BINDIR}"
             COMPONENT Media
     )
