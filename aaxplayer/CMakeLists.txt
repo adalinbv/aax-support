@@ -1,6 +1,4 @@
 
-cmake_minimum_required (VERSION 3.10.2)
-
 ENABLE_LANGUAGE(CXX)
 
 CHECK_LIBRARY_EXISTS(m floorf "" HAVE_LIBM)

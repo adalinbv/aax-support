@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.10.2)
 
 set(CMAKE_PREFIX_PATH "C:/Qt/Qt5.7.0/5.7/msvc2015_64")
 set( cmake_verbose_makefile TRUE)
@@ -8,28 +8,6 @@ set(PACKAGE_NAME "AeonWave-Support")
 set(PACKAGE "aaxsupport")
 
 option(WERROR "Treat compile warnings as errors"   OFF)
-
-if(WIN32)
-  set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ".")
-  set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
-  include(InstallRequiredSystemLibraries)
-
-  get_target_property(QtCore_location Qt5::Core LOCATION)
-  get_target_property(QtGui_location Qt5::Gui LOCATION)
-  get_target_property(QtWidgets_location Qt5::Widgets LOCATION)
-  get_target_property(QtNetworklocation Qt5::Network LOCATION)
-  set(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS "${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS};${QtCore_location};${QtGui_location};${QtWidgets_location};${QtNetworklocation}")
-  message("Installing: ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}")
-
-  # InstallRequiredSystemLibraries installs the runtime libraries without
-  # specifying COMPONENT Runtime. We have to do it manually here:
-  install(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
-          DESTINATION bin
-          COMPONENT Support)
-  install(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
-          DESTINATION bin
-          COMPONENT Media)
-endif(WIN32)
 
 # read 'version' file into a variable (stripping any newlines or spaces)
 file(READ version versionFile)
@@ -94,6 +72,28 @@ add_definitions(-DHAVE_CONFIG_H=1)
 if(WERROR)
   add_definitions(-Werror)
 endif(WERROR)
+
+if(WIN32)
+  set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ".")
+  set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
+  include(InstallRequiredSystemLibraries)
+
+  get_target_property(QtCore_location Qt5::Core LOCATION)
+  get_target_property(QtGui_location Qt5::Gui LOCATION)
+  get_target_property(QtWidgets_location Qt5::Widgets LOCATION)
+  get_target_property(QtNetworklocation Qt5::Network LOCATION)
+  set(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS "${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS};${QtCore_location};${QtGui_location};${QtWidgets_location};${QtNetworklocation}")
+  message("Installing: ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}")
+
+  # InstallRequiredSystemLibraries installs the runtime libraries without
+  # specifying COMPONENT Runtime. We have to do it manually here:
+  install(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
+          DESTINATION bin
+          COMPONENT Support)
+  install(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
+          DESTINATION bin
+          COMPONENT Media)
+endif(WIN32)
 
 if(MSVC)
     set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO} -D_DEBUG")
