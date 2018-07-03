@@ -166,11 +166,11 @@ endif(MSVC)
 find_package(AAX COMPONENTS aax REQUIRED)
 find_package(XML COMPONENTS xml REQUIRED)
 
-include_DIRECTORIES("${CMAKE_SOURCE_DIR}"
+include_directories("${CMAKE_SOURCE_DIR}"
    "${CMAKE_SOURCE_DIR}/include"
    "${PROJECT_BINARY_DIR}/include"
-   "${AAX_include_DIR}"
-   "${XML_include_DIR}"
+   "${AAX_INCLUDE_DIR}"
+   "${XML_INCLUDE_DIR}"
 )
 
 configure_file(
