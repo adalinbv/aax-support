@@ -111,6 +111,8 @@ if(MSVC)
     get_target_property(QtGui_location Qt5::Gui LOCATION)
     get_target_property(QtWidgets_location Qt5::Widgets LOCATION)
     get_target_property(QtNetworklocation Qt5::Network LOCATION)
+    message("Installing: ${QtCore_location};${QtGui_location};${QtWidgets_location};${QtNetworklocation}")
+
     install(FILES
             ${QtCore_location}
             ${QtGui_location}
