@@ -562,8 +562,8 @@ AeonWaveConfig::changeMixer(int val)
                 desc += tr("<font><b>Supported Effects:</b></font>"); 
                 desc += tr("</td></tr>");
 
-                int max_flt = AAX_FILTER_MAX;
-                int max_eff = AAX_EFFECT_MAX;
+                int max_flt = aaxMaxFilter();
+                int max_eff = aaxMaxEffect();
                 for (int i=1; i<_MAX(max_flt, max_eff); i++)
                 {
                     desc += tr("<tr>");
