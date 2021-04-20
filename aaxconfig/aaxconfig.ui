@@ -351,6 +351,11 @@
      </property>
      <item>
       <property name="text">
+       <string>Variable</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>64kbps</string>
       </property>
      </item>
@@ -801,9 +806,6 @@
    </property>
    <property name="layoutDirection">
     <enum>Qt::RightToLeft</enum>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;http://www.adalin.com/buy_aeonwaveHD.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Acquire&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="textFormat">
     <enum>Qt::RichText</enum>

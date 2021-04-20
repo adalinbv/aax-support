@@ -308,6 +308,7 @@ public:
         label_setup->setText(QApplication::translate("Configuration", "Speaker Setup:", Q_NULLPTR));
         OutputBitrate->clear();
         OutputBitrate->insertItems(0, QStringList()
+         << QApplication::translate("Configuration", "Variable", Q_NULLPTR)
          << QApplication::translate("Configuration", "64kbps", Q_NULLPTR)
          << QApplication::translate("Configuration", "128kpbs", Q_NULLPTR)
          << QApplication::translate("Configuration", "192kbps", Q_NULLPTR)
@@ -378,7 +379,6 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("Configuration", "Capture", Q_NULLPTR));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("Configuration", "Information", Q_NULLPTR));
         tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("Configuration", "Filters and Effects", Q_NULLPTR));
-        label_acquire->setText(QApplication::translate("Configuration", "<html><head/><body><p><a href=\"http://www.adalin.com/buy_aeonwaveHD.html\"><span style=\" text-decoration: underline; color:#0000ff;\">Acquire</span></a></p></body></html>", Q_NULLPTR));
     } // retranslateUi
 
 };

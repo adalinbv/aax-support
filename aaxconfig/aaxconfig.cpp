@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2011-2017 by Erik Hofman
- * Copyright (C) 2011-2017 by Adalin B.V.
+ * Copyright (C) 2011-2021 by Erik Hofman
+ * Copyright (C) 2011-2021 by Adalin B.V.
  *
  * This file is part of AeonWave-Config.
  *
@@ -130,9 +130,9 @@ AeonWaveConfig::~AeonWaveConfig()
 
 /* ------------------------------------------------------------------------- */
 
-#define MAX_FREQ	12
+#define MAX_FREQ	13
 static unsigned int _freq[MAX_FREQ] = {
-  8000,  11025, 16000, 22050,  32000,
+  0, 8000,  11025, 16000, 22050,  32000,
   44056,  44100,  48000, 88200, 96000,
  176400, 192000
 };
@@ -261,7 +261,7 @@ void
 AeonWaveConfig::changeOutputBitrate(int val)
 {
     unsigned dev = devices[current_device]->current_input_connector;
-    devices[current_device]->output[dev]->bitrate = (val+1)*64;
+    devices[current_device]->output[dev]->bitrate = val*64;
 }
 
 
@@ -401,7 +401,7 @@ AeonWaveConfig::changeOutputConnector(int val)
         val = FreqToIndex(devices[be]->output[dev]->sample_freq);
         ui->OutputSampleFreq->setCurrentIndex(val);
 
-        val = (devices[be]->output[dev]->bitrate/64)-1;
+        val = devices[be]->output[dev]->bitrate/64;
         ui->OutputBitrate->setCurrentIndex(val);
     }
 }
@@ -1082,7 +1082,7 @@ AeonWaveConfig::readConnectorOutSettings(void *xiid, unsigned be, unsigned dev)
     devices[be]->output[dev]->refresh_rate = val;
 
     val = xmlNodeGetInt(xiid, "bitrate");
-    if (val >= 64 && val <= 320) {
+    if (val >= 0 && val <= 320) {
         devices[be]->output[dev]->bitrate = val;
     }
 
