@@ -1030,7 +1030,7 @@ AeonWavePlayer::viewAbout()
 void
 AeonWavePlayer::viewLicense()
 {
-    QString text(QObject::trUtf8((const char*)&___COPYING));
+    QString text((const char*)&___COPYING);
     QMessageBox license;
 
     license.setWindowTitle(tr("License and Copyright"));
