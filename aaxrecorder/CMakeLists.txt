@@ -13,7 +13,6 @@ FILE( GLOB SOURCES *.cpp *.c )
 file( GLOB RC *.rc *.qrc )
 
 ADD_EXECUTABLE(aaxrecorder ${SOURCES} ${RC} ${GUI} )
-qt5_use_modules(aaxrecorder Core Gui Widgets)
 
 TARGET_LINK_LIBRARIES( aaxrecorder
     ${AAX_LIBRARY}

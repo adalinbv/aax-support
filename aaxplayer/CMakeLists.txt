@@ -12,7 +12,6 @@ FILE( GLOB SOURCES *.cpp *.c )
 file( GLOB RC *.rc *.qrc )
 
 ADD_EXECUTABLE(aaxplayer ${SOURCES} ${RC} ${GUI} )
-qt5_use_modules(aaxplayer Core Gui Widgets Network)
 
 TARGET_LINK_LIBRARIES( aaxplayer
     ${AAX_LIBRARY}
