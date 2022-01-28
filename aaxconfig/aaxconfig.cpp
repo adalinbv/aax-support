@@ -312,7 +312,9 @@ AeonWaveConfig::changeNoInputPeriods(int val)
     unsigned be = current_device;
     unsigned dev = devices[be]->current_input_connector;
 
-    devices[be]->input[dev]->no_periods = val+1;
+    if (devices[be]->input.size()) {
+        devices[be]->input[dev]->no_periods = val+1;
+    }
 }
 
 void
@@ -715,7 +717,8 @@ AeonWaveConfig::getSystemResources()
             {
                 device = devices[q];
 
-                if (devname == "AeonWave on Audio Files") {
+                if (devname == "AeonWave on Audio Files" ||
+                    devname == "AeonWave on Audio Stream") {
                     file_be_pos = q;
                 }
             }
