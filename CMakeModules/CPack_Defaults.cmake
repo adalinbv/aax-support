@@ -93,7 +93,7 @@ endif(UNIX AND NOT WIN32)
 set(CPACK_PACKAGE_NAME "${PACKAGE}")
 set(CPACK_PACKAGE_VENDOR "Adalin B.V." CACHE INTERNAL "Vendor name")
 set(CPACK_PACKAGE_CONTACT "tech@adalin.org" CACHE INTERNAL "Contact")
-set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/COPYING.v2" CACHE INTERNAL "Copyright" FORCE)
+set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/COPYING" CACHE INTERNAL "Copyright" FORCE)
 
 #  read 'description` file into a variable
 file(STRINGS description descriptionFile)
@@ -146,27 +146,27 @@ else(WIN32)
   set(CPACK_DEB_COMPONENT_INSTALL ON)
 
   INSTALL(FILES
-          "${PROJECT_SOURCE_DIR}/COPYING.v2"
+          "${PROJECT_SOURCE_DIR}/COPYING"
           DESTINATION /usr/share/doc/${PACKAGE}-bin
           COMPONENT Libraries
   )
   INSTALL(FILES
-          "${PROJECT_SOURCE_DIR}/COPYING.v2"
+          "${PROJECT_SOURCE_DIR}/COPYING"
           DESTINATION /usr/share/doc/${PACKAGE}-dev
           COMPONENT Headers
   )
 
-  EXECUTE_PROCESS(COMMAND "cp" -f -p ChangeLog debian/ChangeLog
-                  COMMAND "gzip" -f -9 debian/ChangeLog
+  EXECUTE_PROCESS(COMMAND "cp" -f -p ChangeLog admin/debian/ChangeLog
+                  COMMAND "gzip" -f -9 admin/debian/ChangeLog
                  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} RESULT_VARIABLE varRes)
   INSTALL(FILES
-          debian/ChangeLog.gz
+          admin/debian/ChangeLog.gz
           DESTINATION /usr/share/doc/${PACKAGE}-bin
           RENAME changelog.gz
           COMPONENT Libraries
   )
   INSTALL(FILES
-          debian/ChangeLog.gz
+          admin/debian/ChangeLog.gz
           DESTINATION /usr/share/doc/${PACKAGE}-dev
           RENAME changelog.gz
           COMPONENT Headers
