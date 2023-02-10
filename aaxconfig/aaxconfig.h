@@ -24,6 +24,7 @@
 #include <string>
 
 #include <aax/aeonwave.hpp>
+#include <xml.h>
 
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QComboBox>
@@ -140,11 +141,11 @@ private:
 
     void getSystemResources();
     void readConfigFiles();
-    void readOldConfigSettings(void*);
-    void readNewConfigSettings(void*);
-    void readConnectorOutSettings(void*, unsigned, unsigned);
-    void readConnectorInSettings(void*, unsigned, unsigned);
-    void readConfigSettings(void*);
+    void readOldConfigSettings(xmlId*);
+    void readNewConfigSettings(xmlId*);
+    void readConnectorOutSettings(xmlId*, unsigned, unsigned);
+    void readConnectorInSettings(xmlId*, unsigned, unsigned);
+    void readConfigSettings(xmlId*);
     void setDefaultDevice(char*, char *input = NULL);
 
     void displayUiConfig();

@@ -72,9 +72,10 @@ if(WERROR)
 endif(WERROR)
 
 if(WIN32)
-  set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ".")
-  set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
-  include(InstallRequiredSystemLibraries)
+# disabling for now so we don' bundle an outdatd UCRT
+# set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ".")
+# set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
+# include(InstallRequiredSystemLibraries)
 
   get_target_property(QtCore_location Qt5::Core LOCATION)
   get_target_property(QtGui_location Qt5::Gui LOCATION)

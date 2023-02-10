@@ -308,15 +308,15 @@ AeonWavePlayer::readFavorite()
     std::string path = userConfigFile(CONFIG_FILE);
     if (!path.empty())
     {
-        void *xid = xmlOpen(path.c_str());
+        xmlId *xid = xmlOpen(path.c_str());
         if (xid)
         {
-            void *xbid = xmlNodeGet(xid, "/favorites");
+            xmlId *xbid = xmlNodeGet(xid, "/favorites");
             if (xbid)
             {
                 favorites->clear();
 
-                void *xuid = xmlMarkId(xbid);
+                xmlId *xuid = xmlMarkId(xbid);
                 size_t num = xmlNodeGetNum(xuid, "url");
                 for (size_t u=0; u<num; u++)
                 {

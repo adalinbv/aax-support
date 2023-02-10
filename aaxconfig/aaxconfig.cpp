@@ -747,7 +747,7 @@ AeonWaveConfig::readConfigFiles()
     std::string path = systemConfigFile(CONFIG_FILE);
     if (!path.empty())
     {
-        void *xid = xmlOpen(path.c_str());
+        xmlId *xid = xmlOpen(path.c_str());
         if (xid)
         {
             readConfigSettings(xid);
@@ -759,7 +759,7 @@ AeonWaveConfig::readConfigFiles()
     path = userConfigFile(CONFIG_FILE);
     if (!path.empty())
     {
-        void *xid = xmlOpen(path.c_str());
+        xmlId *xid = xmlOpen(path.c_str());
         if (xid)
         {
             readConfigSettings(xid);
@@ -836,17 +836,17 @@ AeonWaveConfig::setDefaultDevice(char *name, char *input)
 }
 
 void
-AeonWaveConfig::readOldConfigSettings(void* xcid)
+AeonWaveConfig::readOldConfigSettings(xmlId* xcid)
 {
     if (xcid)
     {
-        void* xbid = xmlMarkId(xcid);
+        xmlId *xbid = xmlMarkId(xcid);
         size_t num = xmlNodeGetNum(xbid, "backend");
         for (size_t xbe=0; xbe<num; xbe++)
         {
             xmlNodeGetPos(xcid, xbid, "backend", xbe);
 
-            void* output = xmlNodeGet(xbid, "output");
+            xmlId *output = xmlNodeGet(xbid, "output");
             if (output)
             {
                 char *name = xmlNodeGetString(xbid, "name");
@@ -884,7 +884,7 @@ AeonWaveConfig::readOldConfigSettings(void* xcid)
                 xmlFree(name);
             }
 
-            void* input = xmlNodeGet(xbid, "input");
+            xmlId *input = xmlNodeGet(xbid, "input");
             if (input)
             {
                 char *name = xmlNodeGetString(xbid, "name");
@@ -928,15 +928,15 @@ AeonWaveConfig::readOldConfigSettings(void* xcid)
 }
 
 void
-AeonWaveConfig::readConfigSettings(void* xid)
+AeonWaveConfig::readConfigSettings(xmlId* xid)
 {
-    void *xcid = xmlNodeGet(xid, "/configuration");
+    xmlId *xcid = xmlNodeGet(xid, "/configuration");
     if (xcid)
     {
         char *default_input_device = NULL;
         char *default_device = NULL;
 
-        void *xoid = xmlNodeGet(xcid, "output");
+        xmlId *xoid = xmlNodeGet(xcid, "output");
         if (xoid)
         {
             default_device = xmlNodeGetString(xoid, "device");
@@ -964,7 +964,7 @@ AeonWaveConfig::readConfigSettings(void* xid)
             xmlFree(xoid);
         }
 
-        void *xiid = xmlNodeGet(xcid, "input");
+        xmlId *xiid = xmlNodeGet(xcid, "input");
         if (xiid)
         {
             default_input_device = xmlNodeGetString(xiid, "device");
@@ -990,11 +990,11 @@ AeonWaveConfig::readConfigSettings(void* xid)
 }
 
 void
-AeonWaveConfig::readNewConfigSettings(void* xcid)
+AeonWaveConfig::readNewConfigSettings(xmlId* xcid)
 {
     if (xcid)
     {
-        void *xdid = xmlMarkId(xcid);
+        xmlId *xdid = xmlMarkId(xcid);
         size_t dev_num = xmlNodeGetNum(xdid, "device");
         for (size_t xdev=0; xdev<dev_num; xdev++)
         {
@@ -1007,7 +1007,7 @@ AeonWaveConfig::readNewConfigSettings(void* xcid)
             xmlFree(driver);
             xmlFree(backend);
 
-            void *xiid = xmlMarkId(xdid);
+            xmlId *xiid = xmlMarkId(xdid);
             size_t con_num = xmlNodeGetNum(xiid, "connector");
             for (size_t con=0; con<con_num; con++)
             {
@@ -1070,7 +1070,7 @@ AeonWaveConfig::readNewConfigSettings(void* xcid)
 
 
 void
-AeonWaveConfig::readConnectorOutSettings(void *xiid, unsigned be, unsigned dev)
+AeonWaveConfig::readConnectorOutSettings(xmlId *xiid, unsigned be, unsigned dev)
 {
     devices[be]->output[dev]->timed = xmlNodeGetBool(xiid, "timed");
     devices[be]->output[dev]->shared = xmlNodeGetBool(xiid, "shared");
@@ -1119,7 +1119,7 @@ AeonWaveConfig::readConnectorOutSettings(void *xiid, unsigned be, unsigned dev)
 }
 
 void
-AeonWaveConfig::readConnectorInSettings(void *xiid, unsigned be, unsigned dev)
+AeonWaveConfig::readConnectorInSettings(xmlId *xiid, unsigned be, unsigned dev)
 {
     int val = xmlNodeGetInt(xiid, "frequency-hz");
     if (val) {
