@@ -33,7 +33,7 @@ IF(RMALLOC)
     $ENV{XMLDIR}
     $ENV{ProgramFiles}/ZeroXML
     $ENV{${ProgramFilesx86}}/ZeroXML
-    PATH_SUFFIXES lib64
+    PATH_SUFFIXES lib lib64
     PATHS
     ~/Library/Frameworks
     /Library/Frameworks
@@ -54,7 +54,7 @@ ELSE(RMALLOC)
     $ENV{XMLDIR}
     $ENV{ProgramFiles}/ZeroXML
     $ENV{${ProgramFilesx86}}/ZeroXML
-    PATH_SUFFIXES lib64
+    PATH_SUFFIXES lib lib64
     PATHS
     ~/Library/Frameworks
     /Library/Frameworks
