@@ -292,7 +292,7 @@ AeonWaveRecorder::startRecording()
             {
                 _TEST(outdev.add(file));
                 if (bitrate > 0) {
-                    _TEST(file.set(AAX_BITRATE, bitrate));
+                    _TEST(file.set(AAX_BIT_RATE, bitrate));
                 }
                 int res = file.set(AAX_INITIALIZED);
                 if (!res)

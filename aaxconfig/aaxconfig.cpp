@@ -445,7 +445,7 @@ AeonWaveConfig::changeMixer(int val)
             desc = tr("<tabel>");
             cfg.set(AAX_INITIALIZED);
 
-            s = cfg.info(AAX_DRIVER_STRING);
+            s = cfg.info(AAX_NAME_STRING);
             desc += tr("<tr><td>Driver:</td>");
             desc += tr("<td colspan=\"3\">%1</td></tr>").arg(s);
 
@@ -503,7 +503,7 @@ AeonWaveConfig::changeMixer(int val)
             }
             desc += tr(" batched mode</td></tr>");
 
-            x = cfg.get(AAX_REFRESHRATE);
+            x = cfg.get(AAX_REFRESH_RATE);
             if (x)
             {
                desc += tr("<tr><td>Mixer refresh rate:</td>");
