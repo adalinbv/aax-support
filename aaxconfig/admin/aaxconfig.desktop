@@ -1,16 +1,10 @@
 [Desktop Entry]
-
-Name=AeonWave Config
-TryExec=aaxconfig
-Categories=System;Settings;HardwareSettings;
-
 Encoding=UTF-8
+Name=AeonWave Config
 Comment=AeonWave configuration applet
-Exec=aaxconfig
+Exec=aaxplayer
+Icon=/usr/share/pixmaps/aaxconfig.xpm
+MimeType=text/plain
 Terminal=false
 Type=Application
-Icon=/usr/share/pixmaps/aaxconfig.xpm
-X-Ubuntu-Gettext-Domain=aaxconfig
-X-GNOME-Settings-Panel=aaxconfig
-#Icon=aaxconfig
-#MimeType=text/plain
+Categories=Settings;HardwareSettings;
