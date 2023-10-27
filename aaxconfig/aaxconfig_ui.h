@@ -77,9 +77,9 @@ public:
     {
         if (Configuration->objectName().isEmpty())
             Configuration->setObjectName(QStringLiteral("Configuration"));
-        Configuration->resize(530, 400);
-        Configuration->setMinimumSize(QSize(530, 400));
-        Configuration->setMaximumSize(QSize(530, 400));
+        Configuration->resize(530, 480);
+        Configuration->setMinimumSize(QSize(530, 480));
+        Configuration->setMaximumSize(QSize(530, 480));
         Device = new QComboBox(Configuration);
         Device->setObjectName(QStringLiteral("Device"));
         Device->setGeometry(QRect(10, 30, 271, 27));
@@ -88,12 +88,12 @@ public:
         label_backend->setGeometry(QRect(10, 10, 71, 17));
         OK = new QDialogButtonBox(Configuration);
         OK->setObjectName(QStringLiteral("OK"));
-        OK->setGeometry(QRect(300, 360, 221, 32));
+        OK->setGeometry(QRect(300, 440, 221, 32));
         OK->setOrientation(Qt::Horizontal);
         OK->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
         tabWidget = new QTabWidget(Configuration);
         tabWidget->setObjectName(QStringLiteral("tabWidget"));
-        tabWidget->setGeometry(QRect(10, 60, 511, 291));
+        tabWidget->setGeometry(QRect(10, 60, 511, 371));
         tab_2 = new QWidget();
         tab_2->setObjectName(QStringLiteral("tab_2"));
         label_input_sample_bitrate = new QLabel(tab_2);
@@ -217,7 +217,7 @@ public:
         tab_4->setObjectName(QStringLiteral("tab_4"));
         FiltersEffects = new QLabel(tab_4);
         FiltersEffects->setObjectName(QStringLiteral("FiltersEffects"));
-        FiltersEffects->setGeometry(QRect(10, 10, 491, 241));
+        FiltersEffects->setGeometry(QRect(10, 10, 491, 321));
         tabWidget->addTab(tab_4, QString());
         label_acquire = new QLabel(Configuration);
         label_acquire->setObjectName(QStringLiteral("label_acquire"));
