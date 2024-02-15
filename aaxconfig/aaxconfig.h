@@ -85,7 +85,7 @@ private:
         _connector(bool m = true) :
             name("default"),
             bitrate(320),
-            refresh_rate(46),
+            refresh_rate(90),
             sample_freq(44100),
             no_speakers(2),
             no_periods(2),
@@ -95,7 +95,7 @@ private:
          _connector(const char* n, bool m = true) :
             name(n),
             bitrate(320),
-            refresh_rate(46),
+            refresh_rate(90),
             sample_freq(44100),
             no_speakers(2),
             no_periods(2),
@@ -105,7 +105,7 @@ private:
         _connector(std::string n, bool m = true) :
             name(n),
             bitrate(320),
-            refresh_rate(46),
+            refresh_rate(90),
             sample_freq(44100),
             no_speakers(2),
             no_periods(2),

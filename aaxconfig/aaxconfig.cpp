@@ -39,8 +39,8 @@
 
 AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     QDialog(parent),
-    refresh_rate(46),
-    general_sample_freq(48000),
+    refresh_rate(90),
+    general_sample_freq(44100),
     general_setup(AAX_MODE_WRITE_STEREO),
     file_be_pos(-1),
     default_device(UINT_MAX),
@@ -132,9 +132,8 @@ AeonWaveConfig::~AeonWaveConfig()
 
 #define MAX_FREQ	13
 static unsigned int _freq[MAX_FREQ] = {
-  0, 8000,  11025, 16000, 22050,  32000,
-  44056,  44100,  48000, 88200, 96000,
- 176400, 192000
+  8000,  11025, 16000, 22050,  32000, 44056,  44100,  48000, 88200, 96000,
+  176400, 192000
 };
 
 void
