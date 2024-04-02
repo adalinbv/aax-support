@@ -287,8 +287,9 @@ public:
         SpeakerSetup->insertItems(0, QStringList()
          << QApplication::translate("Configuration", "Stereo", Q_NULLPTR)
          << QApplication::translate("Configuration", "Spatial", Q_NULLPTR)
-         << QApplication::translate("Configuration", "Surround", Q_NULLPTR)
+         << QApplication::translate("Configuration", "Spatial Surround", Q_NULLPTR)
          << QApplication::translate("Configuration", "HRTF", Q_NULLPTR)
+         << QApplication::translate("Configuration", "Surround", Q_NULLPTR)
         );
 #ifndef QT_NO_TOOLTIP
         Timer->setToolTip(QApplication::translate("Configuration", "<html><head/><body><p>Enable the system timer for pushing data to the audio device.</p><p>This will save power consumption but is less reliable for lower latencies. Therefore this option is only used for refresh rates below 75Hz.</p></body></html>", Q_NULLPTR));

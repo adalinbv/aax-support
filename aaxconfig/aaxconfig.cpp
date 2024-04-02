@@ -953,10 +953,12 @@ AeonWaveConfig::readConfigSettings(xmlId* xid)
                     general_setup = AAX_MODE_WRITE_STEREO;
                 } else if (!strcasecmp(setup, "spatial")) {
                     general_setup = AAX_MODE_WRITE_SPATIAL;
-                } else if (!strcasecmp(setup, "surround")) {
-                    general_setup = AAX_MODE_WRITE_SURROUND;
+                } else if (!strcasecmp(setup, "spatial-surround")) {
+                    general_setup = AAX_MODE_WRITE_SPATIAL_SURROUND;
                 } else if (!strcasecmp(setup, "hrtf")) {
                     general_setup = AAX_MODE_WRITE_HRTF;
+                } else if (!strcasecmp(setup, "surround")) {
+                    general_setup = AAX_MODE_WRITE_SURROUND;
                 }
                 xmlFree(setup);
             }
@@ -1107,11 +1109,14 @@ AeonWaveConfig::readConnectorOutSettings(xmlId *xiid, unsigned be, unsigned dev)
         else if (!strcasecmp(setup, "spatial")) {
             devices[be]->output[dev]->setup = AAX_MODE_WRITE_SPATIAL;
         }
-        else if (!strcasecmp(setup, "surround")) {
-            devices[be]->output[dev]->setup = AAX_MODE_WRITE_SURROUND;
+        else if (!strcasecmp(setup, "spatial-surround")) {
+            devices[be]->output[dev]->setup = AAX_MODE_WRITE_SPATIAL_SURROUND;
         }
         else if (!strcasecmp(setup, "hrtf")) {
             devices[be]->output[dev]->setup = AAX_MODE_WRITE_HRTF;
+        }
+        else if (!strcasecmp(setup, "surround")) {
+            devices[be]->output[dev]->setup = AAX_MODE_WRITE_SURROUND;
         }
         xmlFree(setup);
     }
@@ -1402,8 +1407,9 @@ AeonWaveConfig::writeConfigFile()
         file << "  <setup>";
         if (general_setup == AAX_MODE_WRITE_STEREO) file << "stereo";
         else if (general_setup == AAX_MODE_WRITE_SPATIAL) file << "spatial";
-        else if (general_setup == AAX_MODE_WRITE_SURROUND) file << "surround";
+        else if (general_setup == AAX_MODE_WRITE_SPATIAL_SURROUND) file << "spatial-surround";
         else if (general_setup == AAX_MODE_WRITE_HRTF) file << "hrtf";
+        else if (general_setup == AAX_MODE_WRITE_SURROUND) file << "surround";
         file << "</setup>" << std::endl;
         file << " </output>" << std::endl << std::endl;
 
@@ -1438,11 +1444,14 @@ AeonWaveConfig::writeConfigFile()
                 case AAX_MODE_WRITE_SPATIAL:
                     file << "spatial";
                     break;
-                case AAX_MODE_WRITE_SURROUND:
-                    file << "surround";
+                case AAX_MODE_WRITE_SPATIAL_SURROUND:
+                    file << "spatial-surround";
                     break;
                 case AAX_MODE_WRITE_HRTF:
                     file << "hrtf";
+                    break;
+                case AAX_MODE_WRITE_SURROUND:
+                    file << "surround";
                     break;
                 case AAX_MODE_WRITE_STEREO:
                 default:
@@ -1637,8 +1646,9 @@ AeonWaveConfig::writeOldConfigFile()
         file << "  <setup>";
         if (general_setup == AAX_MODE_WRITE_STEREO) file << "stereo";
         else if (general_setup == AAX_MODE_WRITE_SPATIAL) file << "spatial";
-        else if (general_setup == AAX_MODE_WRITE_SURROUND) file << "surround";
+        else if (general_setup == AAX_MODE_WRITE_SPATIAL_SURROUND) file << "spatial-surround";
         else if (general_setup == AAX_MODE_WRITE_HRTF) file << "hrtf";
+        else if (general_setup == AAX_MODE_WRITE_SURROUND) file << "surround";
         file << "</setup>" << std::endl;
         file << "  <head>" << std::endl;
         file << "   <side-delay-sec>64e-5</side-delay-sec>" << std::endl;
@@ -1671,11 +1681,14 @@ AeonWaveConfig::writeOldConfigFile()
                 case AAX_MODE_WRITE_SPATIAL:
                     file << "spatial";
                     break;
-                case AAX_MODE_WRITE_SURROUND:
-                    file << "surround";
+                case AAX_MODE_WRITE_SPATIAL_SURROUND:
+                    file << "spatial-surround";
                     break;
                 case AAX_MODE_WRITE_HRTF:
                     file << "hrtf";
+                    break;
+                case AAX_MODE_WRITE_SURROUND:
+                    file << "surround";
                     break;
                 case AAX_MODE_WRITE_STEREO:
                 default:

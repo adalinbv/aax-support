@@ -250,7 +250,7 @@
      </item>
      <item>
       <property name="text">
-       <string>Surround</string>
+       <string>Spatial Surround</string>
       </property>
      </item>
      <item>
@@ -259,6 +259,11 @@
       </property>
      </item>
     </widget>
+     <item>
+      <property name="text">
+       <string>urround</string>
+      </property>
+     </item>
     <widget class="QCheckBox" name="Timer">
      <property name="geometry">
       <rect>
