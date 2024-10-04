@@ -18,9 +18,9 @@
  *  along with AeonWave-Config.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>	/* std::rename */
+#include <cstdio>	/* std::rename */
 #include <sys/stat.h>	/* std::chmod  */
-#include <errno.h>
+#include <cerrno>
 
 #include <iostream>
 #include <fstream>
