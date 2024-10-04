@@ -56,7 +56,7 @@
 #ifndef NDEBUG
 # define _TEST(a)                \
 do {                            \
-    int r=(a);                    \
+    bool r=(a);                    \
     if (r!=AAX_TRUE) printf("Error at line %i: %s\n",__LINE__,aaxGetErrorString(aaxGetErrorNo())); \
     assert(r==AAX_TRUE); \
 } while(0);
