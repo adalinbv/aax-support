@@ -394,6 +394,7 @@ AeonWaveRecorder::getSystemResources(device_t &type, enum aaxRenderMode mode)
 
     while (const char *d = aax.drivers(mode))
     {
+        int no_devices = 0;
         while (const char *r = aax.devices())
         {
            struct backend_t backend;
@@ -405,7 +406,16 @@ AeonWaveRecorder::getSystemResources(device_t &type, enum aaxRenderMode mode)
                backend.interface_name.append(i);
            }
            type.backend.append(backend);
+           no_devices++;
         }
+#if 0
+        if (!no_devices)
+        {
+            struct backend_t backend;
+            backend.name = d;
+            type.backend.append(backend);
+        }
+#endif
     }
 }
 

@@ -76,7 +76,7 @@ AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
     indir_pos(0),
     wildcards("*.wav"),
     tracks(2),
-    max_samples(0), 
+    max_samples(0),
     play_pressed(false),
     remote_stream(false),
     playing(false),
@@ -420,7 +420,7 @@ AeonWavePlayer::writeFavorite()
                 }
                 else {
                     file << "name=\"" << title.toUtf8().constData() << "\"";
-                }                 
+                }
             }
             file << ">"<< url.toUtf8().constData();
             file << "</url>" << std::endl;
@@ -443,7 +443,7 @@ AeonWavePlayer::addFavorite()
     QString actname, objname;
     if (remote_stream)
     {
-        QString name = indev.info(AAX_SONG_COMPOSER_STRING); 
+        QString name = indev.info(AAX_SONG_COMPOSER_STRING);
         QString genre = indev.info(AAX_MUSIC_GENRE_STRING);
 
         if (!name.isEmpty())
@@ -791,7 +791,7 @@ AeonWavePlayer::loadDirectory()
             list.removeAt(pos);
             size = list.size();
         }
-        
+
         infiles_path = dir;
         new_file = true;
         remote_stream = false;
@@ -923,6 +923,7 @@ AeonWavePlayer::getSystemResources(device_t &type, enum aaxRenderMode mode)
     type.backend.clear();
     while (const char *d = aax.drivers(mode))
     {
+        int no_devices = 0;
         while (const char *r = aax.devices())
         {
            struct backend_t backend;
@@ -934,7 +935,16 @@ AeonWavePlayer::getSystemResources(device_t &type, enum aaxRenderMode mode)
                backend.interface_name.append(i);
            }
            type.backend.append(backend);
+           no_devices++;
         }
+#if 0
+        if (!no_devices)
+        {
+            struct backend_t backend;
+            backend.name = d;
+            type.backend.append(backend);
+        }
+#endif
     }
 }
 
@@ -1005,7 +1015,7 @@ AeonWavePlayer::showSongInfo()
 
     s = indev.info(AAX_WEBSITE_STRING);
     msg += tr("<tr><td>Website:</td><td>%1</td></tr>").arg(s ? s : "-");
-    
+
     msgBox.setText(msg);
     msgBox.exec();
 }

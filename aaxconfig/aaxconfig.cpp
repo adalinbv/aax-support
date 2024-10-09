@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2011-2021 by Erik Hofman
- * Copyright (C) 2011-2021 by Adalin B.V.
+ * Copyright (C) 2011-2024 by Erik Hofman
+ * Copyright (C) 2011-2024 by Adalin B.V.
  *
  * This file is part of AeonWave-Config.
  *
@@ -47,7 +47,7 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     current_device(0),
     default_input_device(UINT_MAX)
 {
-    getSystemResources();   
+    getSystemResources();
     readConfigFiles();
 
     ui = new Ui_Configuration;
@@ -219,8 +219,11 @@ AeonWaveConfig::testPlay()
 {
     unsigned dev = devices[current_device]->current_output_connector;
     std::string name = devices[current_device]->name;
-    name.append(": ");
-    name.append(devices[current_device]->output[dev]->name);
+    if (devices[current_device]->output.size() > dev)
+    {
+        name.append(": ");
+        name.append(devices[current_device]->output[dev]->name);
+    }
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
     int res = aaxPlaySoundLogo(name.c_str());
@@ -235,8 +238,11 @@ void
 AeonWaveConfig::changeSpeakerSetup(int val)
 {
     unsigned dev = devices[current_device]->current_output_connector;
-    devices[current_device]->output[dev]->setup = val+1;
-    changeNoSpeakers(devices[current_device]->output[dev]->no_speakers/2-1);
+    if (devices[current_device]->output.size() > dev)
+    {
+        devices[current_device]->output[dev]->setup = val+1;
+        changeNoSpeakers(devices[current_device]->output[dev]->no_speakers/2-1);
+    }
 }
 
 void
@@ -291,7 +297,7 @@ AeonWaveConfig::changeNoSpeakers(int val)
            break;
        }
     }
-  
+
     QPixmap pixmap(path);
     ui->graphicsView->setPixmap(pixmap);
 }
@@ -302,7 +308,9 @@ AeonWaveConfig::changeNoPeriods(int val)
     unsigned be = current_device;
     unsigned dev = devices[be]->current_output_connector;
 
-    devices[be]->output[dev]->no_periods = val+1;
+    if (devices[be]->output.size()) {
+        devices[be]->output[dev]->no_periods = val+1;
+    }
 }
 
 void
@@ -461,9 +469,11 @@ AeonWaveConfig::changeMixer(int val)
             s = cfg.info(AAX_VENDOR_STRING);
             desc += tr("<tr><td>Vendor:</td>");
             desc += tr("<td colspan=\"3\">%1</td></tr>").arg(s);
+            desc += tr("</table>");
 
             min = cfg.get(AAX_TRACKS_MIN);
             max = cfg.get(AAX_TRACKS_MAX);
+            desc += tr("<tabel>");
             desc += tr("<tr><td>Supported tacks:</td>");
             desc += tr("<td>%1 - %2 tracks</td>").arg(min).arg(max);
             desc += tr("<td width=\"25%\">&nbsp;</td>");
@@ -475,7 +485,7 @@ AeonWaveConfig::changeMixer(int val)
                desc += tr("<img src=\":/unchecked.png\">");
             }
             desc += tr(" timed mode</td></tr>");
-            
+
 
             min = cfg.get(AAX_FREQUENCY_MIN);
             max = cfg.get(AAX_FREQUENCY_MAX);
@@ -560,7 +570,7 @@ AeonWaveConfig::changeMixer(int val)
                 desc += tr("<tr><td width=\"50%\">");
                 desc += tr("<font><b>Supported Filters:</b></font>");
                 desc += tr("</td><td width=\"50%\">");
-                desc += tr("<font><b>Supported Effects:</b></font>"); 
+                desc += tr("<font><b>Supported Effects:</b></font>");
                 desc += tr("</td></tr>");
 
                 int max_flt = aaxGetByType(AAX_MAX_FILTER);
@@ -656,7 +666,8 @@ AeonWaveConfig::getSystemResources()
         if (std::string(d) == "None")
             continue;
 
-        while (const char* r = aax.devices(false))
+        int no_devices = 0;
+        while (const char* r = aax.devices())
         {
             device = new device_t;
             device->default_output_connector = 0;
@@ -664,12 +675,12 @@ AeonWaveConfig::getSystemResources()
             device->current_input_connector = 0;
             device->name = d;
 
-            if (!r || !*r) continue;
-
+            if (!r) r = "default";
             device->name += std::string(" on ") + r;
             devices.push_back(device);
+            no_devices++;
 
-            while (const char* i = aax.interfaces(false))
+            while (const char* i = aax.interfaces())
             {
                 if (*i)
                 {
@@ -683,6 +694,16 @@ AeonWaveConfig::getSystemResources()
                 device->output.push_back(connector);
             }
         }
+
+        if (!no_devices)
+        {
+            device = new device_t;
+            device->default_output_connector = 0;
+            device->current_output_connector = 0;
+            device->current_input_connector = 0;
+            device->name = d;
+            devices.push_back(device);
+        }
     }
 
     while (const char* d = aax.drivers(AAX_MODE_READ))
@@ -690,10 +711,12 @@ AeonWaveConfig::getSystemResources()
         if (std::string(d) == "None")
             continue;
 
-        while (const char* r = aax.devices(false))
+        while (const char* r = aax.devices())
         {
             std::string devname = d;
-            if (r && *r) devname += std::string(" on ") + r;
+
+            if (!r) r = "default";
+            devname += std::string(" on ") + r;
 
             unsigned int q;
             for (q=0; q<devices.size(); q++)
@@ -722,7 +745,7 @@ AeonWaveConfig::getSystemResources()
                 }
             }
 
-            while (const char* i = aax.interfaces(false))
+            while (const char* i = aax.interfaces())
             {
                 if (*i)
                 {
@@ -858,7 +881,7 @@ AeonWaveConfig::readOldConfigSettings(xmlId* xcid)
                     unsigned be = 0;
                     for (be=0; be<devices.size(); be++)
                     {
-                        if (!strcasecmp(devices[be]->name.c_str(), name)) 
+                        if (!strcasecmp(devices[be]->name.c_str(), name))
                         {
                             found = true;
                             break;
@@ -1034,7 +1057,7 @@ AeonWaveConfig::readNewConfigSettings(xmlId* xcid)
                         for (dev=0; dev<devices[be]->output.size(); dev++)
                         {
                             size_t found;
-    
+
                             found = devices[be]->output[dev]->name.find(ifs);
                             if (found != std::string::npos)
                             {
@@ -1380,7 +1403,7 @@ AeonWaveConfig::writeConfigFile()
             file << "  <frequency-hz>";
             file << devices[default_input_device]->input[dev]->sample_freq;
             file << "</frequency-hz>" << std::endl;
-        
+
             file << " </input>" << std::endl;
         }
 
@@ -1438,7 +1461,7 @@ AeonWaveConfig::writeConfigFile()
                 file << "   <shared>" << (devices[be]->output[dev]->shared ? "true" : "false");
                 file << "</shared>" << std::endl;
 
-                file << "   <setup>"; 
+                file << "   <setup>";
                 switch(devices[be]->output[dev]->setup)
                 {
                 case AAX_MODE_WRITE_SPATIAL:
@@ -1499,7 +1522,7 @@ AeonWaveConfig::writeConfigFile()
                     for (unsigned sp=0; sp<MAX_SPEAKER_SETUP; sp++)
                     {
                        if (devices[be]->output[dev]->setup
-                               == speaker_setup[sp].setup 
+                               == speaker_setup[sp].setup
                            &&  devices[be]->output[dev]->no_speakers
                                    == speaker_setup[sp].no_speakers
                           )
@@ -1675,7 +1698,7 @@ AeonWaveConfig::writeOldConfigFile()
                 file << devices[be]->output[dev]->sample_freq;
                 file << "</frequency-hz>" << std::endl;
 
-                file << "   <setup>"; 
+                file << "   <setup>";
                 switch(devices[be]->output[dev]->setup)
                 {
                 case AAX_MODE_WRITE_SPATIAL:
@@ -1703,7 +1726,7 @@ AeonWaveConfig::writeOldConfigFile()
                 for (unsigned sp=0; sp<MAX_SPEAKER_SETUP; sp++)
                 {
                    if (devices[be]->output[dev]->setup
-                           == speaker_setup[sp].setup 
+                           == speaker_setup[sp].setup
                        &&  devices[be]->output[dev]->no_speakers
                                == speaker_setup[sp].no_speakers
                       )

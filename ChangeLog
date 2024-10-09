@@ -1,3 +1,6 @@
+* Tue Oct 08 2024 - tech@adalin.org
+- Adapt to AeonWave version 2.4.0
+
 * Wed Jul 03 2018 - tech@adalin.org
 - Add a test button to play the official sound logo on the selected device.
 - Add an apply button to save the current configuration without closing the app.
