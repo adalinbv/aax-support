@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Name=AeonWave Config
 Comment=AeonWave configuration applet
-Exec=aaxplayer
+Exec=aaxconfig
 Icon=/usr/share/pixmaps/aaxconfig.xpm
 MimeType=text/plain
 Terminal=false
