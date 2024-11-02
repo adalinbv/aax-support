@@ -34,6 +34,7 @@
 #include <iostream>
 #include <fstream>
 
+#include <QtGlobal>
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
 #include <QRegularExpression>
@@ -876,7 +877,11 @@ void
 AeonWavePlayer::readM3U(QStringList& list, QTextStream &tstream, bool utf8)
 {
     if (utf8) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        tstream.setCodec("UTF-8");
+#else
         tstream.setEncoding(QStringConverter::Utf8);
+#endif
     }
     while(!tstream.atEnd())
     {
@@ -895,7 +900,11 @@ void
 AeonWavePlayer::readPLS(QStringList& list, QTextStream &tstream, bool utf8)
 {
     if (utf8) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        tstream.setCodec("UTF-8");
+#else
         tstream.setEncoding(QStringConverter::Utf8);
+#endif
     }
     while(!tstream.atEnd())
     {

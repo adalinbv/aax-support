@@ -9,8 +9,13 @@ endif(HAVE_LIBM)
 find_package(AAX COMPONENTS aax REQUIRED)
 
 set(SOURCES aaxrecorder.cpp  api.c  main.cpp  record.cpp  setup.cpp)
-qt_wrap_ui(GUI aaxrecorder.ui record.ui setup.ui)
-qt_add_resources(RC aaxrecorder.qrc aaxrecorder.rc)
+if (QT_VERSION_MAJOR EQUAL "5")
+  qt5_wrap_ui(GUI aaxrecorder.ui record.ui setup.ui)
+  qt5_add_resources(RC aaxrecorder.qrc aaxrecorder.rc)
+else()
+  qt_wrap_ui(GUI aaxrecorder.ui record.ui setup.ui)
+  qt_add_resources(RC aaxrecorder.qrc aaxrecorder.rc)
+endif()
 
 add_executable(aaxrecorder ${SOURCES} ${RC} ${GUI} )
 

@@ -7,8 +7,13 @@ find_package(AAX COMPONENTS aax REQUIRED)
 find_package(XML COMPONENTS xml REQUIRED)
 
 set(SOURCES aaxconfig aaxconfig.cpp api.c main.cpp)
-qt_wrap_ui(GUI aaxconfig.ui)
-qt_add_resources(RC aaxconfig.qrc aaxconfig.rc)
+if (QT_VERSION_MAJOR EQUAL "5")
+  qt5_wrap_ui(GUI aaxconfig.ui)
+  qt5_add_resources(RC aaxconfig.qrc aaxconfig.rc)
+else()
+  qt_wrap_ui(GUI aaxconfig.ui)
+  qt_add_resources(RC aaxconfig.qrc aaxconfig.rc)
+endif()
 
 add_executable(aaxconfig ${SOURCES} ${RC} ${GUI} )
 

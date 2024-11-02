@@ -7,8 +7,13 @@ find_package(AAX COMPONENTS aax REQUIRED)
 find_package(XML COMPONENTS xml REQUIRED)
 
 set(SOURCES aaxplayer.cpp  main.cpp  remote.cpp  setup.cpp)
-qt_wrap_ui(GUI aaxplayer.ui remote.ui setup.ui)
-qt_add_resources(RC aaxplayer.qrc aaxplayer.rc)
+if (QT_VERSION_MAJOR EQUAL "5")
+  qt5_wrap_ui(GUI aaxplayer.ui remote.ui setup.ui)
+  qt5_add_resources(RC aaxplayer.qrc aaxplayer.rc)
+else()
+  qt_wrap_ui(GUI aaxplayer.ui remote.ui setup.ui)
+  qt_add_resources(RC aaxplayer.qrc aaxplayer.rc)
+endif()
 
 add_executable(aaxplayer ${SOURCES} ${RC} ${GUI} )
 
