@@ -36,6 +36,7 @@
 
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
+#include <QRegularExpression>
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QTextStream>
@@ -46,9 +47,9 @@
 #include <copyright.h>
 #include <types.h>
 
-#include "aaxplayer_ui.h"
+#include "ui_aaxplayer.h"
 #include "aaxplayer.h"
-#include "remote_ui.h"
+#include "ui_remote.h"
 #include "setup.h"
 
 #undef NDEBUG
@@ -138,7 +139,7 @@ AeonWavePlayer::AeonWavePlayer(QWidget *parent) :
     QFont font1;
     font1.setPointSize(10);
     font1.setBold(true);
-    font1.setWeight(75);
+    font1.setWeight(QFont::Bold);
     for (int track=0; track<MAX_TRACKS; track++)
     {
         VU[track] = new QProgressBar(this);
@@ -875,7 +876,7 @@ void
 AeonWavePlayer::readM3U(QStringList& list, QTextStream &tstream, bool utf8)
 {
     if (utf8) {
-        tstream.setCodec("UTF-8");
+        tstream.setEncoding(QStringConverter::Utf8);
     }
     while(!tstream.atEnd())
     {
@@ -894,7 +895,7 @@ void
 AeonWavePlayer::readPLS(QStringList& list, QTextStream &tstream, bool utf8)
 {
     if (utf8) {
-        tstream.setCodec("UTF-8");
+        tstream.setEncoding(QStringConverter::Utf8);
     }
     while(!tstream.atEnd())
     {
@@ -903,7 +904,7 @@ AeonWavePlayer::readPLS(QStringList& list, QTextStream &tstream, bool utf8)
         {
             QStringList flist;
 
-            flist = line.split(QRegExp("\\s?=\\s?"));
+            flist = line.split(QRegularExpression("\\s?=\\s?"));
             if (flist.size() == 2)
             {
                 infile = flist[1];

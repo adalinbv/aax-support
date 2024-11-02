@@ -1,62 +1,65 @@
 
-ENABLE_LANGUAGE(CXX)
+enable_language(CXX)
 
-CHECK_LIBRARY_EXISTS(m floorf "" HAVE_LIBM)
+check_library_exists(m floorf "" HAVE_LIBM)
 
-FIND_PACKAGE(AAX COMPONENTS aax REQUIRED)
-FIND_PACKAGE(XML COMPONENTS xml REQUIRED)
+find_package(AAX COMPONENTS aax REQUIRED)
+find_package(XML COMPONENTS xml REQUIRED)
 
-# generate a list of all files that match the globbing expressions
-FILE( GLOB GUI *.ui )
-FILE( GLOB SOURCES *.cpp *.c )
-file( GLOB RC *.rc *.qrc )
+set(SOURCES aaxplayer.cpp  main.cpp  remote.cpp  setup.cpp)
+qt_wrap_ui(GUI aaxplayer.ui remote.ui setup.ui)
+qt_add_resources(RC aaxplayer.qrc aaxplayer.rc)
 
-ADD_EXECUTABLE(aaxplayer ${SOURCES} ${RC} ${GUI} )
+add_executable(aaxplayer ${SOURCES} ${RC} ${GUI} )
 
-TARGET_LINK_LIBRARIES( aaxplayer
+target_link_libraries( aaxplayer
     ${AAX_LIBRARY}
     ${XML_LIBRARY}
     ${EXTRA_LIBS}
-    Qt5::Widgets
-    Qt5::Core
-    Qt5::Gui
-    Qt5::Network
+    Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Gui
+    Qt${QT_VERSION_MAJOR}::Network
 )
 
-INSTALL(TARGETS aaxplayer
+install(TARGETS aaxplayer
         RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
         COMPONENT Media
 )
 
-IF(WIN32)
-  # Used to create Start Menu shortcuts <EXEC> <LABEL>
-  SET(CPACK_PACKAGE_EXECUTABLES "aaxplayer;AeonWave Audio Player")
-  SET(CPACK_PACKAGE_ICON "admin\\\\aaxplayer.xpm")
-  SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\aaxplayer.exe")
+target_include_directories(aaxplayer PRIVATE 
+      ${PROJECT_BINARY_DIR}/aaxplayer
+      ${CMAKE_CURRENT_SOURCE_DIR})
 
-ELSE(WIN32)
+if(WIN32)
   # Used to create Start Menu shortcuts <EXEC> <LABEL>
-  SET(CPACK_PACKAGE_EXECUTABLES "aaxplayer;AeonWave Audio Player")
-  SET(CPACK_STRIP_FILES "bin/aaxplayer")
-ENDIF(WIN32)
+  set(CPACK_PACKAGE_EXECUTABLES "aaxplayer;AeonWave Audio Player")
+  set(CPACK_PACKAGE_ICON "admin\\\\aaxplayer.xpm")
+  set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\aaxplayer.exe")
 
-IF(APPLE)
-  SET(PLATFORM_SPECIFIC "aaxplayer.icns")
-  SET_SOURCE_FILES_PROPERTIES(
+else(WIN32)
+  # Used to create Start Menu shortcuts <EXEC> <LABEL>
+  set(CPACK_PACKAGE_EXECUTABLES "aaxplayer;AeonWave Audio Player")
+  set(CPACK_STRIP_FILES "bin/aaxplayer")
+endif(WIN32)
+
+if(APPLE)
+  set(PLATFORM_SPECIFIC "aaxplayer.icns")
+  set_soruce_files_properties(
       "aaxplayer.icns"
       PROPERTIES
       MACOSX_PACKAGE_LOCATION Resources
   )
-  SET(GUI_TYPE MACOSX_BUNDLE)
-  SET(MACOSX_BUNDLE_ICON_FILE MacIcon.icns)
-ENDIF()
+  set(GUI_TYPE MACOSX_BUNDLE)
+  set(MACOSX_BUNDLE_ICON_FILE MacIcon.icns)
+endif()
 
-IF(UNIX AND NOT APPLE)
-  INSTALL(FILES admin/aaxplayer.desktop
+if(UNIX AND NOT APPLE)
+  install(FILES admin/aaxplayer.desktop
           DESTINATION share/applications
           COMPONENT Media)
-  INSTALL(FILES admin/aaxplayer.xpm
+  install(FILES admin/aaxplayer.xpm
           DESTINATION share/pixmaps
           COMPONENT Media)
-ENDIF(UNIX AND NOT APPLE)
+endif(UNIX AND NOT APPLE)
 

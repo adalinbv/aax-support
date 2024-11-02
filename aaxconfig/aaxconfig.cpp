@@ -31,7 +31,7 @@
 #include <QStandardItemModel>
 
 #include <base/api.h>
-#include "aaxconfig_ui.h"
+#include "ui_aaxconfig.h"
 #include "aaxconfig.h"
 #include "types.h"
 #include "api.h"
@@ -103,7 +103,7 @@ AeonWaveConfig::AeonWaveConfig(QWidget *parent) :
     font.setFamily(QString::fromUtf8("Open Sans"));
     font.setPointSize(9);
     font.setBold(false);
-    font.setWeight(50);
+    font.setWeight(QFont::Normal);
     font.setLetterSpacing(QFont::PercentageSpacing, 95.0f);
 
     ui->MixerInfo->setFont(font);

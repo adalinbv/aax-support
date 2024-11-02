@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.9.1)
 
-set(CMAKE_PREFIX_PATH "C:/Qt/Qt5.7.0/5.7/msvc2015_64")
+set(CMAKE_PREFIX_PATH "C:/Qt/Qt${QT_VERSION_MAJOR}.7.0/5.7/msvc2015_64")
 set( cmake_verbose_makefile TRUE)
 
 project(aaxsupport)
@@ -10,7 +10,7 @@ set(PACKAGE "aaxsupport")
 option(WERROR "Treat compile warnings as errors"   OFF)
 
 # read 'version' file into a variable (stripping any newlines or spaces)
-file(READ version versionFile)
+file(READ aaxsupport_version versionFile)
 string(STRIP ${versionFile} AAXSUPPORT_VERSION)
 set(VERSION AAXSUPPORT_VERSION)
 
@@ -39,15 +39,16 @@ include(CheckLibraryExists)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
-find_package(Qt5 5.7 COMPONENTS REQUIRED Core Widgets Gui Network)
+find_package(Qt6 COMPONENTS REQUIRED Core Widgets Gui Network)
+
 if(WIN32)
   set(CPACK_NSIS_MODifY_PATH "ON")
   add_definitions("-D_WIN32")
 
-  install_qt5_plugin("Qt5::QMinimalIntegrationPlugin" QT_PLUGIN "bin" "Support")
-  install_qt5_plugin("Qt5::QWindowsIntegrationPlugin" QT_PLUGIN "bin" "Support")
-  install_qt5_plugin("Qt5::QMinimalIntegrationPlugin" QT_PLUGIN "bin" "Media")
-  install_qt5_plugin("Qt5::QWindowsIntegrationPlugin" QT_PLUGIN "bin" "Media")
+  install_qt5_plugin("Qt${QT_VERSION_MAJOR}::QMinimalIntegrationPlugin" QT_PLUGIN "bin" "Support")
+  install_qt5_plugin("Qt${QT_VERSION_MAJOR}::QWindowsIntegrationPlugin" QT_PLUGIN "bin" "Support")
+  install_qt5_plugin("Qt${QT_VERSION_MAJOR}::QMinimalIntegrationPlugin" QT_PLUGIN "bin" "Media")
+  install_qt5_plugin("Qt${QT_VERSION_MAJOR}::QWindowsIntegrationPlugin" QT_PLUGIN "bin" "Media")
 
 else(WIN32)
 
@@ -77,10 +78,10 @@ if(WIN32)
 # set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
 # include(InstallRequiredSystemLibraries)
 
-  get_target_property(QtCore_location Qt5::Core LOCATION)
-  get_target_property(QtGui_location Qt5::Gui LOCATION)
-  get_target_property(QtWidgets_location Qt5::Widgets LOCATION)
-  get_target_property(QtNetworklocation Qt5::Network LOCATION)
+  get_target_property(QtCore_location Qt${QT_VERSION_MAJOR}::Core LOCATION)
+  get_target_property(QtGui_location Qt${QT_VERSION_MAJOR}::Gui LOCATION)
+  get_target_property(QtWidgets_location Qt${QT_VERSION_MAJOR}::Widgets LOCATION)
+  get_target_property(QtNetworklocation Qt${QT_VERSION_MAJOR}::Network LOCATION)
   set(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS "${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS};${QtCore_location};${QtGui_location};${QtWidgets_location};${QtNetworklocation}")
   message("Installing: ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}")
 

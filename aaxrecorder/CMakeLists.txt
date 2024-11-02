@@ -1,60 +1,64 @@
 
-ENABLE_LANGUAGE(CXX)
+enable_language(CXX)
 
-CHECK_LIBRARY_EXISTS(m floorf "" HAVE_LIBM)
-IF(HAVE_LIBM)
-  SET(EXTRA_LIBS m ${EXTRA_LIBS})
-ENDIF(HAVE_LIBM)
+check_library_exists(m floorf "" HAVE_LIBM)
+if(HAVE_LIBM)
+  set(EXTRA_LIBS m ${EXTRA_LIBS})
+endif(HAVE_LIBM)
 
-FIND_PACKAGE(AAX COMPONENTS aax REQUIRED)
+find_package(AAX COMPONENTS aax REQUIRED)
 
-FILE( GLOB GUI *.ui )
-FILE( GLOB SOURCES *.cpp *.c )
-file( GLOB RC *.rc *.qrc )
+set(SOURCES aaxrecorder.cpp  api.c  main.cpp  record.cpp  setup.cpp)
+qt_wrap_ui(GUI aaxrecorder.ui record.ui setup.ui)
+qt_add_resources(RC aaxrecorder.qrc aaxrecorder.rc)
 
-ADD_EXECUTABLE(aaxrecorder ${SOURCES} ${RC} ${GUI} )
+add_executable(aaxrecorder ${SOURCES} ${RC} ${GUI} )
 
-TARGET_LINK_LIBRARIES( aaxrecorder
+target_link_libraries( aaxrecorder
     ${AAX_LIBRARY}
-    Qt5::Widgets
-    Qt5::Core
-    Qt5::Gui
+    Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Gui
 )
 
-INSTALL(TARGETS aaxrecorder
+install(TARGETS aaxrecorder
         RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
         COMPONENT Media
 )
 
-IF(WIN32)
-  # Used to create Start Menu shortcuts <EXEC> <LABEL>
-  SET(CPACK_PACKAGE_EXECUTABLES "aaxrecorder;AeonWave Audio Recorder")
-  SET(CPACK_PACKAGE_ICON "admin\\\\aaxrecorder.xpm")
-  SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\aaxrecorder.exe")
+target_include_directories(aaxrecorder PRIVATE 
+      ${PROJECT_BINARY_DIR}/aaxrecorder
+      ${CMAKE_CURRENT_SOURCE_DIR})
 
-ELSE(WIN32)
+if(WIN32)
   # Used to create Start Menu shortcuts <EXEC> <LABEL>
-  SET(CPACK_PACKAGE_EXECUTABLES "aaxrecorder;AeonWave Audio Recorder")
-  SET(CPACK_STRIP_FILES "bin/aaxrecorder")
-ENDIF(WIN32)
+  set(CPACK_PACKAGE_EXECUTABLES "aaxrecorder;AeonWave Audio Recorder")
+  set(CPACK_PACKAGE_ICON "admin\\\\aaxrecorder.xpm")
+  set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\aaxrecorder.exe")
 
-IF(APPLE)
-  SET(PLATFORM_SPECIFIC "aaxrecorder.icns")
+else(WIN32)
+  # Used to create Start Menu shortcuts <EXEC> <LABEL>
+  set(CPACK_PACKAGE_EXECUTABLES "aaxrecorder;AeonWave Audio Recorder")
+  set(CPACK_STRIP_FILES "bin/aaxrecorder")
+endif(WIN32)
+
+if(APPLE)
+  set(PLATFORM_SPECIFIC "aaxrecorder.icns")
   SET_SOURCE_FILES_PROPERTIES(
       "aaxrecorder.icns"
       PROPERTIES
       MACOSX_PACKAGE_LOCATION Resources
   )
-  SET(GUI_TYPE MACOSX_BUNDLE)
-  SET(MACOSX_BUNDLE_ICON_FILE MacIcon.icns)
-ENDIF()
+  set(GUI_TYPE MACOSX_BUNDLE)
+  set(MACOSX_BUNDLE_ICON_FILE MacIcon.icns)
+endif()
 
-IF(UNIX AND NOT APPLE)
-  INSTALL(FILES admin/aaxrecorder.desktop
+if(UNIX AND NOT APPLE)
+  install(FILES admin/aaxrecorder.desktop
           DESTINATION share/applications
           COMPONENT Media)
-  INSTALL(FILES admin/aaxrecorder.xpm
+  install(FILES admin/aaxrecorder.xpm
           DESTINATION share/pixmaps
           COMPONENT Media)
-ENDIF(UNIX AND NOT APPLE)
+endif(UNIX AND NOT APPLE)
 

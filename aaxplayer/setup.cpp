@@ -21,7 +21,7 @@
  */
 
 #include "aaxplayer.h"
-#include "setup_ui.h"
+#include "ui_setup.h"
 #include "setup.h"
 
 class QDialog;

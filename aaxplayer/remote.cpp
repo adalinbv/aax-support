@@ -21,7 +21,7 @@
  */
 
 #include "aaxplayer.h"
-#include "remote_ui.h"
+#include "ui_remote.h"
 #include "remote.h"
 
 class QDialog;

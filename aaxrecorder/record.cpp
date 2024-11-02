@@ -21,7 +21,7 @@
  */
 
 #include "aaxrecorder.h"
-#include "record_ui.h"
+#include "ui_record.h"
 #include "record.h"
 
 class QDialog;
@@ -29,7 +29,7 @@ class QDialog;
 Record::Record(QWidget *parent)
     : QDialog(parent)
 {
-    _rec = new Ui_Record;
+    _rec = new Ui_Recording;
     _rec->setupUi(this);
 
     connect(_rec->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));

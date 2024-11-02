@@ -26,7 +26,7 @@
 
 #include <QtWidgets/QDialog>
 
-class Ui_Record;
+class Ui_Recording;
 
 class Record : public QDialog
 {
@@ -38,7 +38,7 @@ public:
     int exec();
 
 private:
-    Ui_Record *_rec;
+    Ui_Recording *_rec;
 
 private slots:
     void accept();

@@ -34,9 +34,9 @@
 #include <copyright.h>
 #include <types.h>
 
-#include "aaxrecorder_ui.h"
+#include "ui_aaxrecorder.h"
 #include "aaxrecorder.h"
-#include "record_ui.h"
+#include "ui_record.h"
 #include "setup.h"
 
 #undef NDEBUG
@@ -211,14 +211,14 @@ AeonWaveRecorder::startOutput()
         else
         {
             _TEST(outdev.set(AAX_PLAYING));
-            odevname_str = outdev.get(AAX_RENDERER_STRING);
+            odevname_str = outdev.info(AAX_RENDERER_STRING);
 
             d = std::string(idevname_str.toUtf8().constData());
             dev = d.empty() ? NULL : d.c_str();
             indev = aax::AeonWave(dev, AAX_MODE_READ);
             if (indev)
             {
-                idevname_str = indev.get(AAX_RENDERER_STRING);
+                idevname_str = indev.info(AAX_RENDERER_STRING);
 
                 _TEST(outdev.add(indev));
 
