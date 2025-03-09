@@ -523,10 +523,12 @@ AeonWavePlayer::startOutput()
 void
 AeonWavePlayer::stopOutput()
 {
+    if (play_pressed)
+    {
+        _TEST(outdev.set(AAX_STOPPED));
+        _TEST(outdev.close());
+    }
     play_pressed = false;
-    _TEST(outdev.set(AAX_STOPPED));
-    _TEST(outdev.close());
-
 }
 
 void
