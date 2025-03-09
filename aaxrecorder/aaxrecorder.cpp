@@ -68,7 +68,7 @@ AeonWaveRecorder::AeonWaveRecorder(QWidget *parent) :
     ui = new Ui_AudioRecorder;
     ui->setupUi(this);
 
-    QFile QSSFile(":/aaxplayer.qss");
+    QFile QSSFile(":/aaxrecorder.qss");
     QSSFile.open(QFile::ReadOnly);
     QString StyleSheet = QLatin1String(QSSFile.readAll());
     qApp->setStyleSheet(StyleSheet);
